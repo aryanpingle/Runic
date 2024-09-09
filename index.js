@@ -25,7 +25,8 @@ function runeLineClicked(event) {
     actualRuneLine.classList.toggle("rune-segment--active");
 
     const runeId = getRuneIdFromElement(document.querySelector(".rune"));
-    document.querySelector("#result").innerHTML = JSON.stringify(getInfoFromRuneId(runeId), undefined, 4).replaceAll("\n", "<br>").replaceAll(" ", "&nbsp;");
+    const info = JSON.stringify(getInfoFromRuneId(runeId), undefined, 4).replaceAll("\n", "<br>").replaceAll(" ", "&nbsp;");
+    document.querySelector("#result").innerHTML = [runeId, info].join("<br>");
 }
 
 const internalArray = [];

@@ -67,14 +67,14 @@ function getRune(symbol = "") {
     // Order matters
     return `
     <g class="rune">
-        <g class="rune-lines-guide">
-            ${getRuneLines()}
+        <g class="rune-segments-guide">
+            ${getRuneSegments()}
         </g>
-        <g class="rune-lines-actual">
-            ${getRuneLines()}
+        <g class="rune-segments-actual">
+            ${getRuneSegments()}
         </g>
-        <g class="rune-lines-hover">
-            ${getRuneLines()}
+        <g class="rune-segments-hover">
+            ${getRuneSegments()}
         </g>
     </g>
     `;
@@ -83,8 +83,8 @@ function getRune(symbol = "") {
 function getRuneLine(coords1, coords2, index) {
     return `
     <line
-        class="rune-line"
-        rune-line-index="${index}"
+        class="rune-segment"
+        rune-segment-index="${index}"
         x1="${coords1[0]}"
         y1="${coords1[1]}"
         x2="${coords2[0]}"
@@ -96,8 +96,8 @@ function getRuneLine(coords1, coords2, index) {
 function getRuneUnderring() {
     return `
     <circle
-        class="rune-line"
-        rune-line-index="${14}"
+        class="rune-segment"
+        rune-segment-index="${14}"
         cx="${1.5}"
         cy="${6.5}"
         r="0.5"
@@ -107,7 +107,7 @@ function getRuneUnderring() {
     `;
 }
 
-function getRuneLines() {
+function getRuneSegments() {
     // Takes up a rect of (width, height) = (3, 7)
 
     // prettier-ignore
@@ -128,11 +128,12 @@ function getRuneLines() {
         [[1.5, 2], [1.5, 3]], // line 13
     ];
 
-    let lineHTML = lineCoords
+    const lineHTML = lineCoords
         .map(([p1, p2], lineIndex) => getRuneLine(p1, p2, lineIndex))
         .join("\n");
 
-    lineHTML += getRuneUnderring();
+    const underringHTML = getRuneUnderring();
 
-    return lineHTML;
+    const segmentsHTML = [lineHTML, underringHTML].join("\n")
+    return segmentsHTML;
 }

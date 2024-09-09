@@ -8,25 +8,28 @@ function qsa(...args) {
 function setup() {
     document.querySelector("svg").innerHTML = getRune();
 
-    qsa(".rune-lines-hover > .rune-line").forEach(hoveredRuneLine => {
-        hoveredRuneLine.onclick = function(event) {
-            const runeLineIndex = +(hoveredRuneLine.getAttribute("rune-line-index"));
-            const selector = `.rune-lines-actual > .rune-line[rune-line-index="${runeLineIndex}"]`;
-            const actualRuneLine = hoveredRuneLine.closest(".rune").querySelector(selector);
-            actualRuneLine.classList.toggle("rune-line--active");
-        }
+    qsa(".rune-segments-hover > .rune-segment").forEach(hoveredRuneSegment => {
+        hoveredRuneSegment.onclick = runeLineClicked;
     })
 }
 setup();
+
+function runeLineClicked(event) {
+    const hoveredRuneSegment = this;
+    const runeLineIndex = +(hoveredRuneSegment.getAttribute("rune-segment-index"));
+    const selector = `.rune-segments-actual > .rune-segment[rune-segment-index="${runeLineIndex}"]`;
+    const actualRuneLine = hoveredRuneSegment.closest(".rune").querySelector(selector);
+    actualRuneLine.classList.toggle("rune-segment--active");
+}
 
 const internalArray = [];
 
 function submit() {
     const RUNE_ID_LENGTH = 14;
     let runeBits = new Array(RUNE_ID_LENGTH + 1).fill(0);
-    qsa(".rune-lines-actual > .rune-line").forEach(runeLine => {
-        const runeLineIndex = parseInt(runeLine.getAttribute("rune-line-index"));
-        if(runeLine.classList.contains("rune-line--active")) {
+    qsa(".rune-segments-actual > .rune-segment").forEach(runeLine => {
+        const runeLineIndex = parseInt(runeLine.getAttribute("rune-segment-index"));
+        if(runeLine.classList.contains("rune-segment--active")) {
             runeBits[runeLineIndex] = 1;
         }
     });

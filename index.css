@@ -14,34 +14,34 @@ body {
 
 /* General properties of rune lines */
 
-.rune-line {
+.rune-segment {
     stroke-width: 0.25;
     stroke-linecap: round;
 }
 
 /* Group of rune lines used as guidelines */
 
-.rune-lines-guide > .rune-line {
+.rune-segments-guide > .rune-segment {
     stroke: #121212;
 }
 
 /* Group of rune lines that indicate the glyph */
 
-.rune-lines-actual > .rune-line {
+.rune-segments-actual > .rune-segment {
     stroke: transparent;
 }
 
-.rune-lines-actual > .rune-line--active {
+.rune-segments-actual > .rune-segment--active {
     stroke: crimson;
 }
 
 /* Group of rune lines to be activated on hover */
 
-.rune-lines-hover > .rune-line {
+.rune-segments-hover > .rune-segment {
     stroke: transparent;
     cursor: pointer;
 }
 
-.rune-lines-hover > .rune-line:hover {
+.rune-segments-hover > .rune-segment:hover {
     stroke: #242424;
 }

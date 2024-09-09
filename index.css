@@ -1,0 +1,47 @@
+* {
+    box-sizing: border-box;
+}
+
+:root {
+    color: white;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: black;
+}
+
+/* General properties of rune lines */
+
+.rune-line {
+    stroke-width: 0.25;
+    stroke-linecap: round;
+}
+
+/* Group of rune lines used as guidelines */
+
+.rune-lines-guide > .rune-line {
+    stroke: #121212;
+}
+
+/* Group of rune lines that indicate the glyph */
+
+.rune-lines-actual > .rune-line {
+    stroke: transparent;
+}
+
+.rune-lines-actual > .rune-line--active {
+    stroke: crimson;
+}
+
+/* Group of rune lines to be activated on hover */
+
+.rune-lines-hover > .rune-line {
+    stroke: transparent;
+    cursor: pointer;
+}
+
+.rune-lines-hover > .rune-line:hover {
+    stroke: #242424;
+}

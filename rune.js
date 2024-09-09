@@ -1,66 +1,75 @@
-const vowels = [
-    ["1100111000000000", "æ"],
-    ["1111001000000000", "ɑ:"],
-    ["1000111000000000", "ɒ"],
-    ["1000001000000000", "eɪ"],
-    ["1011110000000000", "ɛ"],
-    ["1011111000000000", "i:"],
-    ["1010111000000000", "ɪəʳ"],
-    ["1100001000000000", "ə"],
-    ["1010110000000000", "eəʳ"],
-    ["1011000000000000", "ɪ"],
-    ["1100000000000000", "aɪ"],
-    ["1111110000000000", "ɜ:ʳ"],
-    ["1111111000000000", "oʊ"],
-    ["1001000000000000", "ɔɪ"],
-    ["1101111000000000", "u:"],
-    ["1001110000000000", "ʊ"],
-    ["1010000000000000", "aʊ"],
-    ["1110111000000000", "ʊəʳ"],
+const vowelsAndRuneIds = [
+    ["æ", "110011100000000"],
+    ["ɑ:", "111100100000000"],
+    ["ɒ", "100011100000000"],
+    ["eɪ", "100000100000000"],
+    ["ɛ", "101111000000000"],
+    ["i:", "101111100000000"],
+    ["ɪəʳ", "101011100000000"],
+    ["ə", "110000100000000"],
+    ["eəʳ", "101011000000000"],
+    ["ɪ", "101100000000000"],
+    ["aɪ", "110000000000000"],
+    ["ɜ:ʳ", "111111000000000"],
+    ["oʊ", "111111100000000"],
+    ["ɔɪ", "100100000000000"],
+    ["u:", "110111100000000"],
+    ["ʊ", "100111000000000"],
+    ["aʊ", "101000000000000"],
+    ["ʊəʳ", "111011100000000"],
 ];
 
-const consonants = [
-    ["1000000101000100", "b"],
-    ["1000000000101100", "tʃ"],
-    ["1000000101010100", "d"],
-    ["1000000010110100", "f"],
-    ["1000000011100100", "g"],
-    ["1000000101100100", "h"],
-    ["1000000100010100", "dʒ"],
-    ["1000000111000100", "k"],
-    ["1000000100100100", "l"],
-    ["1000000001010000", "m"],
-    ["1000000001011000", "n"],
-    ["1000000111111100", "ŋ"],
-    ["1000000010100100", "p"],
-    ["1000000110100100", "r"],
-    ["1000000110110100", "s"],
-    ["1000000011111100", "ʃ"],
-    ["1000000010101100", "t"],
-    ["1000000110101100", "θ"],
-    ["1000000101110100", "ð"],
-    ["1000000101001100", "v"],
-    ["1000000010001000", "w"],
-    ["1000000100101100", "j"],
-    ["1000000101101100", "z"],
-    ["1000000111011100", "ʒ"],
+const consonantsAndRuneIds = [
+    ["b", "100000010100010"],
+    ["tʃ", "100000000010110"],
+    ["d", "100000010101010"],
+    ["f", "100000001011010"],
+    ["g", "100000001110010"],
+    ["h", "100000010110010"],
+    ["dʒ", "100000010001010"],
+    ["k", "100000011100010"],
+    ["l", "100000010010010"],
+    ["m", "100000000101000"],
+    ["n", "100000000101100"],
+    ["ŋ", "100000011111110"],
+    ["p", "100000001010010"],
+    ["r", "100000011010010"],
+    ["s", "100000011011010"],
+    ["ʃ", "100000001111110"],
+    ["t", "100000001010110"],
+    ["θ", "100000011010110"],
+    ["ð", "100000010111010"],
+    ["v", "100000010100110"],
+    ["w", "100000001000100"],
+    ["j", "100000010010110"],
+    ["z", "100000010110110"],
+    ["ʒ", "100000011101110"],
 ];
 
-const runeIdAndSymbol = [
-    // Blank
-    ["0000000000000000", ""],
-    // Vowels
-    ...vowels,
-    // Consonants
-    ...consonants,
-];
+function countInString(s, query) {
+    let count = 0;
+    for(let i = 0; i < s.length; ++i) {
+        if(s.substring(i).startsWith(query)) ++count;
+    }
+    return count;
+}
 
-const runeIdToSymbol = Object.fromEntries(
-    runeIdAndSymbol.map(([id, symbol]) => [id, symbol])
-);
+// IMPORTANT: Sort the two symbol-runeId datasets by descending order of active
+// segments so that the first "bit-match" by index is the longest (and correct)
+// one.
+vowelsAndRuneIds.sort((a, b) => countInString(b[1], "1") - countInString(a[1], "1"));
+consonantsAndRuneIds.sort((a, b) => countInString(b[1], "1") - countInString(a[1], "1"));
 
+// Map from symbol to runeId
 const symbolToRuneId = Object.fromEntries(
-    runeIdAndSymbol.map(([id, symbol]) => [symbol, id])
+    [
+        // Blank
+        ["", "000000000000000"],
+        // Vowels
+        ...vowelsAndRuneIds,
+        // Consonants
+        ...consonantsAndRuneIds,
+    ].map(([symbol, id]) => [symbol, id])
 );
 
 function getRune(symbol = "") {
@@ -78,6 +87,43 @@ function getRune(symbol = "") {
         </g>
     </g>
     `;
+}
+
+/**
+ * @param {string} bitstring 
+ * @param {string} mask 
+ */
+function matches(bitstring, mask) {
+    for(let i = 0; i < bitstring.length; ++i) {
+        if(mask.charAt(i) === "0") continue;
+        // Now we know mask.charAt(i) === "1"
+        if(bitstring.charAt(i) === "0") {
+            return false;
+        }
+    }
+    return true;
+}
+
+function getFirstMatchingSymbol(runeId, symbolsAndRuneIds) {
+    for(const [symbol, runeIdOfSymbol] of symbolsAndRuneIds) {
+        if(matches(runeId, runeIdOfSymbol)) return symbol;
+    }
+    return "";
+}
+
+/**
+ * @param {string} runeId 
+ */
+function getInfoFromRuneId(runeId) {
+    const vowel = getFirstMatchingSymbol(runeId, vowelsAndRuneIds);
+    const consonant = getFirstMatchingSymbol(runeId, consonantsAndRuneIds);
+    const vowelBeforeConsonant = runeId.endsWith("1");
+
+    return {
+        vowel,
+        consonant,
+        vowelBeforeConsonant
+    };
 }
 
 function getRuneLine(coords1, coords2, index) {
@@ -136,4 +182,20 @@ function getRuneSegments() {
 
     const segmentsHTML = [lineHTML, underringHTML].join("\n")
     return segmentsHTML;
+}
+
+function getRuneIdFromElement(runeElement) {
+    const RUNE_ID_LENGTH = 14;
+    
+    let runeBits = new Array(RUNE_ID_LENGTH + 1).fill(0);
+
+    qsa(".rune-segments-actual > .rune-segment", runeElement).forEach(runeLine => {
+        const runeLineIndex = parseInt(runeLine.getAttribute("rune-segment-index"));
+        if(runeLine.classList.contains("rune-segment--active")) {
+            runeBits[runeLineIndex] = 1;
+        }
+    });
+
+    const runeId = runeBits.join("");
+    return runeId;
 }

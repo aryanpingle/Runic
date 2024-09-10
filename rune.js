@@ -21,6 +21,8 @@ const vowelsAndRuneIds = [
     ["ʊəʳ", 0b111011100000000],
 ];
 
+const VOWEL_MASK = 0b111111100000000;
+
 const consonantsAndRuneIds = [
     ["b", 0b100000010100010],
     ["tʃ", 0b100000000010110],
@@ -48,9 +50,22 @@ const consonantsAndRuneIds = [
     ["ʒ", 0b100000011101110],
 ];
 
+const CONSONANT_MASK = 0b100000011111110;
+
+const MIDDLE_LINE_MASK = 0b100000000000000;
+
+const symbolsAndRuneIds = [
+    // Blank
+    ["", 0b000000000000000],
+    // Vowels
+    ...vowelsAndRuneIds,
+    // Consonants
+    ...consonantsAndRuneIds,
+];
+
 function countSetBits(bitstring) {
     let count = 0;
-    while(bitstring != 0) {
+    while (bitstring != 0) {
         count += bitstring % 2;
         bitstring = bitstring >> 1;
     }
@@ -65,17 +80,14 @@ consonantsAndRuneIds.sort((a, b) => countSetBits(b[1]) - countSetBits(a[1]));
 
 // Map from symbol to runeId
 const symbolToRuneId = Object.fromEntries(
-    [
-        // Blank
-        ["", 0b000000000000000],
-        // Vowels
-        ...vowelsAndRuneIds,
-        // Consonants
-        ...consonantsAndRuneIds,
-    ].map(([symbol, id]) => [symbol, id])
+    symbolsAndRuneIds.map(([symbol, id]) => [symbol, id])
+);
+// Map from runeId to symbol
+const runeIdToSymbol = Object.fromEntries(
+    symbolsAndRuneIds.map(([symbol, id]) => [id, symbol])
 );
 
-function getRune(symbol = "") {
+function getRune() {
     // Order matters
     return `
     <g class="rune">
@@ -93,33 +105,57 @@ function getRune(symbol = "") {
 }
 
 /**
- * @param {string} bitstring 
- * @param {string} mask 
+ * @param {string} bitstring
+ * @param {string} mask
  */
 function containsBitmask(bitstring, bitmask) {
     return (bitstring & bitmask) === bitmask;
 }
 
-function getFirstMatchingSymbol(runeId, symbolsAndRuneIds) {
-    for(const [symbol, runeIdOfSymbol] of symbolsAndRuneIds) {
-        if(containsBitmask(runeId, runeIdOfSymbol)) return symbol;
+function hasValidVowel(runeId) {
+    if ((runeId & VOWEL_MASK) === MIDDLE_LINE_MASK) {
+        // Just the middle line exists, doesn't mean anything
+        return true;
     }
-    return "";
+    return (runeId & VOWEL_MASK) in runeIdToSymbol;
+}
+
+function hasValidConsonant(runeId) {
+    if ((runeId & CONSONANT_MASK) === MIDDLE_LINE_MASK) {
+        // Just the middle line exists, doesn't mean anything
+        return true;
+    }
+    return (runeId & CONSONANT_MASK) in runeIdToSymbol;
+}
+
+function extractVowel(runeId) {
+    if (!hasValidVowel(runeId)) return null; // Signify invalid combination of vowel segments
+    for (const [symbol, runeIdOfSymbol] of vowelsAndRuneIds) {
+        if (containsBitmask(runeId, runeIdOfSymbol)) return symbol;
+    }
+    return ""; // Unreachable
+}
+
+function extractConsonant(runeId) {
+    if (!hasValidConsonant(runeId)) return null; // Signify invalid combination of consonant segments
+    for (const [symbol, runeIdOfSymbol] of consonantsAndRuneIds) {
+        if (containsBitmask(runeId, runeIdOfSymbol)) return symbol;
+    }
+    return ""; // Unreachable
 }
 
 /**
- * @param {number} runeId 
+ * @param {number} runeId
  */
 function getInfoFromRuneId(runeId) {
-    const vowel = getFirstMatchingSymbol(runeId, vowelsAndRuneIds);
-    const consonant = getFirstMatchingSymbol(runeId, consonantsAndRuneIds);
-    console.log("vowel matched, ", runeId.toString(2), vowel, symbolToRuneId[vowel].toString(2))
-    const vowelBeforeConsonant = (runeId % 2) === 1;
+    const vowel = extractVowel(runeId);
+    const consonant = extractConsonant(runeId);
+    const vowelBeforeConsonant = runeId % 2 === 1;
 
     return {
         vowel,
         consonant,
-        vowelBeforeConsonant
+        vowelBeforeConsonant,
     };
 }
 
@@ -177,19 +213,23 @@ function getRuneSegments() {
 
     const underringHTML = getRuneUnderring();
 
-    const segmentsHTML = [lineHTML, underringHTML].join("\n")
+    const segmentsHTML = [lineHTML, underringHTML].join("\n");
     return segmentsHTML;
 }
 
 function getRuneIdFromElement(runeElement) {
     let runeId = 0;
-    
-    qsa(".rune-segments-actual > .rune-segment", runeElement).forEach(runeSegment => {
-        const runeSegmentIndex = parseInt(runeSegment.getAttribute("rune-segment-index"));
-        if(runeSegment.classList.contains("rune-segment--active")) {
-            runeId |= 1 << (RUNE_ID_LENGTH - 1 - runeSegmentIndex);
+
+    qsa(".rune-segments-actual > .rune-segment", runeElement).forEach(
+        (runeSegment) => {
+            const runeSegmentIndex = parseInt(
+                runeSegment.getAttribute("rune-segment-index")
+            );
+            if (runeSegment.classList.contains("rune-segment--active")) {
+                runeId |= 1 << (RUNE_ID_LENGTH - 1 - runeSegmentIndex);
+            }
         }
-    });
+    );
 
     return runeId;
 }

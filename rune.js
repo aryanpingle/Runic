@@ -1,6 +1,6 @@
 const RUNE_ID_LENGTH = 15;
 
-const vowelData = [
+const vowelDataTable = [
     {
         ipaSymbol: "æ",
         mask: 0b110011100000000,
@@ -113,7 +113,7 @@ const vowelData = [
 
 const VOWEL_MASK = 0b111111100000000;
 
-const consonantData = [
+const consonantDataTable = [
     {
         ipaSymbol: "b",
         mask: 0b100000010100010,
@@ -264,13 +264,13 @@ const CONSONANT_MASK = 0b100000011111110;
 
 const MIDDLE_LINE_MASK = 0b100000000000000;
 
-const symbolData = [
+const symbolDataTable = [
     // Blank
     { ipaSymbol: "", mask: 0b000000000000000, english: "", examples: "" },
     // Vowels
-    ...vowelData,
+    ...vowelDataTable,
     // Consonants
-    ...consonantData,
+    ...consonantDataTable,
 ];
 
 function countSetBits(bitstring) {
@@ -282,19 +282,13 @@ function countSetBits(bitstring) {
     return count;
 }
 
-// IMPORTANT: Sort the two symbol-runeId datasets by descending order of active
-// segments so that the first "bit-match" by index is the longest (and correct)
-// one.
-vowelData.sort((a, b) => countSetBits(b[1]) - countSetBits(a[1]));
-consonantData.sort((a, b) => countSetBits(b[1]) - countSetBits(a[1]));
-
-// Map from symbol to runeId
-const symbolToRuneId = Object.fromEntries(
-    symbolData.map(({ ipaSymbol, mask }) => [ipaSymbol, mask])
+// Map from symbol to symbol data
+const symbolToSymbolData = Object.fromEntries(
+    symbolDataTable.map((symbolData) => [symbolData.ipaSymbol, symbolData])
 );
-// Map from runeId to symbol
-const runeIdToSymbol = Object.fromEntries(
-    symbolData.map(({ ipaSymbol, mask }) => [mask, ipaSymbol])
+// Map from runeMask to symbol
+const runeMaskToSymbolData = Object.fromEntries(
+    symbolDataTable.map((symbolData) => [symbolData.mask, symbolData])
 );
 
 function getRune() {
@@ -322,45 +316,73 @@ function containsBitmask(bitstring, bitmask) {
     return (bitstring & bitmask) === bitmask;
 }
 
-function hasValidVowel(runeId) {
-    if ((runeId & VOWEL_MASK) === MIDDLE_LINE_MASK) {
+function hasValidVowel(runeMask) {
+    if ((runeMask & VOWEL_MASK) === MIDDLE_LINE_MASK) {
         // Just the middle line exists, doesn't mean anything
         return true;
     }
-    return (runeId & VOWEL_MASK) in runeIdToSymbol;
+    return (runeMask & VOWEL_MASK) in runeMaskToSymbolData;
 }
 
-function hasValidConsonant(runeId) {
-    if ((runeId & CONSONANT_MASK) === MIDDLE_LINE_MASK) {
+function hasValidConsonant(runeMask) {
+    if ((runeMask & CONSONANT_MASK) === MIDDLE_LINE_MASK) {
         // Just the middle line exists, doesn't mean anything
         return true;
     }
-    return (runeId & CONSONANT_MASK) in runeIdToSymbol;
+    return (runeMask & CONSONANT_MASK) in runeMaskToSymbolData;
 }
 
-function extractVowel(runeId) {
-    if (!hasValidVowel(runeId)) return null; // Signify invalid combination of vowel segments
-    for (const { ipaSymbol, mask: symbolRuneMask } of vowelData) {
-        if (containsBitmask(runeId, symbolRuneMask)) return ipaSymbol;
+function extractVowel(runeMask) {
+    // Check if the consonant pattern is invalid
+    if (!hasValidVowel(runeMask)) return null;
+
+    let resultSymbol = "";
+    for (const symbolData of vowelDataTable) {
+        if (containsBitmask(runeMask, symbolData.mask)) {
+            // This symbol is a match.
+            // We want the matching symbol with the most number of set bits.
+            const setBitsInSymbol = countSetBits(symbolData.mask);
+            const setBitsInCurrentResult = countSetBits(
+                symbolToSymbolData[resultSymbol].mask
+            );
+
+            if (setBitsInSymbol > setBitsInCurrentResult) {
+                resultSymbol = symbolData.ipaSymbol;
+            }
+        }
     }
-    return ""; // Unreachable
+    return resultSymbol;
 }
 
-function extractConsonant(runeId) {
-    if (!hasValidConsonant(runeId)) return null; // Signify invalid combination of consonant segments
-    for (const { ipaSymbol, mask: symbolRuneMask } of consonantData) {
-        if (containsBitmask(runeId, symbolRuneMask)) return ipaSymbol;
+function extractConsonant(runeMask) {
+    // Check if the consonant pattern is invalid
+    if (!hasValidConsonant(runeMask)) return null;
+
+    let resultSymbol = "";
+    for (const symbolData of consonantDataTable) {
+        if (containsBitmask(runeMask, symbolData.mask)) {
+            // This symbol is a match.
+            // We want the matching symbol with the most number of set bits.
+            const setBitsInSymbol = countSetBits(symbolData.mask);
+            const setBitsInCurrentResult = countSetBits(
+                symbolToSymbolData[resultSymbol].mask
+            );
+
+            if (setBitsInSymbol > setBitsInCurrentResult) {
+                resultSymbol = symbolData.ipaSymbol;
+            }
+        }
     }
-    return ""; // Unreachable
+    return resultSymbol;
 }
 
 /**
- * @param {number} runeId
+ * @param {number} runeMask
  */
-function getInfoFromRuneId(runeId) {
-    const vowel = extractVowel(runeId);
-    const consonant = extractConsonant(runeId);
-    const vowelBeforeConsonant = runeId % 2 === 1;
+function getInfoFromRuneMask(runeMask) {
+    const vowel = extractVowel(runeMask);
+    const consonant = extractConsonant(runeMask);
+    const vowelBeforeConsonant = runeMask % 2 === 1;
 
     return {
         vowel,
@@ -427,8 +449,8 @@ function getRuneSegments() {
     return segmentsHTML;
 }
 
-function getRuneIdFromElement(runeElement) {
-    let runeId = 0;
+function getRuneMaskFromElement(runeElement) {
+    let runeMask = 0;
 
     qsa(".rune-segments-actual > .rune-segment", runeElement).forEach(
         (runeSegment) => {
@@ -436,10 +458,10 @@ function getRuneIdFromElement(runeElement) {
                 runeSegment.getAttribute("rune-segment-index")
             );
             if (runeSegment.classList.contains("rune-segment--active")) {
-                runeId |= 1 << (RUNE_ID_LENGTH - 1 - runeSegmentIndex);
+                runeMask |= 1 << (RUNE_ID_LENGTH - 1 - runeSegmentIndex);
             }
         }
     );
 
-    return runeId;
+    return runeMask;
 }

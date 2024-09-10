@@ -22,7 +22,7 @@ body {
 /* Group of rune lines used as guidelines */
 
 .rune-segments-guide > .rune-segment {
-    stroke: #121212;
+    stroke: #242424;
 }
 
 /* Group of rune lines that indicate the glyph */
@@ -43,5 +43,5 @@ body {
 }
 
 .rune-segments-hover > .rune-segment:hover {
-    stroke: #242424;
+    stroke: orangered;
 }

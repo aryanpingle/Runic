@@ -1,66 +1,156 @@
 const RUNE_ID_LENGTH = 15;
 
-const vowelsAndRuneIds = [
-    ["æ", 0b110011100000000],
-    ["ɑ:", 0b111100100000000],
-    ["ɒ", 0b100011100000000],
-    ["eɪ", 0b100000100000000],
-    ["ɛ", 0b101111000000000],
-    ["i:", 0b101111100000000],
-    ["ɪəʳ", 0b101011100000000],
-    ["ə", 0b110000100000000],
-    ["eəʳ", 0b101011000000000],
-    ["ɪ", 0b101100000000000],
-    ["aɪ", 0b110000000000000],
-    ["ɜ:ʳ", 0b111111000000000],
-    ["oʊ", 0b111111100000000],
-    ["ɔɪ", 0b100100000000000],
-    ["u:", 0b110111100000000],
-    ["ʊ", 0b100111000000000],
-    ["aʊ", 0b101000000000000],
-    ["ʊəʳ", 0b111011100000000],
+const vowelData = [
+    {
+        ipaSymbol: "æ",
+        mask: 0b110011100000000,
+        english: "a",
+        examples: "has, apple, ash",
+    },
+    {
+        ipaSymbol: "ɑ:",
+        mask: 0b111100100000000,
+        english: "ah",
+        examples: "arm, large, far",
+    },
+    {
+        ipaSymbol: "ɒ",
+        mask: 0b100011100000000,
+        english: "aw",
+        examples: "box, awesome, swan",
+    },
+    {
+        ipaSymbol: "eɪ",
+        mask: 0b100000100000000,
+        english: "ay/ei",
+        examples: "maid, break, they",
+    },
+    {
+        ipaSymbol: "ɛ",
+        mask: 0b101111000000000,
+        english: "eh",
+        examples: "end, bread, said",
+    },
+    {
+        ipaSymbol: "i:",
+        mask: 0b101111100000000,
+        english: "ee",
+        examples: "bee, meat, key",
+    },
+    {
+        ipaSymbol: "ɪəʳ",
+        mask: 0b101011100000000,
+        english: "ear",
+        examples: "ear, beer, steer",
+    },
+    {
+        ipaSymbol: "ə",
+        mask: 0b110000100000000,
+        english: "uh",
+        examples: "about, other, uhh",
+    },
+    {
+        ipaSymbol: "eəʳ",
+        mask: 0b101011000000000,
+        english: "air",
+        examples: "air, heir, there",
+    },
+    {
+        ipaSymbol: "ɪ",
+        mask: 0b101100000000000,
+        english: "i",
+        examples: "it, gym, brim",
+    },
+    {
+        ipaSymbol: "aɪ",
+        mask: 0b110000000000000,
+        english: "aye",
+        examples: "ice, spider, pie",
+    },
+    {
+        ipaSymbol: "ɜ:ʳ",
+        mask: 0b111111000000000,
+        english: "uhr",
+        examples: "bird, burn, pearl",
+    },
+    {
+        ipaSymbol: "oʊ",
+        mask: 0b111111100000000,
+        english: "oh",
+        examples: "open, boat, moan",
+    },
+    {
+        ipaSymbol: "ɔɪ",
+        mask: 0b100100000000000,
+        english: "oi",
+        examples: "join, boy, coin",
+    },
+    {
+        ipaSymbol: "u:",
+        mask: 0b110111100000000,
+        english: "ooo",
+        examples: "who, blue, soon",
+    },
+    {
+        ipaSymbol: "ʊ",
+        mask: 0b100111000000000,
+        english: "oo",
+        examples: "wolf, bush, would",
+    },
+    {
+        ipaSymbol: "aʊ",
+        mask: 0b101000000000000,
+        english: "ow",
+        examples: "now, shout, bow",
+    },
+    {
+        ipaSymbol: "ʊəʳ",
+        mask: 0b111011100000000,
+        english: "our",
+        examples: "tour, cure, sure",
+    },
 ];
 
 const VOWEL_MASK = 0b111111100000000;
 
-const consonantsAndRuneIds = [
-    ["b", 0b100000010100010],
-    ["tʃ", 0b100000000010110],
-    ["d", 0b100000010101010],
-    ["f", 0b100000001011010],
-    ["g", 0b100000001110010],
-    ["h", 0b100000010110010],
-    ["dʒ", 0b100000010001010],
-    ["k", 0b100000011100010],
-    ["l", 0b100000010010010],
-    ["m", 0b100000000101000],
-    ["n", 0b100000000101100],
-    ["ŋ", 0b100000011111110],
-    ["p", 0b100000001010010],
-    ["r", 0b100000011010010],
-    ["s", 0b100000011011010],
-    ["ʃ", 0b100000001111110],
-    ["t", 0b100000001010110],
-    ["θ", 0b100000011010110],
-    ["ð", 0b100000010111010],
-    ["v", 0b100000010100110],
-    ["w", 0b100000001000100],
-    ["j", 0b100000010010110],
-    ["z", 0b100000010110110],
-    ["ʒ", 0b100000011101110],
+const consonantData = [
+    { ipaSymbol: "b", mask: 0b100000010100010, english: "", examples: "" },
+    { ipaSymbol: "tʃ", mask: 0b100000000010110, english: "", examples: "" },
+    { ipaSymbol: "d", mask: 0b100000010101010, english: "", examples: "" },
+    { ipaSymbol: "f", mask: 0b100000001011010, english: "", examples: "" },
+    { ipaSymbol: "g", mask: 0b100000001110010, english: "", examples: "" },
+    { ipaSymbol: "h", mask: 0b100000010110010, english: "", examples: "" },
+    { ipaSymbol: "dʒ", mask: 0b100000010001010, english: "", examples: "" },
+    { ipaSymbol: "k", mask: 0b100000011100010, english: "", examples: "" },
+    { ipaSymbol: "l", mask: 0b100000010010010, english: "", examples: "" },
+    { ipaSymbol: "m", mask: 0b100000000101000, english: "", examples: "" },
+    { ipaSymbol: "n", mask: 0b100000000101100, english: "", examples: "" },
+    { ipaSymbol: "ŋ", mask: 0b100000011111110, english: "", examples: "" },
+    { ipaSymbol: "p", mask: 0b100000001010010, english: "", examples: "" },
+    { ipaSymbol: "r", mask: 0b100000011010010, english: "", examples: "" },
+    { ipaSymbol: "s", mask: 0b100000011011010, english: "", examples: "" },
+    { ipaSymbol: "ʃ", mask: 0b100000001111110, english: "", examples: "" },
+    { ipaSymbol: "t", mask: 0b100000001010110, english: "", examples: "" },
+    { ipaSymbol: "θ", mask: 0b100000011010110, english: "", examples: "" },
+    { ipaSymbol: "ð", mask: 0b100000010111010, english: "", examples: "" },
+    { ipaSymbol: "v", mask: 0b100000010100110, english: "", examples: "" },
+    { ipaSymbol: "w", mask: 0b100000001000100, english: "", examples: "" },
+    { ipaSymbol: "j", mask: 0b100000010010110, english: "", examples: "" },
+    { ipaSymbol: "z", mask: 0b100000010110110, english: "", examples: "" },
+    { ipaSymbol: "ʒ", mask: 0b100000011101110, english: "", examples: "" },
 ];
 
 const CONSONANT_MASK = 0b100000011111110;
 
 const MIDDLE_LINE_MASK = 0b100000000000000;
 
-const symbolsAndRuneIds = [
+const symbolData = [
     // Blank
-    ["", 0b000000000000000],
+    { ipaSymbol: "", mask: 0b000000000000000, english: "", examples: "" },
     // Vowels
-    ...vowelsAndRuneIds,
+    ...vowelData,
     // Consonants
-    ...consonantsAndRuneIds,
+    ...consonantData,
 ];
 
 function countSetBits(bitstring) {
@@ -75,16 +165,16 @@ function countSetBits(bitstring) {
 // IMPORTANT: Sort the two symbol-runeId datasets by descending order of active
 // segments so that the first "bit-match" by index is the longest (and correct)
 // one.
-vowelsAndRuneIds.sort((a, b) => countSetBits(b[1]) - countSetBits(a[1]));
-consonantsAndRuneIds.sort((a, b) => countSetBits(b[1]) - countSetBits(a[1]));
+vowelData.sort((a, b) => countSetBits(b[1]) - countSetBits(a[1]));
+consonantData.sort((a, b) => countSetBits(b[1]) - countSetBits(a[1]));
 
 // Map from symbol to runeId
 const symbolToRuneId = Object.fromEntries(
-    symbolsAndRuneIds.map(([symbol, id]) => [symbol, id])
+    symbolData.map(({ ipaSymbol, mask }) => [ipaSymbol, mask])
 );
 // Map from runeId to symbol
 const runeIdToSymbol = Object.fromEntries(
-    symbolsAndRuneIds.map(([symbol, id]) => [id, symbol])
+    symbolData.map(({ ipaSymbol, mask }) => [mask, ipaSymbol])
 );
 
 function getRune() {
@@ -130,16 +220,16 @@ function hasValidConsonant(runeId) {
 
 function extractVowel(runeId) {
     if (!hasValidVowel(runeId)) return null; // Signify invalid combination of vowel segments
-    for (const [symbol, runeIdOfSymbol] of vowelsAndRuneIds) {
-        if (containsBitmask(runeId, runeIdOfSymbol)) return symbol;
+    for (const { ipaSymbol, mask: symbolRuneMask } of vowelData) {
+        if (containsBitmask(runeId, symbolRuneMask)) return ipaSymbol;
     }
     return ""; // Unreachable
 }
 
 function extractConsonant(runeId) {
     if (!hasValidConsonant(runeId)) return null; // Signify invalid combination of consonant segments
-    for (const [symbol, runeIdOfSymbol] of consonantsAndRuneIds) {
-        if (containsBitmask(runeId, runeIdOfSymbol)) return symbol;
+    for (const { ipaSymbol, mask: symbolRuneMask } of consonantData) {
+        if (containsBitmask(runeId, symbolRuneMask)) return ipaSymbol;
     }
     return ""; // Unreachable
 }

@@ -12,6 +12,10 @@ body {
     background-color: black;
 }
 
+svg {
+    width: 100%;
+}
+
 /* General properties of rune lines */
 
 .rune-segment {
@@ -22,7 +26,11 @@ body {
 /* Group of rune lines used as guidelines */
 
 .rune-segments-guide > .rune-segment {
-    stroke: #242424;
+    stroke: transparent;
+}
+
+svg:hover .rune-segments-guide > .rune-segment {
+    stroke: #121212;
 }
 
 /* Group of rune lines that indicate the glyph */

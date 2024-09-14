@@ -61,7 +61,8 @@ export class RuneSVG extends Component<Props, State> {
                 lineWidth += word.length * RUNE_WIDTH;
             });
             // Add spacing between words
-            lineWidth += line.length * SPACE_WIDTH;
+            const numWords = line.length - 1;
+            lineWidth += numWords * SPACE_WIDTH;
 
             // Add width of runes
             maxLineWidth = Math.max(maxLineWidth, lineWidth);

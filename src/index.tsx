@@ -1,7 +1,6 @@
 import { render } from "preact";
-import { RuneSVG } from "components/RuneSVG";
-import { translateWord, loadIPADict, translateSentence } from "./ipa";
-import { RunicEditor } from "components/RunicTranslator";
+import { loadIPADict } from "./ipa";
+import { RunicEditor } from "components/RunicEditor";
 
 import "./index.css";
 import { RuneReference } from "components/RuneReference";

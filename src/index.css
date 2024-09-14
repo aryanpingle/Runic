@@ -1,13 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=PT+Serif&display=swap');
+
 * {
     box-sizing: border-box;
 }
 
 :root {
+    font-family: 'PT Serif', serif;
     color: white;
+    /* 2 times bigger than the default */
+    font-size: 2em;
 }
 
 body {
-    margin: 0;
+    /* margin: 0; */
     padding: 0;
     background-color: black;
 }

@@ -1,3 +1,5 @@
+import { symbolDataTable } from "./runeDataset";
+
 const IPADictURL = "./ipa_dict.json";
 
 let IPADict: Record<string, string> = {};
@@ -6,6 +8,28 @@ export async function loadIPADict() {
     // Load the dictionary
     const response = await fetch(IPADictURL);
     IPADict = await response.json();
+
+    const symbolsUsedInIPADict = new Set();
+    let c = 0;
+    for (const key in IPADict) {
+        const tr = IPADict[key][0];
+        tr.split(" ").forEach((w) => {
+            if (!symbolsUsedInIPADict.has(w)) console.log(key);
+            symbolsUsedInIPADict.add(w);
+        });
+    }
+    console.log("Symbols used in ipa dict =", symbolsUsedInIPADict);
+    const ipaCompliantSymbols = symbolDataTable.filter((y) =>
+        symbolsUsedInIPADict.has(y.ipaSymbol),
+    );
+    const uniqueMasks = new Set();
+    ipaCompliantSymbols.forEach((element) => {
+        uniqueMasks.add(element.mask);
+    });
+    console.log(uniqueMasks);
+    console.log(ipaCompliantSymbols);
+
+    console.log(symbolsUsedInIPADict);
 }
 
 /**

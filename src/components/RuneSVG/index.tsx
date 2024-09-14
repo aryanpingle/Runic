@@ -1,13 +1,11 @@
 import { h, Component, VNode } from "preact";
 import { Rune, RUNE_HEIGHT, RUNE_WIDTH } from "../Rune";
-import {
-    isVowel,
-    symbolDataTable,
-    symbolToSymbolData,
-} from "../../runeDataset";
+import { sanitizeTextInput, textToBitmaskLines } from "./utils";
 
 interface Props {
-    text: string;
+    interactive: boolean;
+    displayPhonemes: boolean;
+    phoneticText: string;
 }
 
 interface State {
@@ -15,120 +13,14 @@ interface State {
 }
 
 const SVG_PADDING = 1;
-
-function parseString(s: string, i: number, tokens: string[]): boolean {
-    if (i === s.length) return true;
-
-    const c = s.charAt(i);
-
-    // " " | "\"
-    if (c === " " || c === "/") {
-        tokens.push(c);
-        return parseString(s, i + 1, tokens);
-    }
-
-    // character (may not be symbol)
-    // Try to find the symbol that matches it
-    for (const symbolData of symbolDataTable) {
-        if (s.startsWith(symbolData.ipaSymbol, i)) {
-            const ipaSymbol = symbolData.ipaSymbol;
-            tokens.push(ipaSymbol);
-
-            // Check if using this symbol results in a valid parse
-            const parseResult = parseString(s, i + ipaSymbol.length, tokens);
-            if (parseResult) return true;
-
-            tokens.pop();
-        }
-    }
-
-    // No symbols matched here
-    return false;
-}
-
-function textToBitmaskLines(s: string): number[][][] {
-    const tokens: string[] = [];
-
-    // console.log("Parsing");
-    parseString(s, 0, tokens);
-    // console.log(`Tokens =`, tokens);
-
-    let currentWord = [];
-
-    let currentLine = [];
-    currentLine.push(currentWord);
-
-    const lines: number[][][] = [];
-    lines.push(currentLine);
-
-    let lastSymbol: "vowel" | "consonant" | "both";
-
-    for (const phoneme of tokens) {
-        if (phoneme === " ") {
-            // Add word
-            currentWord = [];
-            currentLine.push(currentWord);
-
-            lastSymbol = "both";
-            continue;
-        }
-
-        if (phoneme === "/") {
-            // Add line
-            currentWord = [];
-
-            currentLine = [];
-            currentLine.push(currentWord);
-
-            lines.push(currentLine);
-
-            lastSymbol = "both";
-            continue;
-        }
-
-        const bitmask = symbolToSymbolData[phoneme].mask;
-
-        const isV = isVowel(phoneme);
-
-        if (isV) {
-            if (lastSymbol === "consonant") {
-                // console.log("Adding", phoneme);
-                // Join
-                currentWord[currentWord.length - 1] |= bitmask;
-                lastSymbol = "both";
-            } else {
-                // console.log("Merging", phoneme);
-                // Add
-                currentWord.push(bitmask);
-                lastSymbol = "vowel";
-            }
-        } else {
-            if (lastSymbol === "vowel") {
-                // console.log("Adding", phoneme);
-                // Join
-                currentWord[currentWord.length - 1] |= bitmask;
-                // Vowel before consonant
-                currentWord[currentWord.length - 1] |= 1;
-                lastSymbol = "both";
-            } else {
-                // console.log("Merging", phoneme);
-                // Add
-                currentWord.push(bitmask);
-                lastSymbol = "consonant";
-            }
-        }
-    }
-
-    // console.log("bitmasks created", lines);
-    return lines;
-}
+const SPACE_WIDTH = RUNE_WIDTH;
 
 export class RuneSVG extends Component<Props, State> {
+    svgElement?: SVGElement;
+
     constructor(props: Props) {
         super(props);
-        this.setState({
-            lines: textToBitmaskLines(props.text),
-        });
+        this.renderPhoneticText(props.phoneticText);
     }
 
     public getRunes(): VNode<Rune>[] {
@@ -136,12 +28,14 @@ export class RuneSVG extends Component<Props, State> {
 
         this.state.lines.forEach((line, lineIndex) => {
             let tx = 0;
-            line.forEach((word, wordIndex) => {
-                word.forEach((bitmask, runeIndex) => {
+            line.forEach((word) => {
+                word.forEach((bitmask) => {
                     const ty = lineIndex * (RUNE_HEIGHT + SVG_PADDING);
                     const transformation = `translate(${tx}, ${ty})`;
                     runesArray.push(
                         <Rune
+                            displayPhonemes={this.props.displayPhonemes}
+                            interactive={this.props.interactive}
                             bitmask={bitmask}
                             transform={transformation}
                         ></Rune>,
@@ -150,14 +44,14 @@ export class RuneSVG extends Component<Props, State> {
                 });
 
                 // Space after a word
-                tx += RUNE_WIDTH / 2;
+                tx += SPACE_WIDTH;
             });
         });
 
         return runesArray;
     }
 
-    private getViewBox(): string {
+    private getViewBoxDimensions(): [number, number] {
         // Calculate maximum width among the lines
         let maxLineWidth = 0;
         this.state.lines.forEach((line) => {
@@ -167,7 +61,7 @@ export class RuneSVG extends Component<Props, State> {
                 lineWidth += word.length * RUNE_WIDTH;
             });
             // Add spacing between words
-            lineWidth += line.length * (RUNE_WIDTH / 2);
+            lineWidth += line.length * SPACE_WIDTH;
 
             // Add width of runes
             maxLineWidth = Math.max(maxLineWidth, lineWidth);
@@ -181,16 +75,41 @@ export class RuneSVG extends Component<Props, State> {
             RUNE_HEIGHT * NUM_LINES + // Height of all lines
             (NUM_LINES - 1) * (RUNE_WIDTH / 2); // Spacing between lines
 
-        const viewBox = `-${SVG_PADDING} -${SVG_PADDING} ${SVG_VIEWBOX_WIDTH} ${SVG_VIEWBOX_HEIGHT}`;
-        return viewBox;
+        return [SVG_VIEWBOX_WIDTH, SVG_VIEWBOX_HEIGHT];
     }
 
-    render(props: Props, { lines }: State) {
-        const bitmasks = this.state.lines.flat().flat();
-        const RUNE_COUNT = bitmasks.length;
+    renderPhoneticText(phoneticText: string) {
+        const sanitized = sanitizeTextInput(phoneticText);
 
+        this.setState({
+            lines: textToBitmaskLines(sanitized),
+        });
+    }
+
+    setRuneColor = (color: string) => {
+        this.svgElement.style.setProperty("--rune-line-color", color);
+    };
+
+    setRunePhonemeColor = (color: string) => {
+        this.svgElement.style.setProperty("--rune-line-color", color);
+    };
+
+    setBackgroundColor = (color: string) => {
+        this.svgElement.style.setProperty("--svg-background-color", color);
+    };
+
+    render(props: Props, { lines }: State) {
+        const [viewBoxWidth, viewBoxHeight] = this.getViewBoxDimensions();
+        const viewBox = `-${SVG_PADDING} -${SVG_PADDING} ${viewBoxWidth} ${viewBoxHeight}`;
         return (
-            <svg width={512} height={512} viewBox={this.getViewBox()}>
+            <svg
+                ref={(e) => {
+                    this.svgElement = e;
+                }}
+                width={viewBoxWidth}
+                height={viewBoxHeight}
+                viewBox={viewBox}
+            >
                 {...this.getRunes()}
             </svg>
         );

@@ -3,6 +3,8 @@ import { getInfoFromRuneMask } from "../../rune";
 import { symbolToSymbolData } from "../../runeDataset";
 
 interface Props extends JSX.SVGAttributes {
+    interactive: boolean;
+    displayPhonemes: boolean;
     bitmask: number;
 }
 
@@ -76,12 +78,20 @@ export class Rune extends Component<Props, State> {
     }
 
     componentDidMount(): void {
-        this.element.querySelectorAll(".rune-segment").forEach((segment) => {
-            const index = parseInt(segment.getAttribute("data-segment-index"));
-            segment.addEventListener("click", (event) => {
-                this.toggleBit(index);
+        this.setupRuneSegmentClicks();
+    }
+
+    setupRuneSegmentClicks() {
+        this.element
+            .querySelectorAll(".rune-segments-hover > .rune-segment")
+            .forEach((segment) => {
+                const index = parseInt(
+                    segment.getAttribute("data-segment-index"),
+                );
+                segment.addEventListener("click", (event) => {
+                    this.toggleBit(index);
+                });
             });
-        });
     }
 
     getRuneSegments(bitmask: number): VNode<SVGElement>[] {
@@ -103,6 +113,12 @@ export class Rune extends Component<Props, State> {
         super(props);
 
         this.state.bitmask = props.bitmask;
+    }
+
+    static getDerivedStateFromProps(props: Props, state: State): State {
+        return {
+            bitmask: props.bitmask,
+        };
     }
 
     render(props: Props, state: State) {
@@ -128,23 +144,34 @@ export class Rune extends Component<Props, State> {
                 ref={(e) => {
                     this.element = e;
                 }}
+                data-runemask={state.bitmask.toString(2)}
                 {...(attrs as any)}
             >
-                <g class="rune-segments-guide">{...this.getRuneSegments(0)}</g>
+                {props.interactive && (
+                    <g class="rune-segments-guide">
+                        {...this.getRuneSegments(0)}
+                    </g>
+                )}
                 <g class="rune-segments-actual">
                     {...this.getRuneSegments(state.bitmask)}
                 </g>
-                <g class="rune-segments-hover">{...this.getRuneSegments(0)}</g>
-                <text
-                    font-size={1}
-                    fill={"white"}
-                    x={1.5}
-                    y={8}
-                    text-anchor={"middle"}
-                    title={pronunciation}
-                >
-                    {translation}
-                </text>
+                {props.interactive && (
+                    <g class="rune-segments-hover">
+                        {...this.getRuneSegments(0)}
+                    </g>
+                )}
+                {props.displayPhonemes && (
+                    <text
+                        font-size={1}
+                        fill={"white"}
+                        x={1.5}
+                        y={8}
+                        text-anchor={"middle"}
+                        title={pronunciation}
+                    >
+                        {translation}
+                    </text>
+                )}
             </g>
         );
     }

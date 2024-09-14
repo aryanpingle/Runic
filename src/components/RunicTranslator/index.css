@@ -1,0 +1,20 @@
+.runic-svg-container {
+    border-radius: 1em;
+}
+
+/* Mobile */
+
+.runic-svg-container {
+    width: 100%;
+    height: 10em;
+    outline: 2px solid yellow;
+    overflow: hidden;
+}
+
+/* Desktop */
+
+@media (min-width: 720px) {
+    .runic-svg-container {
+        outline: 1px solid violet;
+    }
+}

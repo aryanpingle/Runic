@@ -1,0 +1,10 @@
+.rune-reference-grid {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+}
+
+.rune-reference-grid-item {
+    width: 100%;
+    height: 100%;
+}

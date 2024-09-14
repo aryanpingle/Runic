@@ -13,7 +13,13 @@ body {
 }
 
 svg {
+    --rune-line-color: crimson;
+    --svg-background-color: transparent;
+    
     width: 100%;
+    height: 100%;
+
+    background-color: var(--svg-background-color);
 }
 
 /* General properties of rune lines */
@@ -40,7 +46,7 @@ svg:hover .rune-segments-guide > .rune-segment {
 }
 
 .rune-segments-actual > .rune-segment--active {
-    stroke: crimson;
+    stroke: var(--rune-line-color);
 }
 
 /* Group of rune lines to be activated on hover */

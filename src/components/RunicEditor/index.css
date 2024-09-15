@@ -28,7 +28,7 @@
 }
 
 .runic-editor__svg-container {
-    min-height: 10em;
+    height: 10em;
     padding: 1em;
     overflow: hidden;
 }

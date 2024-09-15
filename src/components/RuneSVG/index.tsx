@@ -2,12 +2,24 @@ import "./index.css";
 
 import { h, Component, VNode } from "preact";
 import { Rune, RUNE_HEIGHT, RUNE_WIDTH } from "../Rune";
-import { sanitizeTextInput, textToBitmaskLines } from "./utils";
+import {
+    downloadSVGFromElement,
+    sanitizeTextInput,
+    textToBitmaskLines,
+} from "./utils";
+import { querySelectorArray } from "src/utils";
 
 interface Props {
     interactive: boolean;
     displayPhonemes: boolean;
     phoneticText: string;
+}
+
+export interface RunicSVGStyles {
+    runeColor: string;
+    runeGuideColor: string;
+    runeThickness: number;
+    shadowSpread: number;
 }
 
 interface State {
@@ -19,6 +31,71 @@ const SPACE_WIDTH = RUNE_WIDTH;
 
 export class RuneSVG extends Component<Props, State> {
     svgElement?: SVGElement;
+
+    styles: RunicSVGStyles = {
+        runeColor: "crimson",
+        runeGuideColor: "transparent",
+        runeThickness: 0.25,
+        shadowSpread: 0,
+    };
+
+    componentDidUpdate() {
+        this.applyStyles({});
+    }
+
+    componentDidMount() {
+        this.applyStyles({});
+    }
+
+    applyStylesToGuideSegments() {
+        // Rune segment guides
+        querySelectorArray(
+            ".rune-segments-guide > .rune-segment",
+            this.svgElement,
+        ).forEach((segment) => {
+            segment.setAttribute("stroke", this.styles.runeGuideColor);
+        });
+    }
+
+    applyStylesToActiveSegments() {
+        // Active rune segments
+        querySelectorArray(".rune-segment--active", this.svgElement).forEach(
+            (segment) => {
+                segment.setAttribute("stroke", this.styles.runeColor);
+            },
+        );
+    }
+
+    applyStyles = (newStyles: Partial<RunicSVGStyles>) => {
+        Object.assign(this.styles, newStyles);
+
+        // TODO: Refactor
+
+        // General properties of rune segments
+        querySelectorArray(".rune-segment", this.svgElement).forEach(
+            (segment) => {
+                segment.setAttribute("stroke", "transparent");
+                segment.setAttribute(
+                    "stroke-width",
+                    `${this.styles.runeThickness}`,
+                );
+                segment.setAttribute("stroke-linecap", "round");
+            },
+        );
+
+        this.applyStylesToGuideSegments();
+        this.applyStylesToActiveSegments();
+
+        // Drop Shadow
+        const filter = this.styles.shadowSpread
+            ? `drop-shadow(0 0 ${this.styles.shadowSpread}px ${this.styles.runeColor})`
+            : "";
+        this.svgElement.style.setProperty("filter", filter);
+    };
+
+    downloadSVG = () => {
+        downloadSVGFromElement(this.svgElement);
+    };
 
     constructor(props: Props) {
         super(props);
@@ -92,7 +169,11 @@ export class RuneSVG extends Component<Props, State> {
         });
     }
 
-    render(props: Props, { lines }: State) {
+    render(props: Props, state: State) {
+        // Magic number because I'm a wizard
+        // TODO: Put this in a better place
+        const SCALING_FACTOR = 100;
+
         const [viewBoxWidth, viewBoxHeight] = this.getViewBoxDimensions();
         const viewBox = `-${SVG_PADDING} -${SVG_PADDING} ${viewBoxWidth} ${viewBoxHeight}`;
         return (
@@ -101,9 +182,12 @@ export class RuneSVG extends Component<Props, State> {
                     this.svgElement = e;
                 }}
                 class="runic-svg"
-                width={viewBoxWidth}
-                height={viewBoxHeight}
+                width={viewBoxWidth * SCALING_FACTOR}
+                height={viewBoxHeight * SCALING_FACTOR}
                 viewBox={viewBox}
+                version="1.1"
+                xmlns="http://www.w3.org/2000/svg"
+                xmlnsXlink="http://www.w3.org/1999/xlink"
             >
                 {...this.getRunes()}
             </svg>

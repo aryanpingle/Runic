@@ -10,6 +10,8 @@ export interface Props {
     label: string;
     onChange?: (event: Event) => void;
     onInput?: (event: Event) => void;
+    /** Like onInput, except the input value is passed */
+    bindInput?: (value: number) => void;
 }
 
 export interface State {
@@ -39,6 +41,7 @@ export class RangeInput extends Component<Props, State> {
 
         // Fire onInput listener
         this.props.onInput?.(event);
+        this.props.bindInput?.(value);
     };
 
     render(props: Props, state: State) {

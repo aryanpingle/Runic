@@ -37,22 +37,16 @@ export class RunicEditor extends Component<Props, State> {
         this.onPhoneticChange();
     };
 
-    onThicknessChange = (event: Event) => {
-        const thicknessInput = event.currentTarget as HTMLInputElement;
-        const thickness = thicknessInput.value;
-        this.runeSVGElement.svgElement.style.setProperty(
-            "--rune-segment-thickness",
-            String(thickness),
-        );
+    onThicknessChange = (thickness: number) => {
+        this.runeSVGElement.applyStyles({
+            runeThickness: thickness,
+        });
     };
 
-    onShadowChange = (event: Event) => {
-        const shadowSpreadInput = event.currentTarget as HTMLInputElement;
-        const shadowSpread = shadowSpreadInput.value;
-        this.runeSVGElement.svgElement.style.setProperty(
-            "--rune-segment-shadow-spread",
-            String(shadowSpread),
-        );
+    onShadowChange = (spread: number) => {
+        this.runeSVGElement.applyStyles({
+            shadowSpread: spread,
+        });
     };
 
     render() {
@@ -75,7 +69,7 @@ export class RunicEditor extends Component<Props, State> {
                             max={0.5}
                             step={0.01}
                             default={0.25}
-                            onInput={this.onThicknessChange}
+                            bindInput={this.onThicknessChange}
                         ></RangeInput>
                         <RangeInput
                             label={"Shadow"}
@@ -83,7 +77,7 @@ export class RunicEditor extends Component<Props, State> {
                             max={20}
                             step={0.5}
                             default={0}
-                            onInput={this.onShadowChange}
+                            bindInput={this.onShadowChange}
                         ></RangeInput>
                     </div>
                 </div>

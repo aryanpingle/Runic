@@ -124,7 +124,7 @@ export function downloadSVGFromElement(svgElement: SVGElement) {
     var svgData = svgElement.outerHTML;
     var svgBlob = new Blob([svgData], { type: "image/svg+xml;charset=utf-8" });
     var svgUrl = URL.createObjectURL(svgBlob);
-    window.location
+    window.location;
     var downloadLink = document.createElement("a");
     downloadLink.href = svgUrl;
     downloadLink.download = "newesttree.svg";

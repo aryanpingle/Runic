@@ -12,7 +12,7 @@ export class RunicPlayground extends Component<Props, State> {
                 interactive={true}
                 displayPhonemes={true}
                 styles={{
-                    runeGuideColor: "#121212"
+                    runeGuideColor: "#121212",
                 }}
             />
         );

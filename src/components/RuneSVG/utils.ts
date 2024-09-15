@@ -15,6 +15,7 @@ export function sanitizeTextInput(s: string): string {
 
     return sanitized;
 }
+
 function parseString(s: string, i: number, tokens: string[]): boolean {
     if (i === s.length) return true;
 
@@ -44,6 +45,7 @@ function parseString(s: string, i: number, tokens: string[]): boolean {
     // No symbols matched here
     return false;
 }
+
 export function textToBitmaskLines(s: string): number[][][] {
     const tokens: string[] = [];
 

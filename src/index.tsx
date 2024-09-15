@@ -5,6 +5,7 @@ import { RunicEditor } from "components/RunicEditor";
 import "./index.css";
 import { RuneReferenceTable } from "components/RuneReference";
 import { consonantDataTable, vowelDataTable } from "./runeDataset";
+import { RunicPlayground } from "components/RunicPlayground";
 
 async function setup() {
     await loadIPADict();
@@ -13,6 +14,12 @@ async function setup() {
     render(
         <RunicEditor></RunicEditor>,
         document.querySelector(".runic-editor-container"),
+    );
+
+    // Runic Playground
+    render(
+        <RunicPlayground />,
+        document.querySelector(".runic-playground-container"),
     );
 
     // Vowel Table

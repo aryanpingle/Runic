@@ -1,3 +1,5 @@
+import "./index.css";
+
 import { h, Component, VNode } from "preact";
 import { Rune, RUNE_HEIGHT, RUNE_WIDTH } from "../Rune";
 import { sanitizeTextInput, textToBitmaskLines } from "./utils";
@@ -52,6 +54,9 @@ export class RuneSVG extends Component<Props, State> {
     }
 
     private getViewBoxDimensions(): [number, number] {
+        const ACTUAL_RUNE_HEIGHT =
+            RUNE_HEIGHT - (this.props.displayPhonemes ? 0 : 1);
+
         // Calculate maximum width among the lines
         let maxLineWidth = 0;
         this.state.lines.forEach((line) => {
@@ -73,7 +78,7 @@ export class RuneSVG extends Component<Props, State> {
         const NUM_LINES = this.state.lines.length;
         const SVG_VIEWBOX_HEIGHT =
             2 * SVG_PADDING + // Padding on either side
-            RUNE_HEIGHT * NUM_LINES + // Height of all lines
+            ACTUAL_RUNE_HEIGHT * NUM_LINES + // Height of all lines
             (NUM_LINES - 1) * (RUNE_WIDTH / 2); // Spacing between lines
 
         return [SVG_VIEWBOX_WIDTH, SVG_VIEWBOX_HEIGHT];
@@ -87,18 +92,6 @@ export class RuneSVG extends Component<Props, State> {
         });
     }
 
-    setRuneColor = (color: string) => {
-        this.svgElement.style.setProperty("--rune-line-color", color);
-    };
-
-    setRunePhonemeColor = (color: string) => {
-        this.svgElement.style.setProperty("--rune-line-color", color);
-    };
-
-    setBackgroundColor = (color: string) => {
-        this.svgElement.style.setProperty("--svg-background-color", color);
-    };
-
     render(props: Props, { lines }: State) {
         const [viewBoxWidth, viewBoxHeight] = this.getViewBoxDimensions();
         const viewBox = `-${SVG_PADDING} -${SVG_PADDING} ${viewBoxWidth} ${viewBoxHeight}`;
@@ -107,6 +100,7 @@ export class RuneSVG extends Component<Props, State> {
                 ref={(e) => {
                     this.svgElement = e;
                 }}
+                class="runic-svg"
                 width={viewBoxWidth}
                 height={viewBoxHeight}
                 viewBox={viewBox}

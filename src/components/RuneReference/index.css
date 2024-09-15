@@ -1,14 +1,58 @@
 .rune-reference-grid {
     width: 100%;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(2em, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(15ch, 1fr));
 }
 
 .rune-reference-grid-item {
     width: 100%;
     height: 100%;
 
+    padding: 0.25em;
+}
+
+/* Horizontal card layout */
+
+.rune-card {
     display: flex;
+    gap: 0.25em;
+    padding: 0.25em;
+
+    height: 100%;
+    cursor: pointer;
+
+    background-color: #121212;
+    border-radius: 0.5em;
+}
+
+.rune-card .rune-segments-guide > .rune-segment {
+    stroke: #242424 !important;
+}
+
+.rune-card > .svg-container {
+    flex: 0 0 auto;
+    width: 2em;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+
+.rune-info {
+    flex: 1 0 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.rune-info__symbol {
+    font-size: 1.5em;
+    color: #cdcdcd;
+}
+
+.rune-info__english {
+    font-size: 0.5em;
+    color: #888;
 }

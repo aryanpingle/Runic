@@ -1,3 +1,5 @@
+import "./index.css";
+
 import { h, Component, VNode, JSX } from "preact";
 import { getInfoFromRuneMask } from "../../rune";
 import { symbolToSymbolData } from "../../runeDataset";
@@ -132,10 +134,10 @@ export class Rune extends Component<Props, State> {
             arr.reverse();
         }
         const translation = arr.join(" ").trim();
-        const pronunciation = translation
-            .split(" ")
-            .map((s) => symbolToSymbolData[s].english)
-            .join(", ");
+        // const pronunciation = translation
+        //     .split(" ")
+        //     .map((s) => symbolToSymbolData[s].english)
+        //     .join(", ");
 
         return (
             // TODO: ref function
@@ -147,11 +149,7 @@ export class Rune extends Component<Props, State> {
                 data-runemask={state.bitmask.toString(2)}
                 {...(attrs as any)}
             >
-                {props.interactive && (
-                    <g class="rune-segments-guide">
-                        {...this.getRuneSegments(0)}
-                    </g>
-                )}
+                <g class="rune-segments-guide">{...this.getRuneSegments(0)}</g>
                 <g class="rune-segments-actual">
                     {...this.getRuneSegments(state.bitmask)}
                 </g>
@@ -167,7 +165,7 @@ export class Rune extends Component<Props, State> {
                         x={1.5}
                         y={8}
                         text-anchor={"middle"}
-                        title={pronunciation}
+                        // title={pronunciation}
                     >
                         {translation}
                     </text>

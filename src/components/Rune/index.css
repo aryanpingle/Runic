@@ -1,0 +1,38 @@
+/**
+ * --rune-segment-color
+ * --rune-guide-color
+*/
+
+/* General properties of rune lines */
+
+.rune-segment {
+    stroke-width: 0.25;
+    stroke-linecap: round;
+}
+
+/* Group of rune lines used as guidelines */
+
+.rune-segments-guide > .rune-segment {
+    stroke: var(--rune-guide-color)
+}
+
+/* Group of rune lines that indicate the glyph */
+
+.rune-segments-actual > .rune-segment {
+    stroke: transparent;
+}
+
+.rune-segments-actual > .rune-segment--active {
+    stroke: var(--rune-segment-color);
+}
+
+/* Group of rune lines to be activated on hover */
+
+.rune-segments-hover > .rune-segment {
+    stroke: transparent;
+    cursor: pointer;
+}
+
+.rune-segments-hover > .rune-segment:hover {
+    stroke: orangered;
+}

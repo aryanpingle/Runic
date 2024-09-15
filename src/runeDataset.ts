@@ -245,13 +245,13 @@ export const consonantDataTable = [
     {
         ipaSymbol: "θ",
         mask: 0b100000011010110,
-        english: "th (hard)",
+        english: "th (sharp)",
         examples: "theta, theme, thaw",
     },
     {
         ipaSymbol: "ð",
         mask: 0b100000010111010,
-        english: "th (gentle)",
+        english: "th (soft)",
         examples: "leather, the, them",
     },
     {

@@ -1,2 +1,8 @@
-.runic-svg {
+.runic-layer--interactive .rune-segment {
+    transition: stroke 250ms ease;
+    cursor: pointer;
+}
+
+.runic-layer--interactive .rune-segment:hover {
+    stroke: currentColor;
 }

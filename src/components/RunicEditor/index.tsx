@@ -18,6 +18,7 @@ export class RunicEditor extends Component<Props, State> {
         ) as HTMLTextAreaElement;
         const phoneticText = phoneticTextArea.value;
         this.runeSVGElement.renderPhoneticText(phoneticText);
+        this.runeSVGElement.forceUpdate();
     };
 
     onEnglishChange = () => {

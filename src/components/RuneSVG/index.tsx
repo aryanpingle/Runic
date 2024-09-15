@@ -1,18 +1,24 @@
 import "./index.css";
 
-import { h, Component, VNode } from "preact";
-import { Rune, RUNE_HEIGHT, RUNE_WIDTH } from "../Rune";
+import { h, Component } from "preact";
 import {
     downloadSVGFromElement,
     sanitizeTextInput,
     textToBitmaskLines,
 } from "./utils";
-import { querySelectorArray } from "src/utils";
+import {
+    RUNE_HEIGHT,
+    RUNE_SPACE_WIDTH,
+    RUNE_WIDTH,
+    getRuneLayers,
+} from "./rune";
 
 interface Props {
     interactive: boolean;
     displayPhonemes: boolean;
     phoneticText: string;
+
+    styles?: Partial<RunicSVGStyles>;
 }
 
 export interface RunicSVGStyles {
@@ -22,15 +28,20 @@ export interface RunicSVGStyles {
     shadowSpread: number;
 }
 
-interface State {
-    lines: number[][][];
-}
+interface State {}
 
 const SVG_PADDING = 1;
-const SPACE_WIDTH = RUNE_WIDTH;
 
 export class RuneSVG extends Component<Props, State> {
     svgElement?: SVGElement;
+
+    lines: number[][][];
+
+    // The 4 layers
+    guideLayer?: SVGGElement;
+    realLayer?: SVGGElement;
+    interactiveLayer?: SVGGElement;
+    textLayer?: SVGGElement;
 
     styles: RunicSVGStyles = {
         runeColor: "crimson",
@@ -38,6 +49,17 @@ export class RuneSVG extends Component<Props, State> {
         runeThickness: 0.25,
         shadowSpread: 0,
     };
+
+    constructor(props: Props) {
+        super(props);
+
+        // Set default styles (if any) from props
+        Object.assign(this.styles, props.styles || {});
+
+        this.renderPhoneticText(props.phoneticText);
+    }
+
+    // --- Life Cycle Methods
 
     componentDidUpdate() {
         this.applyStyles({});
@@ -47,87 +69,131 @@ export class RuneSVG extends Component<Props, State> {
         this.applyStyles({});
     }
 
-    applyStylesToGuideSegments() {
-        // Rune segment guides
-        querySelectorArray(
-            ".rune-segments-guide > .rune-segment",
-            this.svgElement,
-        ).forEach((segment) => {
-            segment.setAttribute("stroke", this.styles.runeGuideColor);
-        });
-    }
+    // --- Apply SVG-level styles
 
-    applyStylesToActiveSegments() {
-        // Active rune segments
-        querySelectorArray(".rune-segment--active", this.svgElement).forEach(
-            (segment) => {
-                segment.setAttribute("stroke", this.styles.runeColor);
-            },
-        );
-    }
-
-    applyStyles = (newStyles: Partial<RunicSVGStyles>) => {
+    public applyStyles = (newStyles: Partial<RunicSVGStyles>) => {
         Object.assign(this.styles, newStyles);
 
-        // TODO: Refactor
-
-        // General properties of rune segments
-        querySelectorArray(".rune-segment", this.svgElement).forEach(
-            (segment) => {
-                segment.setAttribute("stroke", "transparent");
-                segment.setAttribute(
-                    "stroke-width",
-                    `${this.styles.runeThickness}`,
-                );
-                segment.setAttribute("stroke-linecap", "round");
-            },
-        );
-
+        // Apply styles to rune segments
+        this.applyGeneralStylesToSegments();
         this.applyStylesToGuideSegments();
-        this.applyStylesToActiveSegments();
+        this.applyStylesToRealSegments();
+        this.applyStylesToInteractiveSegments();
 
+        // Apply styles to the SVG
+        this.applyGeneralSVGStyles();
+    };
+
+    private applyGeneralSVGStyles() {
         // Drop Shadow
         const filter = this.styles.shadowSpread
             ? `drop-shadow(0 0 ${this.styles.shadowSpread}px ${this.styles.runeColor})`
             : "";
         this.svgElement.style.setProperty("filter", filter);
-    };
+    }
 
-    downloadSVG = () => {
+    private applyGeneralStylesToSegments() {
+        // General properties of rune segments
+        this.svgElement.querySelectorAll(".rune-segment").forEach((segment) => {
+            // Make every segment transparent by default
+            segment.setAttribute("stroke", "transparent");
+            // Set a common stroke-width
+            segment.setAttribute(
+                "stroke-width",
+                `${this.styles.runeThickness}`,
+            );
+            // Make every line have rounded ends
+            segment.setAttribute("stroke-linecap", "round");
+        });
+    }
+
+    private applyStylesToGuideSegments() {
+        // Guide layer segments
+        this.guideLayer
+            ?.querySelectorAll(".rune-segment")
+            .forEach((segment) => {
+                segment.setAttribute("stroke", this.styles.runeGuideColor);
+            });
+    }
+
+    private applyStylesToRealSegments() {
+        // Real layer segments
+        this.realLayer
+            ?.querySelectorAll(".rune-segment--active")
+            .forEach((segment) => {
+                segment.setAttribute("stroke", this.styles.runeColor);
+            });
+    }
+
+    private applyStylesToInteractiveSegments() {
+        // Interactive layer segments
+
+        // Apply onclick if it hasn't already been applied
+        const onclickCertificate = "CUM";
+        this.interactiveLayer
+            ?.querySelectorAll(".rune-segment")
+            .forEach((segment) => {
+                if (segment.hasAttribute(onclickCertificate)) return;
+
+                segment.addEventListener(
+                    "click",
+                    this.onInteractiveSegmentClick,
+                );
+                segment.setAttribute(onclickCertificate, "true");
+            });
+    }
+
+    // --- Miscellaneous
+
+    public downloadSVG = () => {
         downloadSVGFromElement(this.svgElement);
     };
 
-    constructor(props: Props) {
-        super(props);
-        this.renderPhoneticText(props.phoneticText);
+    // --- Listener
+
+    private onInteractiveSegmentClick = (event: Event) => {
+        const segment = event.currentTarget as SVGElement;
+        const runeContainer = segment.parentElement;
+
+        // Extract information from the segment and its .rune parent
+        const runeIndex = parseInt(
+            runeContainer.getAttribute("data-rune-index"),
+        );
+        const bitmask = parseInt(
+            runeContainer.getAttribute("data-rune-bitmask"),
+            2,
+        );
+        const segmentIndex = parseInt(
+            segment.getAttribute("data-segment-index"),
+        );
+
+        // Calculate the new bitmask after toggling
+        const newBitmask = bitmask ^ (1 << (14 - segmentIndex));
+
+        this.updateIndividualRune(newBitmask, runeIndex);
+        this.forceUpdate();
+    };
+
+    updateIndividualRune(bitmask: number, runeIndex: number) {
+        let counter = 0;
+        for (const line of this.lines) {
+            for (const word of line) {
+                for (let i = 0; i < word.length; ++i) {
+                    if (counter === runeIndex) {
+                        word[i] = bitmask;
+                        return;
+                    }
+                    ++counter;
+                }
+            }
+        }
     }
 
-    public getRunes(): VNode<Rune>[] {
-        const runesArray = [];
+    // --- Creating the SVG
 
-        this.state.lines.forEach((line, lineIndex) => {
-            let tx = 0;
-            line.forEach((word) => {
-                word.forEach((bitmask) => {
-                    const ty = lineIndex * (RUNE_HEIGHT + SVG_PADDING);
-                    const transformation = `translate(${tx}, ${ty})`;
-                    runesArray.push(
-                        <Rune
-                            displayPhonemes={this.props.displayPhonemes}
-                            interactive={this.props.interactive}
-                            bitmask={bitmask}
-                            transform={transformation}
-                        ></Rune>,
-                    );
-                    tx += RUNE_WIDTH;
-                });
-
-                // Space after a word
-                tx += SPACE_WIDTH;
-            });
-        });
-
-        return runesArray;
+    public renderPhoneticText(phoneticText: string) {
+        const sanitized = sanitizeTextInput(phoneticText);
+        this.lines = textToBitmaskLines(sanitized);
     }
 
     private getViewBoxDimensions(): [number, number] {
@@ -136,7 +202,7 @@ export class RuneSVG extends Component<Props, State> {
 
         // Calculate maximum width among the lines
         let maxLineWidth = 0;
-        this.state.lines.forEach((line) => {
+        this.lines.forEach((line) => {
             let lineWidth = 0;
             // Add rune widths
             line.forEach((word) => {
@@ -144,7 +210,7 @@ export class RuneSVG extends Component<Props, State> {
             });
             // Add spacing between words
             const numWords = line.length - 1;
-            lineWidth += numWords * SPACE_WIDTH;
+            lineWidth += numWords * RUNE_SPACE_WIDTH;
 
             // Add width of runes
             maxLineWidth = Math.max(maxLineWidth, lineWidth);
@@ -152,21 +218,13 @@ export class RuneSVG extends Component<Props, State> {
         // Padding on either side + max line width
         const SVG_VIEWBOX_WIDTH = 2 * SVG_PADDING + maxLineWidth;
 
-        const NUM_LINES = this.state.lines.length;
+        const NUM_LINES = this.lines.length;
         const SVG_VIEWBOX_HEIGHT =
             2 * SVG_PADDING + // Padding on either side
             ACTUAL_RUNE_HEIGHT * NUM_LINES + // Height of all lines
             (NUM_LINES - 1) * (RUNE_WIDTH / 2); // Spacing between lines
 
         return [SVG_VIEWBOX_WIDTH, SVG_VIEWBOX_HEIGHT];
-    }
-
-    renderPhoneticText(phoneticText: string) {
-        const sanitized = sanitizeTextInput(phoneticText);
-
-        this.setState({
-            lines: textToBitmaskLines(sanitized),
-        });
     }
 
     render(props: Props, state: State) {
@@ -176,6 +234,8 @@ export class RuneSVG extends Component<Props, State> {
 
         const [viewBoxWidth, viewBoxHeight] = this.getViewBoxDimensions();
         const viewBox = `-${SVG_PADDING} -${SVG_PADDING} ${viewBoxWidth} ${viewBoxHeight}`;
+
+        const layers = getRuneLayers(this.lines);
         return (
             <svg
                 ref={(e) => {
@@ -189,7 +249,34 @@ export class RuneSVG extends Component<Props, State> {
                 xmlns="http://www.w3.org/2000/svg"
                 xmlnsXlink="http://www.w3.org/1999/xlink"
             >
-                {...this.getRunes()}
+                <g
+                    ref={(e) => (this.guideLayer = e)}
+                    className="runic-layer--guide"
+                >
+                    {...layers.guide}
+                </g>
+                <g
+                    ref={(e) => (this.realLayer = e)}
+                    className="runic-layer--real"
+                >
+                    {...layers.real}
+                </g>
+                {props.interactive && (
+                    <g
+                        ref={(e) => (this.interactiveLayer = e)}
+                        className="runic-layer--interactive"
+                    >
+                        {...layers.interactive}
+                    </g>
+                )}
+                {props.displayPhonemes && (
+                    <g
+                        ref={(e) => (this.textLayer = e)}
+                        className="runic-layer--text"
+                    >
+                        {...layers.text}
+                    </g>
+                )}
             </svg>
         );
     }

@@ -9,7 +9,7 @@ export const RUNE_WIDTH = 3;
 export const RUNE_HEIGHT = 8;
 
 export const RUNE_SPACE_WIDTH = RUNE_WIDTH;
-export const RUNE_LINE_SPACING = RUNE_WIDTH;
+export const RUNE_LINE_SPACING = RUNE_WIDTH / 2;
 
 // prettier-ignore
 const lineCoords: [Point, Point][] = [
@@ -80,7 +80,11 @@ export interface RuneLayers {
     text: VNode<RuneSegmentsContainer>[];
 }
 
-export function getRuneLayers(lines: number[][][]): RuneLayers {
+export function getRuneLayers(
+    lines: number[][][],
+    // TODO: Refactor somehow
+    displayPhonemes: boolean,
+): RuneLayers {
     const layers: RuneLayers = {
         guide: [],
         real: [],
@@ -88,9 +92,11 @@ export function getRuneLayers(lines: number[][][]): RuneLayers {
         text: [],
     };
 
+    const ACTUAL_RUNE_HEIGHT = RUNE_HEIGHT - (displayPhonemes ? 0 : 1);
+
     let index = 0;
     lines.forEach((line, lineIndex) => {
-        const runeY = lineIndex * (RUNE_HEIGHT + RUNE_LINE_SPACING);
+        const runeY = lineIndex * (ACTUAL_RUNE_HEIGHT + RUNE_LINE_SPACING);
         let runeX = 0;
         line.map((word) => {
             word.forEach((bitmask) => {

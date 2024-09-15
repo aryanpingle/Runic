@@ -8,6 +8,7 @@ import {
 } from "./utils";
 import {
     RUNE_HEIGHT,
+    RUNE_LINE_SPACING,
     RUNE_SPACE_WIDTH,
     RUNE_WIDTH,
     getRuneLayers,
@@ -222,7 +223,7 @@ export class RuneSVG extends Component<Props, State> {
         const SVG_VIEWBOX_HEIGHT =
             2 * SVG_PADDING + // Padding on either side
             ACTUAL_RUNE_HEIGHT * NUM_LINES + // Height of all lines
-            (NUM_LINES - 1) * (RUNE_WIDTH / 2); // Spacing between lines
+            (NUM_LINES - 1) * RUNE_LINE_SPACING; // Spacing between lines
 
         return [SVG_VIEWBOX_WIDTH, SVG_VIEWBOX_HEIGHT];
     }
@@ -235,15 +236,16 @@ export class RuneSVG extends Component<Props, State> {
         const [viewBoxWidth, viewBoxHeight] = this.getViewBoxDimensions();
         const viewBox = `-${SVG_PADDING} -${SVG_PADDING} ${viewBoxWidth} ${viewBoxHeight}`;
 
-        const layers = getRuneLayers(this.lines);
+        const layers = getRuneLayers(this.lines, this.props.displayPhonemes);
         return (
             <svg
                 ref={(e) => {
                     this.svgElement = e;
                 }}
                 class="runic-svg"
-                width={viewBoxWidth * SCALING_FACTOR}
-                height={viewBoxHeight * SCALING_FACTOR}
+                // width={viewBoxWidth * SCALING_FACTOR}
+                // height={viewBoxHeight * SCALING_FACTOR}
+                preserveAspectRatio="meet"
                 viewBox={viewBox}
                 version="1.1"
                 xmlns="http://www.w3.org/2000/svg"

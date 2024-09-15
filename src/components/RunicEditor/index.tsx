@@ -3,6 +3,7 @@ import "./index.css";
 import { h, Component } from "preact";
 import { RuneSVG } from "components/RuneSVG";
 import { translateSentence } from "src/ipa";
+import { RangeInput } from "components/RangeInput";
 
 interface Props {}
 
@@ -36,16 +37,55 @@ export class RunicEditor extends Component<Props, State> {
         this.onPhoneticChange();
     };
 
+    onThicknessChange = (event: Event) => {
+        const thicknessInput = event.currentTarget as HTMLInputElement;
+        const thickness = thicknessInput.value;
+        this.runeSVGElement.svgElement.style.setProperty(
+            "--rune-segment-thickness",
+            String(thickness),
+        );
+    };
+
+    onShadowChange = (event: Event) => {
+        const shadowSpreadInput = event.currentTarget as HTMLInputElement;
+        const shadowSpread = shadowSpreadInput.value;
+        this.runeSVGElement.svgElement.style.setProperty(
+            "--rune-segment-shadow-spread",
+            String(shadowSpread),
+        );
+    };
+
     render() {
         return (
             <div className="runic-editor">
-                <div className="runic-svg-container">
-                    <RuneSVG
-                        ref={(e) => (this.runeSVGElement = e)}
-                        interactive={false}
-                        displayPhonemes={true}
-                        phoneticText=""
-                    ></RuneSVG>
+                <div className="runic-editor__preview">
+                    <div className="runic-editor__svg-container">
+                        <RuneSVG
+                            ref={(e) => (this.runeSVGElement = e)}
+                            interactive={false}
+                            displayPhonemes={false}
+                            phoneticText="sikɹət ɫɛdʒənd"
+                        ></RuneSVG>
+                    </div>
+                    <hr />
+                    <div className="runic-editor__settings-container">
+                        <RangeInput
+                            label={"Thickness"}
+                            min={0.05}
+                            max={0.5}
+                            step={0.01}
+                            default={0.25}
+                            onInput={this.onThicknessChange}
+                        ></RangeInput>
+                        <RangeInput
+                            label={"Shadow"}
+                            min={0}
+                            max={20}
+                            step={0.5}
+                            default={0}
+                            onInput={this.onShadowChange}
+                        ></RangeInput>
+                    </div>
                 </div>
                 <textarea
                     name="phonetic"

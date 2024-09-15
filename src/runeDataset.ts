@@ -1,4 +1,10 @@
-export const vowelDataTable = [
+export interface SymbolData {
+    ipaSymbol: string;
+    mask: number;
+    english: string;
+    examples: string;
+}
+export const vowelDataTable: SymbolData[] = [
     {
         ipaSymbol: "æ",
         mask: 0b110011100000000,
@@ -127,7 +133,7 @@ export const vowelDataTable = [
     },
 ];
 export const VOWEL_MASK = 0b111111100000000;
-export const consonantDataTable = [
+export const consonantDataTable: SymbolData[] = [
     {
         ipaSymbol: "b",
         mask: 0b100000010100010,
@@ -287,7 +293,7 @@ export const consonantDataTable = [
 ];
 export const CONSONANT_MASK = 0b100000011111110;
 export const MIDDLE_LINE_MASK = 0b100000000000000;
-export const symbolDataTable = [
+export const symbolDataTable: SymbolData[] = [
     // Vowels
     ...vowelDataTable,
     // Consonants

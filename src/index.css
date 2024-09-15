@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap");
 
 * {
     box-sizing: border-box;
@@ -9,6 +9,8 @@
     color: #ccc;
     /* 2 times bigger than the default */
     font-size: 2em;
+
+    font-weight: 300;
 
     --blog-width: 960px;
 }
@@ -26,4 +28,15 @@ svg {
     height: 100%;
 
     background-color: var(--svg-background-color);
+}
+
+article {}
+
+section {
+    max-width: var(--blog-width);
+    margin: auto;
+}
+
+section > h2 {
+    text-transform: capitalize;
 }

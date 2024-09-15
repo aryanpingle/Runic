@@ -1,0 +1,19 @@
+.range-input {
+    font-size: 0.5rem;
+}
+
+.range-input__info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    font-weight: 600;
+
+    margin-bottom: 0.5em;
+}
+
+.range-input__input-element {
+    accent-color: crimson;
+    font-size: inherit;
+    width: 100%;
+}

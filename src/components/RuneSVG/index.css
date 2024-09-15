@@ -1,4 +1,8 @@
 .runic-svg {
     --rune-guide-color: transparent;
     --rune-segment-color: crimson;
+    --rune-segment-thickness: 0.25;
+    --rune-segment-shadow-spread: 0;
+
+    filter: drop-shadow(0 0 calc(1px * var(--rune-segment-shadow-spread)) var(--rune-segment-color));
 }

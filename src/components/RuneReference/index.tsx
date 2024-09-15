@@ -2,20 +2,19 @@ import "./index.css";
 
 import { RuneSVG } from "components/RuneSVG";
 import { h, Component, VNode } from "preact";
-import {
-    consonantDataTable,
-    symbolDataTable,
-    vowelDataTable,
-} from "src/runeDataset";
+import { SymbolData } from "src/runeDataset";
 
-interface Props {}
+interface Props {
+    table: SymbolData[];
+}
+
 interface State {}
 
-function copySymbol(symbol: (typeof symbolDataTable)[0]) {
+function copySymbol(symbol: SymbolData) {
     navigator.clipboard.writeText(symbol.ipaSymbol);
 }
 
-function runeReferenceElement(symbol: (typeof symbolDataTable)[0]): VNode<any> {
+function runeReferenceGridItem(symbol: SymbolData): VNode<any> {
     return (
         <div className="rune-reference-grid-item">
             <div
@@ -43,18 +42,13 @@ function runeReferenceElement(symbol: (typeof symbolDataTable)[0]): VNode<any> {
     );
 }
 
-export class RuneReference extends Component<Props, State> {
-    render() {
+export class RuneReferenceTable extends Component<Props, State> {
+    render(props: Props) {
         return (
             <>
-                <h2>Vowels</h2>
-                <section class="rune-reference-grid">
-                    {...vowelDataTable.map(runeReferenceElement)}
-                </section>
-                <h2>Consonants</h2>
-                <section class="rune-reference-grid">
-                    {...consonantDataTable.map(runeReferenceElement)}
-                </section>
+                <div class="rune-reference-grid">
+                    {...props.table.map(runeReferenceGridItem)}
+                </div>
             </>
         );
     }

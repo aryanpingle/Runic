@@ -6,7 +6,7 @@
 /* General properties of rune lines */
 
 .rune-segment {
-    stroke-width: 0.25;
+    stroke-width: var(--rune-segment-thickness);
     stroke-linecap: round;
 }
 

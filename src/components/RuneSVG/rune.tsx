@@ -80,50 +80,9 @@ export interface RuneLayers {
     text: VNode<RuneSegmentsContainer>[];
 }
 
-export function getRuneLayers(
-    lines: number[][][],
-    // TODO: Refactor somehow
-    displayPhonemes: boolean,
-): RuneLayers {
-    const layers: RuneLayers = {
-        guide: [],
-        real: [],
-        interactive: [],
-        text: [],
-    };
-
-    const ACTUAL_RUNE_HEIGHT = RUNE_HEIGHT - (displayPhonemes ? 0 : 1);
-
-    let index = 0;
-    lines.forEach((line, lineIndex) => {
-        const runeY = lineIndex * (ACTUAL_RUNE_HEIGHT + RUNE_LINE_SPACING);
-        let runeX = 0;
-        line.map((word) => {
-            word.forEach((bitmask) => {
-                const { guide, real, interactive, text } =
-                    getRuneLayersForOneRune(bitmask, index, runeX, runeY);
-
-                // Add the rune containers to their respective layers
-                layers.guide.push(...guide);
-                layers.real.push(...real);
-                layers.interactive.push(...interactive);
-                layers.text.push(...text);
-
-                // Increment the number of runes so far
-                ++index;
-                // Add rune width
-                runeX += RUNE_WIDTH;
-            });
-            runeX += RUNE_SPACE_WIDTH;
-        });
-    });
-
-    return layers;
-}
-
 type RuneSegmentsContainer = SVGGElement;
 
-function getRuneLayersForOneRune(
+export function getRuneLayersForOneRune(
     bitmask: number,
     index: number,
     tx: number,

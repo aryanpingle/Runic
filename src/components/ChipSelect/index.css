@@ -1,0 +1,44 @@
+.chip-select {
+    position: relative;
+
+    font-size: 0.5em;
+
+    width: 100%;
+
+    padding: 0.25em;
+    border: 2px solid crimson;
+    border-radius: 0.5em;
+
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+}
+
+.chip-select__input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    user-select: none;
+    pointer-events: none;
+}
+
+.chip-select__label {
+    width: 100%;
+    padding: 0.5em;
+    cursor: pointer;
+
+    border-radius: 0.25em;
+
+    display: grid;
+    place-items: center;
+}
+
+.chip-select__input:focus + .chip-select__label {
+    /* outline: 2px solid gold; */
+}
+
+.chip-select__input:checked + .chip-select__label {
+    background-color: crimson;
+    color: black;
+}

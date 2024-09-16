@@ -27,10 +27,8 @@ function runeReferenceGridItem(symbol: SymbolData): VNode<any> {
                         displayPhonemes={false}
                         interactive={false}
                         phoneticText={symbol.ipaSymbol}
-                        styles={{
-                            runeColor: "palegreen",
-                            runeGuideColor: "#242424",
-                        }}
+                        runeColor="palegreen"
+                        runeGuideColor="#242424"
                     ></RuneSVG>
                 </div>
                 <div className="rune-info">

@@ -5,7 +5,13 @@ import { RuneSVG } from "components/RuneSVG";
 import { translateSentence } from "src/ipa";
 import { RangeInput } from "components/RangeInput";
 import { downloadURI, drawSVGToCanvas } from "./utils";
-import { DownloadIcon } from "components/icons";
+import {
+    CenterAlignIcon,
+    DownloadIcon,
+    LeftAlignIcon,
+    RightAlignIcon,
+} from "components/icons";
+import { ChipSelect } from "components/ChipSelect";
 
 interface Props {}
 
@@ -40,16 +46,16 @@ export class RunicEditor extends Component<Props, State> {
         this.onPhoneticChange();
     };
 
-    onThicknessChange = (thickness: number) => {
-        this.runeSVGElement.applyStyles({
-            runeThickness: thickness,
-        });
+    onSpreadChange = (spread: number) => {
+        this.runeSVGElement.setState({ shadowSpread: spread });
     };
 
-    onShadowChange = (spread: number) => {
-        this.runeSVGElement.applyStyles({
-            shadowSpread: spread,
-        });
+    onThicknessChange = (thickness: number) => {
+        this.runeSVGElement.setState({ runeThickness: thickness });
+    };
+
+    onAlignmentChange = (align: "left" | "center" | "right") => {
+        this.runeSVGElement.setState({ align: align });
     };
 
     download = (format: "svg" | "png" | "jpeg") => {
@@ -66,6 +72,29 @@ export class RunicEditor extends Component<Props, State> {
     };
 
     render() {
+        const AlignmentSelect = (
+            <ChipSelect
+                chipData={[
+                    {
+                        value: "left",
+                        label: <LeftAlignIcon width="1.25em" height="1.25em" />,
+                    },
+                    {
+                        value: "center",
+                        label: (
+                            <CenterAlignIcon width="1.25em" height="1.25em" />
+                        ),
+                    },
+                    {
+                        value: "right",
+                        label: (
+                            <RightAlignIcon width="1.25em" height="1.25em" />
+                        ),
+                    },
+                ]}
+                onChange={this.onAlignmentChange}
+            />
+        );
         return (
             <div className="runic-editor">
                 <div className="runic-editor__preview">
@@ -93,7 +122,7 @@ export class RunicEditor extends Component<Props, State> {
                             max={20}
                             step={0.5}
                             default={0}
-                            bindInput={this.onShadowChange}
+                            bindInput={this.onSpreadChange}
                         ></RangeInput>
                         <div className="runic-editor__download-group">
                             <button
@@ -115,6 +144,7 @@ export class RunicEditor extends Component<Props, State> {
                                 <DownloadIcon /> JPEG
                             </button>
                         </div>
+                        {AlignmentSelect}
                     </div>
                 </div>
                 <textarea

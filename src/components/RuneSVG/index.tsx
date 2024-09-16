@@ -7,70 +7,71 @@ import {
     RUNE_LINE_SPACING,
     RUNE_SPACE_WIDTH,
     RUNE_WIDTH,
-    getRuneLayers,
+    RuneLayers,
+    getRuneLayersForOneRune,
 } from "./rune";
 
-interface Props {
+export interface Props extends Partial<State> {
+    // Required props
     interactive: boolean;
     displayPhonemes: boolean;
     phoneticText: string;
-
-    styles?: Partial<RunicSVGStyles>;
 }
 
-export interface RunicSVGStyles {
+interface State {
     runeColor: string;
     runeGuideColor: string;
     runeThickness: number;
     shadowSpread: number;
+    align: "left" | "center" | "right";
 }
-
-interface State {}
 
 const SVG_PADDING = 1;
 
 export class RuneSVG extends Component<Props, State> {
     svgElement?: SVGElement;
 
-    lines: number[][][];
+    private lines: number[][][];
 
-    // The 4 layers
-    guideLayer?: SVGGElement;
-    realLayer?: SVGGElement;
-    interactiveLayer?: SVGGElement;
-    textLayer?: SVGGElement;
-
-    styles: RunicSVGStyles = {
+    // Initial state based on props
+    state: State = {
         runeColor: "crimson",
         runeGuideColor: "transparent",
         runeThickness: 0.25,
         shadowSpread: 0,
+        align: "left",
     };
+
+    // The 4 layers
+    private guideLayer?: SVGGElement;
+    private realLayer?: SVGGElement;
+    private interactiveLayer?: SVGGElement;
+    private textLayer?: SVGGElement;
 
     constructor(props: Props) {
         super(props);
 
-        // Set default styles (if any) from props
-        Object.assign(this.styles, props.styles || {});
-
-        this.renderPhoneticText(props.phoneticText);
+        const sanitized = sanitizeTextInput(props.phoneticText);
+        this.lines = textToBitmaskLines(sanitized);
     }
 
     // --- Life Cycle Methods
 
+    componentWillReceiveProps(nextProps: Readonly<Props>): void {
+        console.log(nextProps);
+    }
+
     componentDidUpdate() {
-        this.applyStyles({});
+        this.postRenderSetup();
     }
 
     componentDidMount() {
-        this.applyStyles({});
+        this.postRenderSetup();
     }
 
     // --- Apply SVG-level styles
 
-    public applyStyles = (newStyles: Partial<RunicSVGStyles>) => {
-        Object.assign(this.styles, newStyles);
-
+    public postRenderSetup = () => {
         // Apply styles to rune segments
         this.applyGeneralStylesToSegments();
         this.applyStylesToGuideSegments();
@@ -83,8 +84,8 @@ export class RuneSVG extends Component<Props, State> {
 
     private applyGeneralSVGStyles() {
         // Drop Shadow
-        const filter = this.styles.shadowSpread
-            ? `drop-shadow(0 0 ${this.styles.shadowSpread}px ${this.styles.runeColor})`
+        const filter = this.state.shadowSpread
+            ? `drop-shadow(0 0 ${this.state.shadowSpread}px ${this.state.runeColor})`
             : "";
         this.svgElement.style.setProperty("filter", filter);
     }
@@ -95,10 +96,7 @@ export class RuneSVG extends Component<Props, State> {
             // Make every segment transparent by default
             segment.setAttribute("stroke", "transparent");
             // Set a common stroke-width
-            segment.setAttribute(
-                "stroke-width",
-                `${this.styles.runeThickness}`,
-            );
+            segment.setAttribute("stroke-width", `${this.state.runeThickness}`);
             // Make every line have rounded ends
             segment.setAttribute("stroke-linecap", "round");
         });
@@ -109,7 +107,7 @@ export class RuneSVG extends Component<Props, State> {
         this.guideLayer
             ?.querySelectorAll(".rune-segment")
             .forEach((segment) => {
-                segment.setAttribute("stroke", this.styles.runeGuideColor);
+                segment.setAttribute("stroke", this.state.runeGuideColor);
             });
     }
 
@@ -118,7 +116,7 @@ export class RuneSVG extends Component<Props, State> {
         this.realLayer
             ?.querySelectorAll(".rune-segment--active")
             .forEach((segment) => {
-                segment.setAttribute("stroke", this.styles.runeColor);
+                segment.setAttribute("stroke", this.state.runeColor);
             });
     }
 
@@ -185,27 +183,27 @@ export class RuneSVG extends Component<Props, State> {
     public renderPhoneticText(phoneticText: string) {
         const sanitized = sanitizeTextInput(phoneticText);
         this.lines = textToBitmaskLines(sanitized);
+        this.forceUpdate();
+    }
+
+    private getLineWidth(line: number[][]): number {
+        // Spaces between words
+        const lineSpaceCount = line.length - 1;
+        // Number of runes
+        const lineRuneCount = line.reduce((acc, word) => acc + word.length, 0);
+        return lineSpaceCount * RUNE_SPACE_WIDTH + lineRuneCount * RUNE_WIDTH;
+    }
+
+    private getMaxLineWidth(): number {
+        const lineWidths = this.lines.map(this.getLineWidth);
+        return Math.max(...lineWidths);
     }
 
     private getViewBoxDimensions(): [number, number] {
         const ACTUAL_RUNE_HEIGHT =
             RUNE_HEIGHT - (this.props.displayPhonemes ? 0 : 1);
 
-        // Calculate maximum width among the lines
-        let maxLineWidth = 0;
-        this.lines.forEach((line) => {
-            let lineWidth = 0;
-            // Add rune widths
-            line.forEach((word) => {
-                lineWidth += word.length * RUNE_WIDTH;
-            });
-            // Add spacing between words
-            const numWords = line.length - 1;
-            lineWidth += numWords * RUNE_SPACE_WIDTH;
-
-            // Add width of runes
-            maxLineWidth = Math.max(maxLineWidth, lineWidth);
-        });
+        let maxLineWidth = this.getMaxLineWidth();
         // Padding on either side + max line width
         const SVG_VIEWBOX_WIDTH = 2 * SVG_PADDING + maxLineWidth;
 
@@ -218,6 +216,65 @@ export class RuneSVG extends Component<Props, State> {
         return [SVG_VIEWBOX_WIDTH, SVG_VIEWBOX_HEIGHT];
     }
 
+    getRuneLayers(lines: number[][][]): RuneLayers {
+        const layers: RuneLayers = {
+            guide: [],
+            real: [],
+            interactive: [],
+            text: [],
+        };
+
+        const viewBox = this.getViewBoxDimensions();
+
+        const ACTUAL_RUNE_HEIGHT =
+            RUNE_HEIGHT - (this.props.displayPhonemes ? 0 : 1);
+
+        const maxLineWidth = this.getMaxLineWidth();
+
+        let index = 0;
+        lines.forEach((line, lineIndex) => {
+            const runeY = lineIndex * (ACTUAL_RUNE_HEIGHT + RUNE_LINE_SPACING);
+            let runeX = 0;
+
+            // Calculate the offset due to alignment
+            const currentLineWidth = this.getLineWidth(line);
+            let alignmentOffset = 0;
+            if (this.state.align === "left") {
+                // noop
+            } else if (this.state.align === "center") {
+                alignmentOffset = (maxLineWidth - currentLineWidth) / 2;
+            } else if (this.state.align === "right") {
+                alignmentOffset = maxLineWidth - currentLineWidth;
+            }
+
+            line.map((word) => {
+                word.forEach((bitmask) => {
+                    const { guide, real, interactive, text } =
+                        getRuneLayersForOneRune(
+                            bitmask,
+                            index,
+                            runeX + alignmentOffset,
+                            runeY,
+                        );
+
+                    // Add the rune containers to their respective layers
+                    layers.guide.push(...guide);
+                    layers.real.push(...real);
+                    layers.interactive.push(...interactive);
+                    layers.text.push(...text);
+
+                    // Increment the number of runes so far
+                    ++index;
+                    // Add rune width
+                    runeX += RUNE_WIDTH;
+                });
+                runeX += RUNE_SPACE_WIDTH;
+            });
+        });
+
+        return layers;
+    }
+
     render(props: Props, state: State) {
         // Magic number because I'm a wizard
         // TODO: Put this in a better place
@@ -226,7 +283,7 @@ export class RuneSVG extends Component<Props, State> {
         const [viewBoxWidth, viewBoxHeight] = this.getViewBoxDimensions();
         const viewBox = `-${SVG_PADDING} -${SVG_PADDING} ${viewBoxWidth} ${viewBoxHeight}`;
 
-        const layers = getRuneLayers(this.lines, this.props.displayPhonemes);
+        const layers = this.getRuneLayers(this.lines);
         return (
             <svg
                 ref={(e) => {

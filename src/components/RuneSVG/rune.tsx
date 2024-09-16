@@ -4,8 +4,8 @@ import { getInfoFromRuneMask } from "src/rune";
 type Point = [number, number];
 
 export const RUNE_WIDTH = 3;
-export const RUNE_HEIGHT_WITH_TEXT = 9;
-export const TEXT_HEIGHT = 2;
+export const RUNE_HEIGHT_WITH_TEXT = 8;
+export const TEXT_HEIGHT = 1;
 
 export const RUNE_SPACE_WIDTH = RUNE_WIDTH;
 export const RUNE_LINE_SPACING = RUNE_WIDTH / 2;
@@ -128,6 +128,7 @@ export function getRuneLayersForOneRune(
                 fill={"white"}
                 x={1.5}
                 y={8}
+                alignment-baseline={"middle"}
                 text-anchor={"middle"}
             >
                 {translation}

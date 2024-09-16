@@ -26,7 +26,7 @@ interface State {
     align: "left" | "center" | "right";
 }
 
-const SVG_PADDING = 1;
+const SVG_PADDING = 2;
 
 export class RuneSVG extends Component<Props, State> {
     svgElement?: SVGElement;
@@ -204,6 +204,7 @@ export class RuneSVG extends Component<Props, State> {
         const ACTUAL_RUNE_HEIGHT =
             RUNE_HEIGHT_WITH_TEXT -
             (this.state.displayPhonemes ? 0 : PHONEME_TEXT_HEIGHT);
+        console.log("actual rune height", ACTUAL_RUNE_HEIGHT)
 
         let maxLineWidth = this.getMaxLineWidth();
         // Padding on either side + max line width

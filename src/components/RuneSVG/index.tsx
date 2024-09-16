@@ -3,16 +3,16 @@ import "./index.css";
 import { h, Component } from "preact";
 import { sanitizeTextInput, textToBitmaskLines } from "./utils";
 import {
-    RUNE_HEIGHT,
+    RUNE_HEIGHT_WITH_TEXT,
     RUNE_LINE_SPACING,
     RUNE_SPACE_WIDTH,
     RUNE_WIDTH,
     RuneLayers,
+    TEXT_HEIGHT as PHONEME_TEXT_HEIGHT,
     getRuneLayersForOneRune,
 } from "./rune";
 
 export interface Props extends Partial<State> {
-    // Required props
     interactive: boolean;
     phoneticText: string;
 }
@@ -202,7 +202,8 @@ export class RuneSVG extends Component<Props, State> {
 
     private getViewBoxDimensions(): [number, number] {
         const ACTUAL_RUNE_HEIGHT =
-            RUNE_HEIGHT - (this.state.displayPhonemes ? 0 : 1);
+            RUNE_HEIGHT_WITH_TEXT -
+            (this.state.displayPhonemes ? 0 : PHONEME_TEXT_HEIGHT);
 
         let maxLineWidth = this.getMaxLineWidth();
         // Padding on either side + max line width
@@ -225,10 +226,8 @@ export class RuneSVG extends Component<Props, State> {
             text: [],
         };
 
-        const viewBox = this.getViewBoxDimensions();
-
         const ACTUAL_RUNE_HEIGHT =
-            RUNE_HEIGHT - (this.state.displayPhonemes ? 0 : 1);
+            RUNE_HEIGHT_WITH_TEXT - (this.state.displayPhonemes ? 0 : 1);
 
         const maxLineWidth = this.getMaxLineWidth();
 

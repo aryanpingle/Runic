@@ -1,12 +1,11 @@
-//////////////////// From Rune/index.tsx
-
 import { VNode } from "preact";
 import { getInfoFromRuneMask } from "src/rune";
 
 type Point = [number, number];
 
 export const RUNE_WIDTH = 3;
-export const RUNE_HEIGHT = 8;
+export const RUNE_HEIGHT_WITH_TEXT = 9;
+export const TEXT_HEIGHT = 2;
 
 export const RUNE_SPACE_WIDTH = RUNE_WIDTH;
 export const RUNE_LINE_SPACING = RUNE_WIDTH / 2;
@@ -70,8 +69,6 @@ function getRuneSegments(bitmask: number): VNode<SVGElement>[] {
     const segments = [...lines, underring];
     return segments;
 }
-
-/////////// Custom helpers
 
 export interface RuneLayers {
     guide: VNode<RuneSegmentsContainer>[];

@@ -121,16 +121,3 @@ export function textToBitmaskLines(s: string): number[][][] {
     // console.log("bitmasks created", lines);
     return lines;
 }
-
-export function downloadSVGFromElement(svgElement: SVGElement) {
-    var svgData = svgElement.outerHTML;
-    var svgBlob = new Blob([svgData], { type: "image/svg+xml;charset=utf-8" });
-    var svgUrl = URL.createObjectURL(svgBlob);
-    window.location;
-    var downloadLink = document.createElement("a");
-    downloadLink.href = svgUrl;
-    downloadLink.download = "newesttree.svg";
-    // document.body.appendChild(downloadLink);
-    downloadLink.click();
-    // document.body.removeChild(downloadLink);
-}

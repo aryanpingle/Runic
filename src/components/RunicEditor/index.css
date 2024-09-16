@@ -36,3 +36,26 @@
 .runic-editor__settings-container {
     padding: 1em;
 }
+
+.runic-editor__download-group {
+    margin: 2em 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.5em;
+    gap: 0.5em;
+}
+
+.runic-editor__download-button {
+    flex: 1 0 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5em;
+}
+
+.runic-editor__download-button > svg {
+    width: 1em;
+    height: 1em;
+}

@@ -1,11 +1,7 @@
 import "./index.css";
 
 import { h, Component } from "preact";
-import {
-    downloadSVGFromElement,
-    sanitizeTextInput,
-    textToBitmaskLines,
-} from "./utils";
+import { sanitizeTextInput, textToBitmaskLines } from "./utils";
 import {
     RUNE_HEIGHT,
     RUNE_LINE_SPACING,
@@ -144,12 +140,6 @@ export class RuneSVG extends Component<Props, State> {
             });
     }
 
-    // --- Miscellaneous
-
-    public downloadSVG = () => {
-        downloadSVGFromElement(this.svgElement);
-    };
-
     // --- Listener
 
     private onInteractiveSegmentClick = (event: Event) => {
@@ -245,7 +235,6 @@ export class RuneSVG extends Component<Props, State> {
                 class="runic-svg"
                 // width={viewBoxWidth * SCALING_FACTOR}
                 // height={viewBoxHeight * SCALING_FACTOR}
-                preserveAspectRatio="meet"
                 viewBox={viewBox}
                 version="1.1"
                 xmlns="http://www.w3.org/2000/svg"

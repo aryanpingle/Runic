@@ -4,6 +4,8 @@ import { h, Component } from "preact";
 import { RuneSVG } from "components/RuneSVG";
 import { translateSentence } from "src/ipa";
 import { RangeInput } from "components/RangeInput";
+import { downloadURI, drawSVGToCanvas } from "./utils";
+import { DownloadIcon } from "components/icons";
 
 interface Props {}
 
@@ -50,6 +52,19 @@ export class RunicEditor extends Component<Props, State> {
         });
     };
 
+    download = (format: "svg" | "png" | "jpeg") => {
+        const svgElement = this.runeSVGElement.svgElement;
+
+        if (format === "svg") {
+            // TODO
+        } else {
+            drawSVGToCanvas(svgElement).then((canvas) => {
+                const uri = canvas.toDataURL(`image/${format}`);
+                downloadURI(uri, `temp.${format}`);
+            });
+        }
+    };
+
     render() {
         return (
             <div className="runic-editor">
@@ -80,6 +95,26 @@ export class RunicEditor extends Component<Props, State> {
                             default={0}
                             bindInput={this.onShadowChange}
                         ></RangeInput>
+                        <div className="runic-editor__download-group">
+                            <button
+                                className="runic-editor__download-button"
+                                onClick={() => this.download("svg")}
+                            >
+                                <DownloadIcon /> SVG
+                            </button>
+                            <button
+                                className="runic-editor__download-button"
+                                onClick={() => this.download("png")}
+                            >
+                                <DownloadIcon /> PNG
+                            </button>
+                            <button
+                                className="runic-editor__download-button"
+                                onClick={() => this.download("jpeg")}
+                            >
+                                <DownloadIcon /> JPEG
+                            </button>
+                        </div>
                     </div>
                 </div>
                 <textarea

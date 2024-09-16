@@ -1,3 +1,8 @@
+svg.runic-svg {
+    max-width: 100%;
+    max-height: 100%;
+}
+
 .runic-layer--interactive .rune-segment {
     transition: stroke 250ms ease;
     cursor: pointer;

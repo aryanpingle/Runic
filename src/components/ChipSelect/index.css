@@ -6,6 +6,7 @@
     width: 100%;
 
     padding: 0.25em;
+    margin: 1em 0;
     border: 2px solid crimson;
     border-radius: 0.5em;
 
@@ -32,6 +33,7 @@
 
     display: grid;
     place-items: center;
+    text-align: center;
 }
 
 .chip-select__input:focus + .chip-select__label {

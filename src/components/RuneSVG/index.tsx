@@ -14,11 +14,11 @@ import {
 export interface Props extends Partial<State> {
     // Required props
     interactive: boolean;
-    displayPhonemes: boolean;
     phoneticText: string;
 }
 
 interface State {
+    displayPhonemes: boolean;
     runeColor: string;
     runeGuideColor: string;
     runeThickness: number;
@@ -35,11 +35,12 @@ export class RuneSVG extends Component<Props, State> {
 
     // Initial state based on props
     state: State = {
-        runeColor: "crimson",
-        runeGuideColor: "transparent",
-        runeThickness: 0.25,
-        shadowSpread: 0,
-        align: "left",
+        displayPhonemes: this.props.displayPhonemes ?? false,
+        runeColor: this.props.runeColor ?? "crimson",
+        runeGuideColor: this.props.runeGuideColor ?? "transparent",
+        runeThickness: this.props.runeThickness ?? 0.25,
+        shadowSpread: this.props.shadowSpread ?? 0,
+        align: this.props.align ?? "left",
     };
 
     // The 4 layers
@@ -201,7 +202,7 @@ export class RuneSVG extends Component<Props, State> {
 
     private getViewBoxDimensions(): [number, number] {
         const ACTUAL_RUNE_HEIGHT =
-            RUNE_HEIGHT - (this.props.displayPhonemes ? 0 : 1);
+            RUNE_HEIGHT - (this.state.displayPhonemes ? 0 : 1);
 
         let maxLineWidth = this.getMaxLineWidth();
         // Padding on either side + max line width
@@ -227,7 +228,7 @@ export class RuneSVG extends Component<Props, State> {
         const viewBox = this.getViewBoxDimensions();
 
         const ACTUAL_RUNE_HEIGHT =
-            RUNE_HEIGHT - (this.props.displayPhonemes ? 0 : 1);
+            RUNE_HEIGHT - (this.state.displayPhonemes ? 0 : 1);
 
         const maxLineWidth = this.getMaxLineWidth();
 
@@ -316,7 +317,7 @@ export class RuneSVG extends Component<Props, State> {
                         {...layers.interactive}
                     </g>
                 )}
-                {props.displayPhonemes && (
+                {state.displayPhonemes && (
                     <g
                         ref={(e) => (this.textLayer = e)}
                         className="runic-layer--text"

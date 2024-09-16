@@ -58,6 +58,10 @@ export class RunicEditor extends Component<Props, State> {
         this.runeSVGElement.setState({ align: align });
     };
 
+    onPhonemeDisplayChange = (display: "false" | "true") => {
+        this.runeSVGElement.setState({ displayPhonemes: display === "true" });
+    };
+
     download = (format: "svg" | "png" | "jpeg") => {
         const svgElement = this.runeSVGElement.svgElement;
 
@@ -93,6 +97,15 @@ export class RunicEditor extends Component<Props, State> {
                     },
                 ]}
                 onChange={this.onAlignmentChange}
+            />
+        );
+        const PhonemeSelect = (
+            <ChipSelect
+                chipData={[
+                    { value: "false", label: "Hide phonemes" },
+                    { value: "true", label: "Show phonemes" },
+                ]}
+                onChange={this.onPhonemeDisplayChange}
             />
         );
         return (
@@ -145,6 +158,7 @@ export class RunicEditor extends Component<Props, State> {
                             </button>
                         </div>
                         {AlignmentSelect}
+                        {PhonemeSelect}
                     </div>
                 </div>
                 <textarea

@@ -30,7 +30,8 @@
 .runic-editor__svg-container {
     height: 15em;
     padding: 1em;
-    overflow: hidden;
+    display: grid;
+    place-items: center;
 }
 
 .runic-editor__settings-container {

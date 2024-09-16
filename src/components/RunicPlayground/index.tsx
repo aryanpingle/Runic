@@ -15,6 +15,7 @@ export class RunicPlayground extends Component<Props, State> {
                     interactive={true}
                     displayPhonemes={true}
                     styles={{
+                        runeColor: "cornflowerblue",
                         runeGuideColor: "#121212",
                     }}
                 />

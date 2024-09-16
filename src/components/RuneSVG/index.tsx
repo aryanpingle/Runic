@@ -233,8 +233,7 @@ export class RuneSVG extends Component<Props, State> {
                     this.svgElement = e;
                 }}
                 class="runic-svg"
-                // width={viewBoxWidth * SCALING_FACTOR}
-                // height={viewBoxHeight * SCALING_FACTOR}
+                preserveAspectRatio="xMidYMid meet"
                 viewBox={viewBox}
                 version="1.1"
                 xmlns="http://www.w3.org/2000/svg"

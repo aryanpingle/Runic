@@ -1,3 +1,9 @@
 .runic-playground {
-    height: 10em;
+    height: 15em;
+
+    border-radius: 1em;
+    border: 2px solid cornflowerblue;
+
+    display: grid;
+    place-items: center;
 }

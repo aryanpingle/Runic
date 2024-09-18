@@ -1,0 +1,34 @@
+.color-input {
+    position: relative;
+    font-size: 0.5em;
+    padding: 0.5em;
+    border: 2px solid crimson;
+    border-radius: 0.5em;
+
+    margin: 1em 0;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    cursor: pointer;
+}
+
+.color-input > input {
+    position: absolute;
+    opacity: 0;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+
+    cursor: pointer;
+}
+
+.color-input__indicator {
+    height: 1em;
+    width: 1em;
+    background-color: cyan;
+    border-radius: 0.25em;
+    outline: 2px solid currentColor;
+}

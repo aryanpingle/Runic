@@ -19,6 +19,7 @@ export interface Props extends Partial<State> {
 
 interface State {
     displayPhonemes: boolean;
+    backgroundColor: string;
     runeColor: string;
     runeGuideColor: string;
     runeThickness: number;
@@ -36,6 +37,7 @@ export class RuneSVG extends Component<Props, State> {
     // Initial state based on props
     state: State = {
         displayPhonemes: this.props.displayPhonemes ?? false,
+        backgroundColor: this.props.backgroundColor ?? "transparent",
         runeColor: this.props.runeColor ?? "crimson",
         runeGuideColor: this.props.runeGuideColor ?? "transparent",
         runeThickness: this.props.runeThickness ?? 0.25,
@@ -204,7 +206,6 @@ export class RuneSVG extends Component<Props, State> {
         const ACTUAL_RUNE_HEIGHT =
             RUNE_HEIGHT_WITH_TEXT -
             (this.state.displayPhonemes ? 0 : PHONEME_TEXT_HEIGHT);
-        console.log("actual rune height", ACTUAL_RUNE_HEIGHT)
 
         let maxLineWidth = this.getMaxLineWidth();
         // Padding on either side + max line width
@@ -287,15 +288,15 @@ export class RuneSVG extends Component<Props, State> {
         const layers = this.getRuneLayers(this.lines);
         return (
             <svg
-                ref={(e) => {
-                    this.svgElement = e;
-                }}
+                ref={(e) => (this.svgElement = e)}
                 class="runic-svg"
                 preserveAspectRatio="xMidYMid meet"
                 viewBox={viewBox}
                 version="1.1"
                 xmlns="http://www.w3.org/2000/svg"
                 xmlnsXlink="http://www.w3.org/1999/xlink"
+                // TODO: Refactor
+                style={{ backgroundColor: state.backgroundColor }}
             >
                 <g
                     ref={(e) => (this.guideLayer = e)}

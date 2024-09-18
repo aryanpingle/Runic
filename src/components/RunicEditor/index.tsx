@@ -12,6 +12,7 @@ import {
     RightAlignIcon,
 } from "components/icons";
 import { ChipSelect } from "components/ChipSelect";
+import { ColorInput } from "components/ColorInput";
 
 interface Props {}
 
@@ -20,11 +21,14 @@ interface State {}
 export class RunicEditor extends Component<Props, State> {
     runeSVGElement?: RuneSVG;
 
+    // Listeners
+
     onPhoneticChange = () => {
         const phoneticTextArea = document.querySelector(
             "textarea[name='phonetic']",
         ) as HTMLTextAreaElement;
         const phoneticText = phoneticTextArea.value;
+        // TODO: This really should be a state then
         this.runeSVGElement.renderPhoneticText(phoneticText);
         this.runeSVGElement.forceUpdate();
     };
@@ -61,6 +65,16 @@ export class RunicEditor extends Component<Props, State> {
     onPhonemeDisplayChange = (display: "false" | "true") => {
         this.runeSVGElement.setState({ displayPhonemes: display === "true" });
     };
+
+    onRuneColorChange = (color: string) => {
+        this.runeSVGElement.setState({ runeColor: color });
+    };
+
+    onBackgroundChange = (color: string) => {
+        this.runeSVGElement.setState({ backgroundColor: color });
+    };
+
+    // Miscellaneous
 
     download = (format: "svg" | "png" | "jpeg") => {
         const svgElement = this.runeSVGElement.svgElement;
@@ -159,6 +173,16 @@ export class RunicEditor extends Component<Props, State> {
                         </div>
                         {AlignmentSelect}
                         {PhonemeSelect}
+                        <ColorInput
+                            defaultColor="crimson"
+                            bindInput={this.onRuneColorChange}
+                            label="Rune Color"
+                        />
+                        <ColorInput
+                            defaultColor="transparent"
+                            bindInput={this.onBackgroundChange}
+                            label="Background"
+                        />
                     </div>
                 </div>
                 <textarea

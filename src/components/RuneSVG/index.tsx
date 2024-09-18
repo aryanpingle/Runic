@@ -278,10 +278,6 @@ export class RuneSVG extends Component<Props, State> {
     }
 
     render(props: Props, state: State) {
-        // Magic number because I'm a wizard
-        // TODO: Put this in a better place
-        const SCALING_FACTOR = 100;
-
         const [viewBoxWidth, viewBoxHeight] = this.getViewBoxDimensions();
         const viewBox = `-${SVG_PADDING} -${SVG_PADDING} ${viewBoxWidth} ${viewBoxHeight}`;
 
@@ -295,8 +291,6 @@ export class RuneSVG extends Component<Props, State> {
                 version="1.1"
                 xmlns="http://www.w3.org/2000/svg"
                 xmlnsXlink="http://www.w3.org/1999/xlink"
-                // TODO: Refactor
-                style={{ backgroundColor: state.backgroundColor }}
             >
                 <g
                     ref={(e) => (this.guideLayer = e)}

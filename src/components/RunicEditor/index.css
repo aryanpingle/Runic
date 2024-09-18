@@ -4,6 +4,9 @@
     outline: 2px solid crimson;
 
     display: grid;
+    align-items: center;
+
+    overflow: hidden;
 }
 
 /* Mobile */
@@ -28,10 +31,14 @@
 }
 
 .runic-editor__svg-container {
-    height: 15em;
+    height: 100%;
     padding: 1em;
     display: grid;
     place-items: center;
+}
+
+.runic-editor__svg-container > .runic-svg {
+    max-height: 15em;
 }
 
 .runic-editor__settings-container {

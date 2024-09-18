@@ -4,7 +4,7 @@ import { h, Component } from "preact";
 import { RuneSVG } from "components/RuneSVG";
 import { translateSentence } from "src/ipa";
 import { RangeInput } from "components/RangeInput";
-import { downloadURI, drawSVGToCanvas } from "./utils";
+import { downloadURI, drawSVGToCanvas, svgToUri } from "./utils";
 import {
     CenterAlignIcon,
     DownloadIcon,
@@ -20,6 +20,7 @@ interface State {}
 
 export class RunicEditor extends Component<Props, State> {
     runeSVGElement?: RuneSVG;
+    svgContainer?: HTMLElement;
 
     // Listeners
 
@@ -72,6 +73,7 @@ export class RunicEditor extends Component<Props, State> {
 
     onBackgroundChange = (color: string) => {
         this.runeSVGElement.setState({ backgroundColor: color });
+        this.svgContainer.style.setProperty("background-color", color);
     };
 
     // Miscellaneous
@@ -79,14 +81,24 @@ export class RunicEditor extends Component<Props, State> {
     download = (format: "svg" | "png" | "jpeg") => {
         const svgElement = this.runeSVGElement.svgElement;
 
+        // Add background color
+        const backgroundColor = this.runeSVGElement.state.backgroundColor;
+        svgElement.style.setProperty("background-color", backgroundColor);
+
+        const filename = "rune";
+
         if (format === "svg") {
-            // TODO
+            const uri = svgToUri(svgElement);
+            downloadURI(uri, `${filename}.svg`);
         } else {
             drawSVGToCanvas(svgElement).then((canvas) => {
                 const uri = canvas.toDataURL(`image/${format}`);
-                downloadURI(uri, `temp.${format}`);
+                downloadURI(uri, `${filename}.${format}`);
             });
         }
+
+        // Remove background color
+        svgElement.style.removeProperty("background-color");
     };
 
     render() {
@@ -125,7 +137,10 @@ export class RunicEditor extends Component<Props, State> {
         return (
             <div className="runic-editor">
                 <div className="runic-editor__preview">
-                    <div className="runic-editor__svg-container">
+                    <div
+                        className="runic-editor__svg-container"
+                        ref={(e) => (this.svgContainer = e)}
+                    >
                         <RuneSVG
                             ref={(e) => (this.runeSVGElement = e)}
                             interactive={false}

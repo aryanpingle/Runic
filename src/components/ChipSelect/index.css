@@ -16,7 +16,8 @@
     grid-auto-columns: 1fr;
 }
 
-.chip-select:focus-within {
+.chip-select:focus-within,
+.chip-select:active {
     outline: 2px solid currentColor;
 }
 

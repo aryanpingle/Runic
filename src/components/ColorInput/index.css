@@ -16,7 +16,8 @@
     cursor: pointer;
 }
 
-.color-input:focus-within {
+.color-input:focus-within,
+.color-input:active  {
     outline: 2px solid currentColor;
 }
 

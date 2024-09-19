@@ -12,12 +12,6 @@ export const vowelDataTable: SymbolData[] = [
         examples: "has, apple, ash",
     },
     {
-        ipaSymbol: "ɑ",
-        mask: 0b111100100000000,
-        english: "ah",
-        examples: "arm, large, far",
-    },
-    {
         ipaSymbol: "ɑɹ",
         mask: 0b111100100000000,
         english: "ah",
@@ -30,6 +24,12 @@ export const vowelDataTable: SymbolData[] = [
     //     english: "aw",
     //     examples: "box, awesome, swan",
     // },
+    {
+        ipaSymbol: "ɑ",
+        mask: 0b100011100000000,
+        english: "aw",
+        examples: "box, awesome, swan",
+    },
     {
         ipaSymbol: "ɔ",
         mask: 0b100011100000000,

@@ -4,7 +4,6 @@ import { h, Component } from "preact";
 import { sanitizeTextInput, textToBitmaskLines } from "./utils";
 import {
     RUNE_HEIGHT_WITH_TEXT,
-    RUNE_LINE_SPACING,
     RUNE_SPACE_WIDTH,
     RUNE_WIDTH,
     RuneLayers,
@@ -20,11 +19,13 @@ export interface Props extends Partial<State> {
 interface State {
     displayPhonemes: boolean;
     backgroundColor: string;
+    transparentBackground: boolean;
     runeColor: string;
     runeGuideColor: string;
     runeThickness: number;
     shadowSpread: number;
     align: "left" | "center" | "right";
+    lineSpacing: number;
 }
 
 const SVG_PADDING = 2;
@@ -38,11 +39,13 @@ export class RuneSVG extends Component<Props, State> {
     state: State = {
         displayPhonemes: this.props.displayPhonemes ?? false,
         backgroundColor: this.props.backgroundColor ?? "transparent",
+        transparentBackground: this.props.transparentBackground ?? true,
         runeColor: this.props.runeColor ?? "crimson",
         runeGuideColor: this.props.runeGuideColor ?? "transparent",
         runeThickness: this.props.runeThickness ?? 0.25,
         shadowSpread: this.props.shadowSpread ?? 0,
         align: this.props.align ?? "left",
+        lineSpacing: this.props.lineSpacing ?? RUNE_WIDTH / 2,
     };
 
     // The 4 layers
@@ -215,7 +218,7 @@ export class RuneSVG extends Component<Props, State> {
         const SVG_VIEWBOX_HEIGHT =
             2 * SVG_PADDING + // Padding on either side
             ACTUAL_RUNE_HEIGHT * NUM_LINES + // Height of all lines
-            (NUM_LINES - 1) * RUNE_LINE_SPACING; // Spacing between lines
+            (NUM_LINES - 1) * this.state.lineSpacing; // Spacing between lines
 
         return [SVG_VIEWBOX_WIDTH, SVG_VIEWBOX_HEIGHT];
     }
@@ -235,7 +238,8 @@ export class RuneSVG extends Component<Props, State> {
 
         let index = 0;
         lines.forEach((line, lineIndex) => {
-            const runeY = lineIndex * (ACTUAL_RUNE_HEIGHT + RUNE_LINE_SPACING);
+            const runeY =
+                lineIndex * (ACTUAL_RUNE_HEIGHT + this.state.lineSpacing);
             let runeX = 0;
 
             // Calculate the offset due to alignment

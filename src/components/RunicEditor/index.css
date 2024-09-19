@@ -35,18 +35,65 @@
     padding: 1em;
     display: grid;
     place-items: center;
+
+    --transparency-darker: #000000;
+    --transparency-lighter: #121212;
+    background-image: linear-gradient(
+            45deg,
+            var(--transparency-lighter) 25%,
+            transparent 25%,
+            transparent 75%,
+            var(--transparency-lighter) 75%,
+            var(--transparency-lighter) 100%
+        ),
+        linear-gradient(
+            45deg,
+            var(--transparency-lighter) 25%,
+            var(--transparency-darker) 25%,
+            var(--transparency-darker) 75%,
+            var(--transparency-lighter) 75%,
+            var(--transparency-lighter) 100%
+        );
+    background-position:
+        0px 0px,
+        1em 1em;
+    background-size: 2em 2em;
+    background-repeat: repeat;
 }
 
 .runic-editor__svg-container > .runic-svg {
     max-height: 15em;
 }
 
-.runic-editor__settings-container {
+details {
     padding: 1em;
+    /* noop */
+}
+
+summary {
+    font-weight: 900;
+    font-size: 0.75em;
+    cursor: pointer;
+}
+
+/* On desktop, hide the summary element so that the user cannot
+collapse the details tag. */
+
+@media (min-width: 1024px) {
+    details > summary {
+        display: none;
+    }
+
+    details {
+        display: block;
+    }
+}
+
+.runic-editor__settings-container {
 }
 
 .runic-editor__download-group {
-    margin: 2em 0;
+    margin-top: 2em;
     display: flex;
     justify-content: center;
     align-items: center;

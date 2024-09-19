@@ -8,7 +8,6 @@ export const RUNE_HEIGHT_WITH_TEXT = 8;
 export const TEXT_HEIGHT = 1;
 
 export const RUNE_SPACE_WIDTH = RUNE_WIDTH;
-export const RUNE_LINE_SPACING = RUNE_WIDTH / 2;
 
 // prettier-ignore
 const lineCoords: [Point, Point][] = [

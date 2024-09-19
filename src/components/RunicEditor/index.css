@@ -32,6 +32,33 @@
     border: 1px solid crimson;
 }
 
+.runic-editor__input-divider {
+    position: relative;
+}
+
+.runic-editor__input-divider::after {
+    font: inherit;
+    color: currentColor;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* Mobile - Down arrow */
+
+.runic-editor__input-divider::after {
+    content: "↓";
+}
+
+/* Desktop - Right arrow */
+
+@media (min-width: 1024px) {
+    .runic-editor__input-divider::after {
+        content: "→";
+    }
+}
+
 /* SVG Preview Area */
 
 .runic-editor__preview {

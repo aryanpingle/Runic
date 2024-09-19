@@ -225,7 +225,7 @@ export class RunicEditor extends Component<Props, State> {
                         name="text-input--english"
                         bindInput={this.onEnglishChange}
                     />
-                    <hr />
+                    <span className="runic-editor__input-divider">&nbsp;</span>
                     <TextInput
                         ref={(e) => (this.phoneticInput = e)}
                         label="Input (Phonetic)"

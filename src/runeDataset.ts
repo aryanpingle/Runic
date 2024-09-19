@@ -23,12 +23,13 @@ export const vowelDataTable: SymbolData[] = [
         english: "ah",
         examples: "arm, large, far",
     },
-    {
-        ipaSymbol: "ɒ",
-        mask: 0b100011100000000,
-        english: "aw",
-        examples: "box, awesome, swan",
-    },
+    // Same as 'ɔ' but not used in IPA dictionary
+    // {
+    //     ipaSymbol: "ɒ",
+    //     mask: 0b100011100000000,
+    //     english: "aw",
+    //     examples: "box, awesome, swan",
+    // },
     {
         ipaSymbol: "ɔ",
         mask: 0b100011100000000,
@@ -218,12 +219,13 @@ export const consonantDataTable: SymbolData[] = [
         english: "p",
         examples: "pip, pretty, pop",
     },
-    {
-        ipaSymbol: "r",
-        mask: 0b100000011010010,
-        english: "r",
-        examples: "rice, rune, rim",
-    },
+    // Same as 'ɹ' but not used in IPA dictionary
+    // {
+    //     ipaSymbol: "r",
+    //     mask: 0b100000011010010,
+    //     english: "r",
+    //     examples: "rice, rune, rim",
+    // },
     {
         ipaSymbol: "ɹ",
         mask: 0b100000011010010,

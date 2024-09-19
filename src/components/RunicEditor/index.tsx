@@ -40,9 +40,9 @@ export class RunicEditor extends Component<Props, State> {
         ) as HTMLTextAreaElement;
         const englishtext = textArea.value;
 
-        const lines = englishtext.split("/");
+        const lines = englishtext.split("\n");
         const translatedLines = lines.map(translateSentence);
-        const translatedText = translatedLines.join("/");
+        const translatedText = translatedLines.join("\n");
 
         const phoneticTextArea = document.querySelector(
             "textarea[name='phonetic']",

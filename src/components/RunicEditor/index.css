@@ -4,7 +4,7 @@
     outline: 2px solid crimson;
 
     display: grid;
-    align-items: center;
+    align-items: stretch;
 
     overflow: hidden;
 }

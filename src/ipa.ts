@@ -10,7 +10,6 @@ export async function loadIPADict() {
     IPADict = await response.json();
 
     const symbolsUsedInIPADict = new Set();
-    let c = 0;
     for (const key in IPADict) {
         const tr = IPADict[key][0];
         tr.split(" ").forEach((w) => {
@@ -26,10 +25,15 @@ export async function loadIPADict() {
     ipaCompliantSymbols.forEach((element) => {
         uniqueMasks.add(element.mask);
     });
-    console.log(uniqueMasks);
-    console.log(ipaCompliantSymbols);
-
-    console.log(symbolsUsedInIPADict);
+    console.log("Number of unique masks in symbol table =", uniqueMasks);
+    console.log(
+        "Intersection of symbol table and IPA dict",
+        ipaCompliantSymbols,
+    );
+    console.log(
+        "symbols that do not appear in ipa dict:",
+        symbolDataTable.filter((s) => !ipaCompliantSymbols.includes(s)),
+    );
 }
 
 /**

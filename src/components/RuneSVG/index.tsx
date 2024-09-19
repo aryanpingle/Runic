@@ -184,8 +184,8 @@ export class RuneSVG extends Component<Props, State> {
     // --- Creating the SVG
 
     public renderPhoneticText(phoneticText: string) {
-        const sanitized = sanitizeTextInput(phoneticText);
-        this.lines = textToBitmaskLines(sanitized);
+        // Assume the text is already sanitized (makes it more flexible)
+        this.lines = textToBitmaskLines(phoneticText);
         this.forceUpdate();
     }
 

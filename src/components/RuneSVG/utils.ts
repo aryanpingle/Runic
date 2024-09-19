@@ -1,17 +1,15 @@
 import { symbolDataTable, symbolToSymbolData, isVowel } from "src/runeDataset";
 
-const LINE_SEPARATOR = "/";
-
 /**
  * Sanitize an English or Phonetic input.
  */
 export function sanitizeTextInput(s: string): string {
     // Split into lines
-    const lines = s.split(LINE_SEPARATOR);
+    const lines = s.split("\n");
 
     const sanitized = lines
         .map((line) => line.trim().replace(/\s+/g, " "))
-        .join(LINE_SEPARATOR);
+        .join("\n");
 
     return sanitized;
 }
@@ -21,8 +19,8 @@ function parseString(s: string, i: number, tokens: string[]): boolean {
 
     const c = s.charAt(i);
 
-    // " " | "\"
-    if (c === " " || c === "/") {
+    // " " | "\n"
+    if (c === " " || c === "\n") {
         tokens.push(c);
         return parseString(s, i + 1, tokens);
     }
@@ -72,7 +70,7 @@ export function textToBitmaskLines(s: string): number[][][] {
             continue;
         }
 
-        if (phoneme === "/") {
+        if (phoneme === "\n") {
             // Add line
             currentWord = [];
 

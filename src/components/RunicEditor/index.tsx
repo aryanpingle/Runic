@@ -14,6 +14,7 @@ import {
 import { ChipSelect } from "components/ChipSelect";
 import { ColorInput } from "components/ColorInput";
 import { RUNE_WIDTH } from "components/RuneSVG/rune";
+import { TextInput } from "components/TextInput";
 
 interface Props {}
 
@@ -126,34 +127,26 @@ function getSettings(obj: RunicEditor): VNode {
 export class RunicEditor extends Component<Props, State> {
     runeSVGElement?: RuneSVG;
     svgContainer?: HTMLElement;
+    englishInput?: TextInput;
+    phoneticInput?: TextInput;
 
     // Listeners
 
-    onPhoneticChange = () => {
-        const phoneticTextArea = document.querySelector(
-            "textarea[name='phonetic']",
-        ) as HTMLTextAreaElement;
-        const phoneticText = phoneticTextArea.value;
+    onPhoneticChange = (phoneticText: string) => {
         // TODO: This really should be a state then
         this.runeSVGElement.renderPhoneticText(phoneticText);
         this.runeSVGElement.forceUpdate();
     };
 
-    onEnglishChange = () => {
-        const textArea = document.querySelector(
-            "textarea[name='english']",
-        ) as HTMLTextAreaElement;
-        const englishtext = textArea.value;
+    onEnglishChange = (englishText: string) => {
+        // TODO: Sanitize this you freak
+        // At least remove the periods and commas and whatnot
+        // till you implement support for them.
 
-        const lines = englishtext.split("\n");
-        const translatedLines = lines.map(translateSentence);
-        const translatedText = translatedLines.join("\n");
+        const phoneticText = translateSentence(englishText.toLowerCase());
 
-        const phoneticTextArea = document.querySelector(
-            "textarea[name='phonetic']",
-        ) as HTMLTextAreaElement;
-        phoneticTextArea.value = translatedText;
-        this.onPhoneticChange();
+        // Update the phonetic text input
+        this.phoneticInput.setText(phoneticText);
     };
 
     onSpreadChange = (spread: number) => {
@@ -224,6 +217,23 @@ export class RunicEditor extends Component<Props, State> {
     render() {
         return (
             <div className="runic-editor">
+                <div className="runic-editor__input-area">
+                    <TextInput
+                        ref={(e) => (this.englishInput = e)}
+                        label="Input (English)"
+                        placeholder="Type something here"
+                        name="text-input--english"
+                        bindInput={this.onEnglishChange}
+                    />
+                    <hr />
+                    <TextInput
+                        ref={(e) => (this.phoneticInput = e)}
+                        label="Input (Phonetic)"
+                        placeholder="Type something here"
+                        name="text-input--phonetic"
+                        bindInput={this.onPhoneticChange}
+                    />
+                </div>
                 <div className="runic-editor__preview">
                     <div
                         className="runic-editor__svg-container"
@@ -242,16 +252,6 @@ export class RunicEditor extends Component<Props, State> {
                         {getSettings(this)}
                     </details>
                 </div>
-                <textarea
-                    name="phonetic"
-                    id=""
-                    onInput={this.onPhoneticChange}
-                ></textarea>
-                <textarea
-                    name="english"
-                    id=""
-                    onInput={this.onEnglishChange}
-                ></textarea>
             </div>
         );
     }

@@ -1,0 +1,27 @@
+.text-input {
+    padding: 0.5em 1em;
+    display: grid;
+    gap: 0.5em;
+}
+
+.text-input__label {
+    font-size: 0.5em;
+    font-weight: 900;
+}
+
+.text-input__textarea {
+    font-size: inherit;
+    color: inherit;
+    background-color: transparent;
+    padding: 0.5em;
+    text-wrap: nowrap;
+    resize: none;
+
+    border-radius: 0.5em;
+    border: none;
+    background-color: #121212;
+}
+
+.text-input__textarea:focus {
+    outline: 2px solid currentColor;
+}

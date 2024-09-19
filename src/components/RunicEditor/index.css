@@ -1,7 +1,52 @@
-.runic-editor__preview {
-    width: 100%;
+.runic-editor {
     border-radius: 1em;
     outline: 2px solid crimson;
+
+    overflow: hidden;
+}
+
+.runic-editor__input-area {
+    display: grid;
+    align-items: stretch;
+    border-bottom: 2px solid crimson;
+}
+
+/* Mobile - Vertical layout */
+
+.runic-editor__input-area {
+    grid-auto-flow: row;
+    grid-auto-rows: auto;
+}
+
+/* Desktop - Horizontal layout */
+
+@media (min-width: 1024px) {
+    .runic-editor__input-area {
+        grid-auto-flow: column;
+        grid-auto-columns: 1fr auto 1fr;
+    }
+}
+
+.runic-editor__textarea {
+    font-size: inherit;
+    color: inherit;
+    background-color: transparent;
+    padding: 0.5em;
+    text-wrap: nowrap;
+    resize: none;
+
+    border: none;
+}
+
+.runic-editor__input-area > hr {
+    margin: 0;
+    border: 1px solid crimson;
+}
+
+/* SVG Preview Area */
+
+.runic-editor__preview {
+    width: 100%;
 
     display: grid;
     align-items: stretch;
@@ -25,7 +70,6 @@
 }
 
 .runic-editor__preview > hr {
-    flex: 0 0 auto;
     margin: 0;
     border: 1px solid crimson;
 }

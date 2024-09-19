@@ -27,17 +27,6 @@
     }
 }
 
-.runic-editor__textarea {
-    font-size: inherit;
-    color: inherit;
-    background-color: transparent;
-    padding: 0.5em;
-    text-wrap: nowrap;
-    resize: none;
-
-    border: none;
-}
-
 .runic-editor__input-area > hr {
     margin: 0;
     border: 1px solid crimson;

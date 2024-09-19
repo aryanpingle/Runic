@@ -105,13 +105,13 @@ export const vowelDataTable: SymbolData[] = [
     {
         ipaSymbol: "u",
         mask: 0b110111100000000,
-        english: "ooo",
+        english: "oo (long)",
         examples: "who, blue, soon",
     },
     {
         ipaSymbol: "ʊ",
         mask: 0b100111000000000,
-        english: "oo",
+        english: "oo (short)",
         examples: "wolf, bush, would",
     },
     {

@@ -232,6 +232,7 @@ export class RunicEditor extends Component<Props, State> {
                         placeholder="Type something here"
                         name="text-input--phonetic"
                         bindInput={this.onPhoneticChange}
+                        spellcheck={false}
                     />
                 </div>
                 <div className="runic-editor__preview">

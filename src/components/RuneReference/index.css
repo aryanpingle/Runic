@@ -1,7 +1,7 @@
 .rune-reference-grid {
     width: 100%;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(15ch, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(10ch, 1fr));
 }
 
 .rune-reference-grid-item {
@@ -14,15 +14,18 @@
 /* Horizontal card layout */
 
 .rune-card {
-    display: flex;
-    gap: 0.25em;
-    padding: 0.25em;
+    display: grid;
+    grid-auto-flow: row;
+    grid-template-rows: auto 1fr;
+    justify-items: stretch;
 
     height: 100%;
     cursor: pointer;
 
-    background-color: #121212;
+    outline: 2px solid #242424;
     border-radius: 0.5em;
+
+    text-align: center;
 }
 
 .rune-card .rune-segments-guide > .rune-segment {
@@ -30,18 +33,32 @@
 }
 
 .rune-card > .svg-container {
-    flex: 0 0 auto;
-    width: 2em;
+    width: 100%;
     height: 100%;
 
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+
+    background-color: #121212;
+    border-radius: inherit;
+}
+
+.rune-card .runic-svg {
+    width: 3em;
+}
+
+.rune-card hr {
+    margin: 0;
+    width: 100%;
+    border: 1px solid #242424;
 }
 
 .rune-info {
     flex: 1 0 0;
+    padding: 0.5em;
+    padding-top: 0;
     display: flex;
     flex-direction: column;
     justify-content: center;

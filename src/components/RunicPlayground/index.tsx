@@ -11,7 +11,7 @@ export class RunicPlayground extends Component<Props, State> {
         return (
             <div className="runic-playground">
                 <RuneSVG
-                    phoneticText="aɪaɪaɪaɪaɪaɪaɪaɪ"
+                    phoneticText="aɪaɪaɪaɪaɪ"
                     interactive={true}
                     displayPhonemes={true}
                     runeColor="cornflowerblue"

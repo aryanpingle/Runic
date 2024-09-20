@@ -1,6 +1,9 @@
 .runic-editor {
     border-radius: 1em;
-    outline: 2px solid crimson;
+    outline: 2px solid #242424;
+    background-color: #121212;
+
+    font-size: 0.75em;
 
     overflow: hidden;
 }
@@ -8,7 +11,7 @@
 .runic-editor__input-area {
     display: grid;
     align-items: stretch;
-    border-bottom: 2px solid crimson;
+    border-bottom: 2px solid #242424;
 }
 
 /* Mobile - Vertical layout */
@@ -27,13 +30,9 @@
     }
 }
 
-.runic-editor__input-area > hr {
-    margin: 0;
-    border: 1px solid crimson;
-}
-
 .runic-editor__input-divider {
     position: relative;
+    line-height: 1;
 }
 
 .runic-editor__input-divider::after {
@@ -87,7 +86,7 @@
 
 .runic-editor__preview > hr {
     margin: 0;
-    border: 1px solid crimson;
+    border: 1px solid #242424;
 }
 
 .runic-editor__svg-container {
@@ -132,7 +131,6 @@ details {
 
 summary {
     font-weight: 900;
-    font-size: 0.75em;
     cursor: pointer;
 }
 
@@ -150,6 +148,7 @@ collapse the details tag. */
 }
 
 .runic-editor__settings-container {
+    font-size: 0.75em;
 }
 
 .runic-editor__download-group {
@@ -157,7 +156,6 @@ collapse the details tag. */
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 0.5em;
     gap: 0.5em;
 }
 

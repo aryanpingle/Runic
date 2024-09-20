@@ -95,6 +95,7 @@
     display: grid;
     place-items: center;
 
+    background-color: black;
     --transparency-darker: #000000;
     --transparency-lighter: #121212;
     background-image: linear-gradient(

@@ -2,7 +2,8 @@
     height: 15em;
 
     border-radius: 1em;
-    border: 2px solid cornflowerblue;
+    border: 2px solid #242424;
+    background-color: #121212;
 
     display: grid;
     place-items: center;

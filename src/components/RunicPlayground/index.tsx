@@ -15,7 +15,7 @@ export class RunicPlayground extends Component<Props, State> {
                     interactive={true}
                     displayPhonemes={true}
                     runeColor="cornflowerblue"
-                    runeGuideColor="#121212"
+                    runeGuideColor="#242424"
                 />
             </div>
         );

@@ -124,11 +124,17 @@ function getSettings(obj: RunicEditor): VNode {
     );
 }
 
+const initialEnglishText = "Tunic\nSecret Legend!";
+
 export class RunicEditor extends Component<Props, State> {
     runeSVGElement?: RuneSVG;
     svgContainer?: HTMLElement;
     englishInput?: TextInput;
     phoneticInput?: TextInput;
+
+    componentDidMount(): void {
+        this.onEnglishChange(initialEnglishText);
+    }
 
     // Listeners
 
@@ -222,6 +228,7 @@ export class RunicEditor extends Component<Props, State> {
                         placeholder="Type something here"
                         name="text-input--english"
                         bindInput={this.onEnglishChange}
+                        value={initialEnglishText}
                     />
                     <span className="runic-editor__input-divider">&nbsp;</span>
                     <TextInput

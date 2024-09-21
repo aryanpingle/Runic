@@ -25,6 +25,107 @@ const lineCoords: [Point, Point][] = [
     [[1.5, 2], [1.5, 3]], // line 13
 ];
 
+export function renderSpecialCharacter(
+    char: string,
+    runeX: number,
+    runeY: number,
+): VNode {
+    const translation = `translate(${runeX}, ${runeY})`;
+
+    switch (char) {
+        // Period
+        case ".":
+            return (
+                <g className="rune" transform={translation}>
+                    <circle
+                        class="rune-segment rune-segment--active"
+                        cx={1.5}
+                        cy={3}
+                        r={0.25}
+                        fill="none"
+                    ></circle>
+                </g>
+            );
+        // Exclamation
+        case "!":
+            return (
+                <g className="rune" transform={translation}>
+                    <line
+                        class="rune-segment rune-segment--active"
+                        x1={1.5}
+                        y1={1}
+                        x2={1.5}
+                        y2={3.5}
+                    ></line>
+                    <circle
+                        class="rune-segment rune-segment--active"
+                        cx={1.5}
+                        cy={5}
+                        r={0.25}
+                        fill="none"
+                    ></circle>
+                </g>
+            );
+        // Exclamation Mark
+        case "!":
+            return (
+                <g className="rune" transform={translation}>
+                    <line
+                        class="rune-segment rune-segment--active"
+                        x1={1.5}
+                        y1={1}
+                        x2={1.5}
+                        y2={3.5}
+                    ></line>
+                    <circle
+                        class="rune-segment rune-segment--active"
+                        cx={1.5}
+                        cy={5}
+                        r={0.25}
+                        fill="none"
+                    ></circle>
+                </g>
+            );
+        // Question Mark
+        case "?":
+            return (
+                <g className="rune" transform={translation}>
+                    <path
+                        class="rune-segment rune-segment--active"
+                        d="
+                        M0.75, 2
+                        A0.75, 0.75, 0, 1, 1, 1.5, 2.75
+                        L1.5, 3.5
+                        "
+                        fill="none"
+                    ></path>
+                    <circle
+                        class="rune-segment rune-segment--active"
+                        cx={1.5}
+                        cy={5}
+                        r={0.25}
+                        fill="none"
+                    ></circle>
+                </g>
+            );
+        // Hyphen
+        case "-":
+            return (
+                <g className="rune" transform={translation}>
+                    <line
+                        class="rune-segment rune-segment--active"
+                        x1={1}
+                        y1={3}
+                        x2={2}
+                        y2={3}
+                    ></line>
+                </g>
+            );
+    }
+
+    return null;
+}
+
 function getRuneLine(index: number, active: boolean): VNode<SVGLineElement> {
     const p1 = lineCoords[index][0];
     const p2 = lineCoords[index][1];

@@ -8,6 +8,7 @@ import {
     TEXT_HEIGHT,
     getRuneLayersForOneRune,
     appendLayers,
+    renderSpecialCharacter,
 } from "./rune";
 import {
     getLineTokenCounts,
@@ -250,7 +251,12 @@ export class RuneSVG extends Component<Props, State> {
                 lineTokenIndex = 0;
             } else if (token.type === "specialChar") {
                 // Any other special character
-                // TODO: KYS
+                const special = renderSpecialCharacter(
+                    token.char,
+                    runeX,
+                    runeY,
+                );
+                layers.real.push(special as any);
             } else {
                 // Add layers of this phonetic token
                 const runeBitmask = getRuneBitmask(token);

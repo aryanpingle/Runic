@@ -18,10 +18,10 @@ import { getRuneBitmask } from "./utils";
 
 export interface Props extends Partial<StateInProps> {
     interactive: boolean;
+    phoneticText: string;
 }
 
 interface StateInProps {
-    phoneticText: string;
     displayPhonemes: boolean;
     backgroundColor: string;
     transparentBackground: boolean;
@@ -40,11 +40,10 @@ const SVG_PADDING = 2;
 export class RuneSVG extends Component<Props, State> {
     svgElement?: SVGElement;
 
-    private lines: number[][][];
+    tokens: RenderableToken[];
 
     // Initial state based on props
     state: State = {
-        phoneticText: this.props.phoneticText ?? "",
         displayPhonemes: this.props.displayPhonemes ?? false,
         backgroundColor: this.props.backgroundColor ?? "transparent",
         transparentBackground: this.props.transparentBackground ?? true,
@@ -63,6 +62,12 @@ export class RuneSVG extends Component<Props, State> {
     private textLayer?: SVGGElement;
 
     // --- Life Cycle Methods
+
+    constructor(props: Props) {
+        super(props);
+
+        this.tokens = parseString(props.phoneticText);
+    }
 
     componentDidUpdate() {
         this.postRenderSetup();
@@ -168,27 +173,27 @@ export class RuneSVG extends Component<Props, State> {
 
     updateIndividualRune(bitmask: number, runeIndex: number) {
         let counter = 0;
-        for (const line of this.lines) {
-            for (const word of line) {
-                for (let i = 0; i < word.length; ++i) {
-                    if (counter === runeIndex) {
-                        word[i] = bitmask;
-                        return;
-                    }
-                    ++counter;
-                }
-            }
-        }
+        // for (const line of this.lines) {
+        //     for (const word of line) {
+        //         for (let i = 0; i < word.length; ++i) {
+        //             if (counter === runeIndex) {
+        //                 word[i] = bitmask;
+        //                 return;
+        //             }
+        //             ++counter;
+        //         }
+        //     }
+        // }
     }
 
     // --- Creating the SVG
 
-    private getViewBoxDimensions(tokens: RenderableToken[]): [number, number] {
+    private getViewBoxDimensions(): [number, number] {
         const ACTUAL_RUNE_HEIGHT =
             RUNE_HEIGHT_WITH_TEXT -
             (this.state.displayPhonemes ? 0 : TEXT_HEIGHT);
 
-        const lines = splitTokensIntoLines(tokens);
+        const lines = splitTokensIntoLines(this.tokens);
         const maxLineWidth =
             Math.max(...lines.map((tokens) => tokens.length)) * TOKEN_WIDTH;
 
@@ -266,13 +271,16 @@ export class RuneSVG extends Component<Props, State> {
         return layers;
     }
 
+    public setPhoneticText(phoneticText: string) {
+        this.tokens = parseString(phoneticText);
+        this.forceUpdate();
+    }
+
     render(props: Props, state: State) {
-        const { phoneticText } = this.state;
-        const tokens = parseString(phoneticText);
-        const tokenLayers = this.getTokenLayers(tokens);
+        const tokenLayers = this.getTokenLayers(this.tokens);
 
         // Calculate viewbox
-        const [viewBoxWidth, viewBoxHeight] = this.getViewBoxDimensions(tokens);
+        const [viewBoxWidth, viewBoxHeight] = this.getViewBoxDimensions();
         const viewBox = [
             -SVG_PADDING,
             -SVG_PADDING,

@@ -133,7 +133,7 @@ export class RunicEditor extends Component<Props, State> {
     // Listeners
 
     onPhoneticChange = (phoneticText: string) => {
-        this.runeSVGElement.setState({ phoneticText: phoneticText });
+        this.runeSVGElement.setPhoneticText(phoneticText);
     };
 
     onEnglishChange = (englishText: string) => {

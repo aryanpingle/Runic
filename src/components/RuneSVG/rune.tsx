@@ -3,11 +3,9 @@ import { getInfoFromRuneMask } from "src/rune";
 
 type Point = [number, number];
 
-export const RUNE_WIDTH = 3;
+export const TOKEN_WIDTH = 3;
 export const RUNE_HEIGHT_WITH_TEXT = 8;
 export const TEXT_HEIGHT = 1;
-
-export const RUNE_SPACE_WIDTH = RUNE_WIDTH;
 
 // prettier-ignore
 const lineCoords: [Point, Point][] = [
@@ -141,4 +139,11 @@ export function getRuneLayersForOneRune(
         interactive: [interactiveLayer],
         text: [textLayer],
     };
+}
+
+export function appendLayers(target: RuneLayers, source: RuneLayers) {
+    target.guide.push(...source.guide);
+    target.real.push(...source.real);
+    target.interactive.push(...source.interactive);
+    target.text.push(...source.text);
 }

@@ -13,7 +13,7 @@ import {
 } from "components/icons";
 import { ChipSelect } from "components/ChipSelect";
 import { ColorInput } from "components/ColorInput";
-import { RUNE_WIDTH } from "components/RuneSVG/rune";
+import { TOKEN_WIDTH } from "components/RuneSVG/rune";
 import { TextInput } from "components/TextInput";
 
 interface Props {}
@@ -81,10 +81,10 @@ function getSettings(obj: RunicEditor): VNode {
             ></RangeInput>
             <RangeInput
                 label={"Line Height"}
-                min={-RUNE_WIDTH}
-                max={RUNE_WIDTH}
+                min={-TOKEN_WIDTH}
+                max={TOKEN_WIDTH}
                 step={0.5}
-                default={RUNE_WIDTH / 2}
+                default={TOKEN_WIDTH / 2}
                 bindInput={obj.onLineSpacingChange}
             ></RangeInput>
             {AlignmentSelect}
@@ -133,9 +133,7 @@ export class RunicEditor extends Component<Props, State> {
     // Listeners
 
     onPhoneticChange = (phoneticText: string) => {
-        // TODO: This really should be a state then
-        this.runeSVGElement.renderPhoneticText(phoneticText);
-        this.runeSVGElement.forceUpdate();
+        this.runeSVGElement.setState({ phoneticText: phoneticText });
     };
 
     onEnglishChange = (englishText: string) => {

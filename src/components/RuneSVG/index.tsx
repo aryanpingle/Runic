@@ -1,22 +1,27 @@
 import "./index.css";
 
 import { h, Component } from "preact";
-import { sanitizeTextInput, textToBitmaskLines } from "./utils";
 import {
     RUNE_HEIGHT_WITH_TEXT,
-    RUNE_SPACE_WIDTH,
-    RUNE_WIDTH,
+    TOKEN_WIDTH,
     RuneLayers,
-    TEXT_HEIGHT as PHONEME_TEXT_HEIGHT,
+    TEXT_HEIGHT,
     getRuneLayersForOneRune,
+    appendLayers,
 } from "./rune";
+import {
+    parseString,
+    RenderableToken,
+    splitTokensIntoLines,
+} from "./tokenizer";
+import { getRuneBitmask } from "./utils";
 
-export interface Props extends Partial<State> {
+export interface Props extends Partial<StateInProps> {
     interactive: boolean;
-    phoneticText: string;
 }
 
-interface State {
+interface StateInProps {
+    phoneticText: string;
     displayPhonemes: boolean;
     backgroundColor: string;
     transparentBackground: boolean;
@@ -28,6 +33,8 @@ interface State {
     lineSpacing: number;
 }
 
+interface State extends StateInProps {}
+
 const SVG_PADDING = 2;
 
 export class RuneSVG extends Component<Props, State> {
@@ -37,6 +44,7 @@ export class RuneSVG extends Component<Props, State> {
 
     // Initial state based on props
     state: State = {
+        phoneticText: this.props.phoneticText ?? "",
         displayPhonemes: this.props.displayPhonemes ?? false,
         backgroundColor: this.props.backgroundColor ?? "transparent",
         transparentBackground: this.props.transparentBackground ?? true,
@@ -45,7 +53,7 @@ export class RuneSVG extends Component<Props, State> {
         runeThickness: this.props.runeThickness ?? 0.25,
         shadowSpread: this.props.shadowSpread ?? 0,
         align: this.props.align ?? "left",
-        lineSpacing: this.props.lineSpacing ?? RUNE_WIDTH / 2,
+        lineSpacing: this.props.lineSpacing ?? TOKEN_WIDTH / 2,
     };
 
     // The 4 layers
@@ -54,18 +62,7 @@ export class RuneSVG extends Component<Props, State> {
     private interactiveLayer?: SVGGElement;
     private textLayer?: SVGGElement;
 
-    constructor(props: Props) {
-        super(props);
-
-        const sanitized = sanitizeTextInput(props.phoneticText);
-        this.lines = textToBitmaskLines(sanitized);
-    }
-
     // --- Life Cycle Methods
-
-    componentWillReceiveProps(nextProps: Readonly<Props>): void {
-        console.log(nextProps);
-    }
 
     componentDidUpdate() {
         this.postRenderSetup();
@@ -186,35 +183,19 @@ export class RuneSVG extends Component<Props, State> {
 
     // --- Creating the SVG
 
-    public renderPhoneticText(phoneticText: string) {
-        // Assume the text is already sanitized (makes it more flexible)
-        this.lines = textToBitmaskLines(phoneticText);
-        this.forceUpdate();
-    }
-
-    private getLineWidth(line: number[][]): number {
-        // Spaces between words
-        const lineSpaceCount = line.length - 1;
-        // Number of runes
-        const lineRuneCount = line.reduce((acc, word) => acc + word.length, 0);
-        return lineSpaceCount * RUNE_SPACE_WIDTH + lineRuneCount * RUNE_WIDTH;
-    }
-
-    private getMaxLineWidth(): number {
-        const lineWidths = this.lines.map(this.getLineWidth);
-        return Math.max(...lineWidths);
-    }
-
-    private getViewBoxDimensions(): [number, number] {
+    private getViewBoxDimensions(tokens: RenderableToken[]): [number, number] {
         const ACTUAL_RUNE_HEIGHT =
             RUNE_HEIGHT_WITH_TEXT -
-            (this.state.displayPhonemes ? 0 : PHONEME_TEXT_HEIGHT);
+            (this.state.displayPhonemes ? 0 : TEXT_HEIGHT);
 
-        let maxLineWidth = this.getMaxLineWidth();
+        const lines = splitTokensIntoLines(tokens);
+        const maxLineWidth =
+            Math.max(...lines.map((tokens) => tokens.length)) * TOKEN_WIDTH;
+
         // Padding on either side + max line width
         const SVG_VIEWBOX_WIDTH = 2 * SVG_PADDING + maxLineWidth;
 
-        const NUM_LINES = this.lines.length;
+        const NUM_LINES = lines.length;
         const SVG_VIEWBOX_HEIGHT =
             2 * SVG_PADDING + // Padding on either side
             ACTUAL_RUNE_HEIGHT * NUM_LINES + // Height of all lines
@@ -223,7 +204,19 @@ export class RuneSVG extends Component<Props, State> {
         return [SVG_VIEWBOX_WIDTH, SVG_VIEWBOX_HEIGHT];
     }
 
-    getRuneLayers(lines: number[][][]): RuneLayers {
+    getAlignmentOffset(lineWidth: number, maxLineWidth: number): number {
+        let alignmentOffset = 0;
+        if (this.state.align === "left") {
+            // noop
+        } else if (this.state.align === "center") {
+            alignmentOffset = (maxLineWidth - lineWidth) / 2;
+        } else if (this.state.align === "right") {
+            alignmentOffset = maxLineWidth - lineWidth;
+        }
+        return alignmentOffset;
+    }
+
+    getTokenLayers(tokens: RenderableToken[]): RuneLayers {
         const layers: RuneLayers = {
             guide: [],
             real: [],
@@ -232,49 +225,41 @@ export class RuneSVG extends Component<Props, State> {
         };
 
         const ACTUAL_RUNE_HEIGHT =
-            RUNE_HEIGHT_WITH_TEXT - (this.state.displayPhonemes ? 0 : 1);
+            RUNE_HEIGHT_WITH_TEXT -
+            (this.state.displayPhonemes ? 0 : TEXT_HEIGHT);
 
-        const maxLineWidth = this.getMaxLineWidth();
+        const lines = splitTokensIntoLines(tokens);
 
-        let index = 0;
-        lines.forEach((line, lineIndex) => {
+        // We'll need this to apply the alignment
+        const maxLineWidth =
+            Math.max(...lines.map((tokens) => tokens.length)) * TOKEN_WIDTH;
+
+        // Render each line
+        lines.forEach((tokens, lineIndex) => {
             const runeY =
                 lineIndex * (ACTUAL_RUNE_HEIGHT + this.state.lineSpacing);
-            let runeX = 0;
 
-            // Calculate the offset due to alignment
-            const currentLineWidth = this.getLineWidth(line);
-            let alignmentOffset = 0;
-            if (this.state.align === "left") {
-                // noop
-            } else if (this.state.align === "center") {
-                alignmentOffset = (maxLineWidth - currentLineWidth) / 2;
-            } else if (this.state.align === "right") {
-                alignmentOffset = maxLineWidth - currentLineWidth;
-            }
+            const alignmentOffset = this.getAlignmentOffset(
+                tokens.length * TOKEN_WIDTH,
+                maxLineWidth,
+            );
 
-            line.map((word) => {
-                word.forEach((bitmask) => {
-                    const { guide, real, interactive, text } =
-                        getRuneLayersForOneRune(
-                            bitmask,
-                            index,
-                            runeX + alignmentOffset,
-                            runeY,
-                        );
-
-                    // Add the rune containers to their respective layers
-                    layers.guide.push(...guide);
-                    layers.real.push(...real);
-                    layers.interactive.push(...interactive);
-                    layers.text.push(...text);
-
-                    // Increment the number of runes so far
-                    ++index;
-                    // Add rune width
-                    runeX += RUNE_WIDTH;
-                });
-                runeX += RUNE_SPACE_WIDTH;
+            // Render each token of this line
+            tokens.forEach((token, tokenIndex) => {
+                const runeX = alignmentOffset + tokenIndex * TOKEN_WIDTH;
+                if (token.type === "specialChar") {
+                    // TODO: KYS
+                } else {
+                    // Add layers of this phonetic token
+                    const runeBitmask = getRuneBitmask(token);
+                    const runeLayers = getRuneLayersForOneRune(
+                        runeBitmask,
+                        lineIndex * 100 + tokenIndex, // TODO: BRUH
+                        runeX,
+                        runeY,
+                    );
+                    appendLayers(layers, runeLayers);
+                }
             });
         });
 
@@ -282,10 +267,19 @@ export class RuneSVG extends Component<Props, State> {
     }
 
     render(props: Props, state: State) {
-        const [viewBoxWidth, viewBoxHeight] = this.getViewBoxDimensions();
-        const viewBox = `-${SVG_PADDING} -${SVG_PADDING} ${viewBoxWidth} ${viewBoxHeight}`;
+        const { phoneticText } = this.state;
+        const tokens = parseString(phoneticText);
+        const tokenLayers = this.getTokenLayers(tokens);
 
-        const layers = this.getRuneLayers(this.lines);
+        // Calculate viewbox
+        const [viewBoxWidth, viewBoxHeight] = this.getViewBoxDimensions(tokens);
+        const viewBox = [
+            -SVG_PADDING,
+            -SVG_PADDING,
+            viewBoxWidth,
+            viewBoxHeight,
+        ].join(" ");
+
         return (
             <svg
                 ref={(e) => (this.svgElement = e)}
@@ -300,20 +294,20 @@ export class RuneSVG extends Component<Props, State> {
                     ref={(e) => (this.guideLayer = e)}
                     className="runic-layer--guide"
                 >
-                    {...layers.guide}
+                    {...tokenLayers.guide}
                 </g>
                 <g
                     ref={(e) => (this.realLayer = e)}
                     className="runic-layer--real"
                 >
-                    {...layers.real}
+                    {...tokenLayers.real}
                 </g>
                 {props.interactive && (
                     <g
                         ref={(e) => (this.interactiveLayer = e)}
                         className="runic-layer--interactive"
                     >
-                        {...layers.interactive}
+                        {...tokenLayers.interactive}
                     </g>
                 )}
                 {state.displayPhonemes && (
@@ -321,7 +315,7 @@ export class RuneSVG extends Component<Props, State> {
                         ref={(e) => (this.textLayer = e)}
                         className="runic-layer--text"
                     >
-                        {...layers.text}
+                        {...tokenLayers.text}
                     </g>
                 )}
             </svg>

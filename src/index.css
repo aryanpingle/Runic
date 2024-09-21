@@ -38,7 +38,7 @@ body {
 
 article {
     max-width: var(--article-width);
-    margin: auto;
+    margin: 3em auto;
 }
 
 section {

@@ -10,11 +10,12 @@ import {
     appendLayers,
 } from "./rune";
 import {
+    getLineTokenCounts,
     parseString,
     RenderableToken,
     splitTokensIntoLines,
 } from "./tokenizer";
-import { getRuneBitmask } from "./utils";
+import { bitmaskToRuneToken, getRuneBitmask } from "./utils";
 
 export interface Props extends Partial<StateInProps> {
     interactive: boolean;
@@ -153,7 +154,7 @@ export class RuneSVG extends Component<Props, State> {
         const runeContainer = segment.parentElement;
 
         // Extract information from the segment and its .rune parent
-        const runeIndex = parseInt(
+        const tokenIndex = parseInt(
             runeContainer.getAttribute("data-rune-index"),
         );
         const bitmask = parseInt(
@@ -167,23 +168,13 @@ export class RuneSVG extends Component<Props, State> {
         // Calculate the new bitmask after toggling
         const newBitmask = bitmask ^ (1 << (14 - segmentIndex));
 
-        this.updateIndividualRune(newBitmask, runeIndex);
-        this.forceUpdate();
+        this.updateRuneTokenMask(tokenIndex, newBitmask);
     };
 
-    updateIndividualRune(bitmask: number, runeIndex: number) {
-        let counter = 0;
-        // for (const line of this.lines) {
-        //     for (const word of line) {
-        //         for (let i = 0; i < word.length; ++i) {
-        //             if (counter === runeIndex) {
-        //                 word[i] = bitmask;
-        //                 return;
-        //             }
-        //             ++counter;
-        //         }
-        //     }
-        // }
+    updateRuneTokenMask(tokenIndex: number, newBitmask: number) {
+        const newToken = bitmaskToRuneToken(newBitmask);
+        this.tokens[tokenIndex] = newToken;
+        this.forceUpdate();
     }
 
     // --- Creating the SVG
@@ -233,39 +224,44 @@ export class RuneSVG extends Component<Props, State> {
             RUNE_HEIGHT_WITH_TEXT -
             (this.state.displayPhonemes ? 0 : TEXT_HEIGHT);
 
-        const lines = splitTokensIntoLines(tokens);
-
         // We'll need this to apply the alignment
-        const maxLineWidth =
-            Math.max(...lines.map((tokens) => tokens.length)) * TOKEN_WIDTH;
+        const lineTokenCounts = getLineTokenCounts(tokens);
+        const maxLineWidth = Math.max(
+            ...lineTokenCounts.map((count) => count * TOKEN_WIDTH),
+        );
 
-        // Render each line
-        lines.forEach((tokens, lineIndex) => {
+        let lineIndex = 0;
+        let lineTokenIndex = 0;
+        tokens.forEach((token, tokenIndex) => {
             const runeY =
                 lineIndex * (ACTUAL_RUNE_HEIGHT + this.state.lineSpacing);
 
             const alignmentOffset = this.getAlignmentOffset(
-                tokens.length * TOKEN_WIDTH,
+                lineTokenCounts[lineIndex] * TOKEN_WIDTH,
                 maxLineWidth,
             );
 
-            // Render each token of this line
-            tokens.forEach((token, tokenIndex) => {
-                const runeX = alignmentOffset + tokenIndex * TOKEN_WIDTH;
-                if (token.type === "specialChar") {
-                    // TODO: KYS
-                } else {
-                    // Add layers of this phonetic token
-                    const runeBitmask = getRuneBitmask(token);
-                    const runeLayers = getRuneLayersForOneRune(
-                        runeBitmask,
-                        lineIndex * 100 + tokenIndex, // TODO: BRUH
-                        runeX,
-                        runeY,
-                    );
-                    appendLayers(layers, runeLayers);
-                }
-            });
+            const runeX = alignmentOffset + lineTokenIndex * TOKEN_WIDTH;
+            ++lineTokenIndex;
+
+            if (token.type === "specialChar" && token.char === "\n") {
+                // If newline
+                ++lineIndex;
+                lineTokenIndex = 0;
+            } else if (token.type === "specialChar") {
+                // Any other special character
+                // TODO: KYS
+            } else {
+                // Add layers of this phonetic token
+                const runeBitmask = getRuneBitmask(token);
+                const runeLayers = getRuneLayersForOneRune(
+                    runeBitmask,
+                    tokenIndex,
+                    runeX,
+                    runeY,
+                );
+                appendLayers(layers, runeLayers);
+            }
         });
 
         return layers;

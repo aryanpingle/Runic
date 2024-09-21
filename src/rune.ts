@@ -13,7 +13,7 @@ function containsBitmask(bitstring: number, bitmask: number) {
     return (bitstring & bitmask) === bitmask;
 }
 
-function hasValidVowel(runeMask) {
+function hasValidVowel(runeMask: number) {
     if ((runeMask & VOWEL_MASK) === MIDDLE_LINE_MASK) {
         // Just the middle line exists, doesn't mean anything
         return true;
@@ -29,7 +29,21 @@ function hasValidConsonant(runeMask: number) {
     return (runeMask & CONSONANT_MASK) in runeMaskToSymbolData;
 }
 
-function extractVowel(runeMask: number) {
+/**
+ * Get a mask corresponding to the bitmask's vowel segments.
+ */
+export function getVowelComponent(bitmask: number): number {
+    return bitmask & VOWEL_MASK;
+}
+
+/**
+ * Get a mask corresponding to the bitmask's consonant segments.
+ */
+export function getConsonantComponent(bitmask: number): number {
+    return bitmask & CONSONANT_MASK;
+}
+
+function extractVowel(runeMask: number): string {
     // Check if the vowel pattern is invalid
     if (!hasValidVowel(runeMask)) return null;
 
@@ -57,7 +71,7 @@ function extractVowel(runeMask: number) {
     return resultSymbol;
 }
 
-function extractConsonant(runeMask: number) {
+function extractConsonant(runeMask: number): string {
     // Check if the consonant pattern is invalid
     if (!hasValidConsonant(runeMask)) return null;
 

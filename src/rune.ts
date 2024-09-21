@@ -7,9 +7,7 @@ import {
     symbolToSymbolData,
     consonantDataTable,
 } from "./runeDataset";
-import { countSetBits, querySelectorArray } from "./utils";
-
-const RUNE_ID_LENGTH = 15;
+import { countSetBits } from "./utils";
 
 function containsBitmask(bitstring: number, bitmask: number) {
     return (bitstring & bitmask) === bitmask;

@@ -21,6 +21,7 @@ export function parseString(s: string): RenderableToken[] {
     const tokens: RenderableToken[] = [];
 
     let i = 0;
+    let isEnglishMode = false;
     while (i < s.length) {
         const c = s.charAt(i);
 
@@ -37,7 +38,7 @@ export function parseString(s: string): RenderableToken[] {
             }
         }
 
-        if (found) {
+        if (found && !isEnglishMode) {
             const ipaSymbol = foundSymbolData.ipaSymbol;
             const symbolIsVowel = isVowel(ipaSymbol);
 
@@ -53,6 +54,10 @@ export function parseString(s: string): RenderableToken[] {
             tokens.push(token);
 
             i += ipaSymbol.length;
+        } else if(c === "@") {
+            isEnglishMode = !isEnglishMode;
+
+            i += 1;
         } else {
             // No phonetic symbol starts from this character onwards.
             // Treat this character like a special character.

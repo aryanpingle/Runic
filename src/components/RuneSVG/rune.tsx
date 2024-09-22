@@ -25,6 +25,27 @@ const lineCoords: [Point, Point][] = [
     [[1.5, 2], [1.5, 3]], // line 13
 ];
 
+export function renderEnglishCharacter(
+    char: string,
+    runeX: number,
+    runeY: number,
+) {
+    const translation = `translate(${runeX}, ${runeY})`;
+    return (
+        <g className="rune" transform={translation}>
+            <text
+                class="rune-segment rune-segment--active rune-segment--fill"
+                font-size={5}
+                font-family={"Noto Sans Mono, monospace"}
+                alignment-baseline={"before-edge"}
+                text-anchor={"start"}
+            >
+                {char}
+            </text>
+        </g>
+    );
+}
+
 export function renderSpecialCharacter(
     char: string,
     runeX: number,
@@ -38,7 +59,7 @@ export function renderSpecialCharacter(
             return (
                 <g className="rune" transform={translation}>
                     <circle
-                        class="rune-segment rune-segment--active"
+                        class="rune-segment rune-segment--active rune-segment--fill"
                         cx={1.5}
                         cy={3}
                         r={0.25}
@@ -51,14 +72,14 @@ export function renderSpecialCharacter(
             return (
                 <g className="rune" transform={translation}>
                     <line
-                        class="rune-segment rune-segment--active"
+                        class="rune-segment rune-segment--active rune-segment--stroke"
                         x1={1.5}
                         y1={1}
                         x2={1.5}
                         y2={3.5}
                     ></line>
                     <circle
-                        class="rune-segment rune-segment--active"
+                        class="rune-segment rune-segment--active rune-segment--stroke rune-segment--fill"
                         cx={1.5}
                         cy={5}
                         r={0.25}
@@ -71,14 +92,14 @@ export function renderSpecialCharacter(
             return (
                 <g className="rune" transform={translation}>
                     <line
-                        class="rune-segment rune-segment--active"
+                        class="rune-segment rune-segment--active rune-segment--stroke"
                         x1={1.5}
                         y1={1}
                         x2={1.5}
                         y2={3.5}
                     ></line>
                     <circle
-                        class="rune-segment rune-segment--active"
+                        class="rune-segment rune-segment--active rune-segment--stroke rune-segment--fill"
                         cx={1.5}
                         cy={5}
                         r={0.25}
@@ -91,7 +112,7 @@ export function renderSpecialCharacter(
             return (
                 <g className="rune" transform={translation}>
                     <path
-                        class="rune-segment rune-segment--active"
+                        class="rune-segment rune-segment--active rune-segment--stroke"
                         d="
                         M0.75, 2
                         A0.75, 0.75, 0, 1, 1, 1.5, 2.75
@@ -100,7 +121,7 @@ export function renderSpecialCharacter(
                         fill="none"
                     ></path>
                     <circle
-                        class="rune-segment rune-segment--active"
+                        class="rune-segment rune-segment--active rune-segment--stroke rune-segment--fill"
                         cx={1.5}
                         cy={5}
                         r={0.25}
@@ -113,7 +134,7 @@ export function renderSpecialCharacter(
             return (
                 <g className="rune" transform={translation}>
                     <line
-                        class="rune-segment rune-segment--active"
+                        class="rune-segment rune-segment--active rune-segment--stroke"
                         x1={1}
                         y1={3}
                         x2={2}
@@ -123,7 +144,7 @@ export function renderSpecialCharacter(
             );
     }
 
-    return null;
+    return renderEnglishCharacter(char, runeX, runeY);
 }
 
 function getRuneLine(index: number, active: boolean): VNode<SVGLineElement> {
@@ -131,7 +152,7 @@ function getRuneLine(index: number, active: boolean): VNode<SVGLineElement> {
     const p2 = lineCoords[index][1];
     return (
         <line
-            class={`rune-segment ${active ? "rune-segment--active" : ""}`}
+            class={`rune-segment rune-segment--stroke ${active ? "rune-segment--active" : ""}`}
             data-segment-index={index}
             x1={p1[0]}
             y1={p1[1]}
@@ -144,7 +165,7 @@ function getRuneLine(index: number, active: boolean): VNode<SVGLineElement> {
 function getRuneUnderring(active: boolean): VNode<SVGCircleElement> {
     return (
         <circle
-            class={`rune-segment ${active ? "rune-segment--active" : ""}`}
+            class={`rune-segment rune-segment--stroke ${active ? "rune-segment--active" : ""}`}
             data-segment-index={14}
             cx={1.5}
             cy={6.5}

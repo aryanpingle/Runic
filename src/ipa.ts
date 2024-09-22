@@ -22,11 +22,34 @@ export function translateWord(word: string): string | null {
  */
 export function translateSentence(sentence: string): string | null {
     // Match all sequences of letters, translate them if possible
-    return sentence.replace(/[\p{Letter}']+/gu, (word) => {
-        if (word in IPADict) {
-            return translateWord(word);
-        } else {
+
+    let englishEscape = false;
+    const punctuationRegex = /[^\s\n\.,?!\-]+/gu;
+    return sentence.replace(punctuationRegex, (word) => {
+        const startsWithAt = word.startsWith("@");
+        const endsWithAt = word.endsWith("@");
+
+        if (startsWithAt && endsWithAt) {
+            // Start and end english sequence
             return word;
+        } else if (startsWithAt) {
+            // Start english sequence
+            englishEscape = true;
+            return word;
+        } else if (endsWithAt) {
+            // End english sequence
+            englishEscape = false;
+            return word;
+        } else if (englishEscape) {
+            // Continue english sequence
+            return word;
+        }
+
+        const lowerCaseWord = word.toLowerCase();
+        if (lowerCaseWord in IPADict) {
+            return translateWord(lowerCaseWord);
+        } else {
+            return "";
         }
     });
 }

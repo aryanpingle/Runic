@@ -29,6 +29,15 @@ export class TextInput extends Component<Props, State> {
         this.textareaElement.rows = numLines + 1;
     };
 
+    componentDidMount() {
+        // When it mounts, determine the number of lines
+        const value = this.textareaElement.value;
+        // Determine the number of lines
+        const numLines = (value.match(/\n/g) || []).length + 1;
+        // Additional 1 line to show the user it can be multiline
+        this.textareaElement.rows = numLines + 1;
+    }
+
     render(props: Props, state: State) {
         const { label, bindInput, ...otherAttrs } = props;
         return (

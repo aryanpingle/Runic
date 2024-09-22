@@ -126,7 +126,24 @@ export class RuneSVG extends Component<Props, State> {
         this.realLayer
             ?.querySelectorAll(".rune-segment--active")
             .forEach((segment) => {
-                segment.setAttribute("stroke", this.state.runeColor);
+                // Fuck you, React. Let me explain -
+                // Sometimes a component is "reused" thanks to the
+                // diffing algorithm. So if it had a fill, and now it must
+                // have a stroke, the fill may not be removed.
+                // Hence, this bullshittery is 100% necessary.
+                const shouldStroke = segment.classList.contains(
+                    "rune-segment--stroke",
+                );
+                segment.setAttribute(
+                    "stroke",
+                    shouldStroke ? this.state.runeColor : "none",
+                );
+                const shouldFill =
+                    segment.classList.contains("rune-segment--fill");
+                segment.setAttribute(
+                    "fill",
+                    shouldFill ? this.state.runeColor : "none",
+                );
             });
     }
 

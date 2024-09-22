@@ -143,12 +143,7 @@ export class RunicEditor extends Component<Props, State> {
     };
 
     onEnglishChange = (englishText: string) => {
-        // TODO: Sanitize this you freak
-        // At least remove the periods and commas and whatnot
-        // till you implement support for them.
-
-        const phoneticText = translateSentence(englishText.toLowerCase());
-
+        const phoneticText = translateSentence(englishText);
         // Update the phonetic text input
         this.phoneticInput.setText(phoneticText);
     };

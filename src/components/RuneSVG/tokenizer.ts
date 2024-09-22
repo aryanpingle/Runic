@@ -54,7 +54,7 @@ export function parseString(s: string): RenderableToken[] {
             tokens.push(token);
 
             i += ipaSymbol.length;
-        } else if(c === "@") {
+        } else if (c === "@") {
             isEnglishMode = !isEnglishMode;
 
             i += 1;

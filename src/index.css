@@ -75,6 +75,7 @@ button {
     height: 100%;
     z-index: -1;
     overflow: hidden;
+    opacity: 0.15;
 }
 
 .orb {
@@ -85,7 +86,7 @@ button {
     border-radius: 100%;
     background-color: var(--orb-color, crimson);
 
-    filter: opacity(0.25) blur(20em);
+    filter: blur(20em);
 }
 
 .orb-red {

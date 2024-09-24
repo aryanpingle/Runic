@@ -46,7 +46,7 @@ article {
     margin: 3em auto;
 }
 
-section {
+section, footer {
     max-width: var(--section-width);
     margin: auto;
 }
@@ -72,6 +72,16 @@ button {
     border: none;
     font-weight: 900;
     cursor: pointer;
+}
+
+a {
+    filter: drop-shadow(0 0 0.2em currentColor);
+    color: orange;
+    text-underline-offset: 0.2em;
+}
+
+footer {
+    border-top: 2px solid #242424;
 }
 
 /* The fancy orb stuff */

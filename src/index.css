@@ -1,5 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Petrona:ital,wght@0,100..900;1,100..900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Mono:wght@100..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Petrona:ital,wght@0,100..900;1,100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+Mono:wght@100..900&display=swap");
 
 * {
     box-sizing: border-box;
@@ -46,7 +46,8 @@ article {
     margin: 3em auto;
 }
 
-section, footer {
+section,
+footer {
     max-width: var(--section-width);
     margin: auto;
 }
@@ -97,32 +98,60 @@ footer {
     opacity: 0.15;
 }
 
+/* Mobile - Use linear gradients for the background */
+
+.fancy-orb-background {
+    background-image: linear-gradient(
+        to bottom,
+        transparent,
+        crimson,
+        transparent,
+        palegreen,
+        transparent,
+        cornflowerblue,
+        transparent
+    );
+}
+
 .orb {
-    position: absolute;
-    transform: translate(-50%, -50%);
-    height: 33%;
-    aspect-ratio: 1 / 1;
-    border-radius: 100%;
-    background-color: var(--orb-color, crimson);
-
-    filter: blur(20em);
+    display: none;
 }
 
-.orb-red {
-    top: calc(33% / 2);
-    left: 10%;
-    --orb-x: 10em;
-    --orb-color: crimson;
-}
+/* Desktop - Use fancy orbs */
 
-.orb-green {
-    top: calc(33% + calc(33% / 2));
-    left: 90%;
-    --orb-color: palegreen;
-}
+@media (min-width: 1024px) {
+    .fancy-orb-background {
+        background-image: none;
+    }
 
-.orb-blue {
-    top: calc(66% + calc(33% / 2));
-    left: 10%;
-    --orb-color: cornflowerblue;
+    .orb {
+        display: block;
+        position: absolute;
+        transform: translate(-50%, -50%);
+        height: 33%;
+        aspect-ratio: 1 / 1;
+        border-radius: 100%;
+        background-color: var(--orb-color, crimson);
+
+        filter: blur(20em);
+    }
+
+    .orb-red {
+        top: calc(33% / 2);
+        left: 10%;
+        --orb-x: 10em;
+        --orb-color: crimson;
+    }
+
+    .orb-green {
+        top: calc(33% + calc(33% / 2));
+        left: 90%;
+        --orb-color: palegreen;
+    }
+
+    .orb-blue {
+        top: calc(66% + calc(33% / 2));
+        left: 10%;
+        --orb-color: cornflowerblue;
+    }
 }

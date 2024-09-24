@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Petrona:ital,wght@0,100..900;1,100..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Mono:wght@100..900&display=swap');
 
 * {
@@ -6,11 +6,12 @@
 }
 
 :root {
-    font-family: "Merriweather", serif;
+    font-family: var(--serif-font-family);
+    font-weight: 400;
     color: #ccc;
 
-    font-weight: 300;
-
+    --serif-font-family: "Petrona", serif;
+    --sans-serif-font-family: "Noto Sans Mono", monospace;
     --article-width: 1280px;
     --section-width: 960px;
 }
@@ -36,6 +37,10 @@ body {
     background-color: black;
 }
 
+header {
+    text-align: center;
+}
+
 article {
     max-width: var(--article-width);
     margin: 3em auto;
@@ -50,8 +55,12 @@ section > h2 {
     text-transform: capitalize;
 }
 
+section > p {
+    margin: 1.33em 0;
+}
+
 textarea {
-    font-family: "Noto Sans Mono", monospace;
+    font-family: var(--sans-serif-font-family);
 }
 
 button {

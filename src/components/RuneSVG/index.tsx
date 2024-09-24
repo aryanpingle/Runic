@@ -71,6 +71,12 @@ export class RuneSVG extends Component<Props, State> {
         this.tokens = parseString(props.phoneticText);
     }
 
+    componentWillReceiveProps(nextProps: Readonly<Props>): void {
+        if(nextProps.phoneticText !== this.props.phoneticText) {
+            this.tokens = parseString(nextProps.phoneticText);
+        }
+    }
+    
     componentDidUpdate() {
         this.postRenderSetup();
     }

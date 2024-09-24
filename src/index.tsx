@@ -6,6 +6,8 @@ import "./index.css";
 import { RuneReferenceTable } from "components/RuneReference";
 import { consonantDataTable, vowelDataTable } from "./runeDataset";
 import { RunicPlayground } from "components/RunicPlayground";
+import { Testimonials } from "components/Testimonials";
+import { addGoldenPathListener } from "./holyCross";
 
 async function setup() {
     await loadIPADict();
@@ -14,12 +16,6 @@ async function setup() {
     render(
         <RunicEditor></RunicEditor>,
         document.querySelector(".runic-editor-container"),
-    );
-
-    // Runic Playground
-    render(
-        <RunicPlayground />,
-        document.querySelector(".runic-playground-container"),
     );
 
     // Vowel Table
@@ -33,5 +29,19 @@ async function setup() {
         <RuneReferenceTable table={consonantDataTable}></RuneReferenceTable>,
         document.querySelector("#rune-consonant-table"),
     );
+
+    // Runic Playground
+    render(
+        <RunicPlayground />,
+        document.querySelector(".runic-playground-container"),
+    );
+
+    // Testimonials Section
+    render(
+        <Testimonials />,
+        document.querySelector(".testimonials-container")
+    );
+
+    addGoldenPathListener();
 }
 setup();

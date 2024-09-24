@@ -1,0 +1,78 @@
+.sm-card {
+    --sm-card--color-dark: black;
+    --sm-card--color-light: rgb(83, 100, 113);
+
+    color: var(--sm-card--color-dark);
+
+    font-size: 0.75em;
+    padding: 0.5em 1em;
+    background-color: white;
+    border-radius: 1em;
+
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto 1fr auto;
+    column-gap: 0.5em;
+    height: 15em;
+    max-width: 60ch;
+    width: 100%;
+}
+
+.sm-card__pfp {
+    grid-row: span 3;
+    width: 2em;
+    height: 2em;
+    background-color: red;
+    border-radius: 100%;
+
+    overflow: hidden;
+}
+
+.sm-card__pfp > img {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.sm-card__header {
+}
+
+.sm-card__display-name {
+    font-weight: 700;
+    margin-right: 0.5em;
+    display: inline-block;
+}
+
+.sm-card__handle {
+    color: var(--sm-card--color-light);
+    display: inline-block;
+}
+
+.sm-card__content {
+    flex: 1 0 0;
+    overflow: hidden;
+}
+
+.sm-card__content > svg {
+    /* height: 100%; */
+}
+
+.sm-card__interactions {
+    padding-top: 0.5em;
+    flex: 0 0 auto;
+    color: var(--sm-card--color-light);
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sm-card__interactions > span {
+    overflow: hidden;
+}
+
+.sm-card__interactions svg {
+    width: 1em;
+    height: 1em;
+    vertical-align: text-top;
+    margin-right: 0.5em;
+}

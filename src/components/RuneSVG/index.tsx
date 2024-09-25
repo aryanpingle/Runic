@@ -16,7 +16,7 @@ import {
     RenderableToken,
     splitTokensIntoLines,
 } from "./tokenizer";
-import { bitmaskToRuneToken, getRuneBitmask } from "./utils";
+import { bitmaskToRuneToken } from "./utils";
 import { sanitizeBitmask } from "src/rune";
 
 export interface Props extends Partial<StateInProps> {
@@ -73,11 +73,11 @@ export class RuneSVG extends Component<Props, State> {
     }
 
     componentWillReceiveProps(nextProps: Readonly<Props>): void {
-        if(nextProps.phoneticText !== this.props.phoneticText) {
+        if (nextProps.phoneticText !== this.props.phoneticText) {
             this.tokens = parseString(nextProps.phoneticText);
         }
     }
-    
+
     componentDidUpdate() {
         this.postRenderSetup();
     }
@@ -284,9 +284,8 @@ export class RuneSVG extends Component<Props, State> {
                 layers.real.push(special as any);
             } else {
                 // Add layers of this phonetic token
-                const runeBitmask = getRuneBitmask(token);
                 const runeLayers = getRuneLayersForOneRune(
-                    runeBitmask,
+                    token,
                     tokenIndex,
                     runeX,
                     runeY,

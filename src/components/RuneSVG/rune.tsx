@@ -1,5 +1,7 @@
 import { VNode } from "preact";
 import { getInfoFromRuneMask } from "src/rune";
+import { bitmaskToRuneToken } from "./utils";
+import { RuneToken } from "./tokenizer";
 
 type Point = [number, number];
 
@@ -198,20 +200,8 @@ export interface RuneLayers {
 
 type RuneSegmentsContainer = SVGGElement;
 
-// TODO: This should be elsewhere
-export function getIPAFromBitmask(bitmask: number): string {
-    const { vowel, consonant, vowelBeforeConsonant } =
-        getInfoFromRuneMask(bitmask);
-    let arr = [consonant, vowel];
-    if (vowelBeforeConsonant) {
-        arr.reverse();
-    }
-    const translation = arr.join(" ").trim();
-    return translation;
-}
-
 export function getRuneLayersForOneRune(
-    bitmask: number,
+    token: RuneToken,
     index: number,
     tx: number,
     ty: number,
@@ -228,7 +218,7 @@ export function getRuneLayersForOneRune(
     // Real Layer
     const realLayer = (
         <g className="rune" data-rune-index={index} transform={runeTranslation}>
-            {...getRuneSegments(bitmask)}
+            {...getRuneSegments(token.bitmask)}
         </g>
     );
 
@@ -239,7 +229,7 @@ export function getRuneLayersForOneRune(
     const interactiveLayer = (
         <g
             className="rune"
-            data-rune-bitmask={bitmask.toString(2)}
+            data-rune-bitmask={token.bitmask.toString(2)}
             data-rune-index={index}
             transform={runeTranslation}
         >
@@ -258,7 +248,7 @@ export function getRuneLayersForOneRune(
                 alignment-baseline={"middle"}
                 text-anchor={"middle"}
             >
-                {getIPAFromBitmask(bitmask)}
+                {token.symbols.map((s) => s.ipaSymbol).join(" ")}
             </text>
         </g>
     );

@@ -1,4 +1,9 @@
-import { SocialMediaCommentIcon, SocialMediaHeartIcon, SocialMediaRepostIcon, SocialMediaViewsIcon } from "components/icons";
+import {
+    SocialMediaCommentIcon,
+    SocialMediaHeartIcon,
+    SocialMediaRepostIcon,
+    SocialMediaViewsIcon,
+} from "components/icons";
 import "./index.css";
 
 import { RuneSVG } from "components/RuneSVG";

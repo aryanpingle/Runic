@@ -34,7 +34,7 @@ function runeReferenceGridItem(symbol: SymbolData): VNode<any> {
                 <div className="rune-info">
                     <span class="rune-info__symbol">{symbol.ipaSymbol}</span>
                     <span class="rune-info__english">
-                        {symbol.english}
+                        {symbol.pronunciation}
                         <br />
                         {symbol.examples}
                     </span>

@@ -1,10 +1,95 @@
 .runic-playground {
-    height: 15em;
-
     border-radius: 1em;
     background-color: black;
     border: 2px solid #242424;
 
     display: grid;
-    place-items: center;
+    align-items: center;
+}
+
+/* Mobile - Vertical */
+
+.runic-playground {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+}
+
+/* Desktop - Horizontal */
+
+@media (min-width: 1024px) {
+    .runic-playground {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto;
+    }
+}
+
+.runic-playground__svg-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    height: 15em;
+    overflow: hidden;
+}
+
+/* Mobile - Vertical */
+
+.runic-playground__svg-container {
+    border: none;
+    border-bottom: 2px solid #242424;
+}
+
+/* Desktop - Horizontal */
+
+@media (min-width: 1024px) {
+    .runic-playground__svg-container {
+        border: none;
+        border-right: 2px solid #242424;
+    }
+}
+
+.runic-playground__manuals {
+    font-size: 0.75em;
+    padding: 1em;
+    overflow: hidden;
+}
+
+.runic-playground__controls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5em;
+    margin: 1em;
+}
+
+.runic-playground__controls > * {
+    flex: 1 0 auto;
+}
+
+.runic-playground__control-button {
+    font: inherit;
+    font-weight: 500;
+    overflow: hidden;
+
+    color: inherit;
+    background-color: #242424;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.runic-playground__control-icon {
+    display: inline-block;
+    width: 1.5em;
+    height: 1.5em;
+    margin-right: 1em;
+    color: cornflowerblue;
+}
+
+.runic-playground__control-icon > svg {
+    margin: auto;
+    width: 100%;
+    height: 100%;
 }

@@ -1,5 +1,5 @@
 .text-input {
-    padding: 1em;
+    margin: 1em;
     display: grid;
     gap: 0.5em;
 }

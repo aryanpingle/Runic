@@ -31,8 +31,7 @@ const testimonialsInfo: SocialMediaCardProps[] = [
         pfp: <img src="./images/librarian.jpg" alt="The Librarian" />,
         displayName: "Holy Cross 🐐",
         handle: "the.librarian",
-        phoneticText:
-            `bɔɹɪŋ. ɛniweɪ.\n\n${holyCrossPhonetic}\n@#runic@`,
+        phoneticText: `bɔɹɪŋ. ɛniweɪ.\n\n${holyCrossPhonetic}\n@#runic@`,
         comments: 300,
         likes: 1000,
         reposts: 1010,

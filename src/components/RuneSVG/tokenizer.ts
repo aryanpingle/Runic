@@ -1,15 +1,16 @@
 import { isVowel, SymbolData, symbolDataTable } from "../../runeDataset";
+import { bitmaskToRuneToken } from "./utils";
 
 export type RenderableToken = RuneToken | CharacterToken;
 
 export interface RuneToken {
     type: "phoneticSymbol";
     vowelOrConsonant: "vowel" | "consonant" | "mixed";
+    bitmask: number;
     vowelBitmask: number;
     consonantBitmask: number;
     vowelBeforeConsonant: boolean;
-
-    symbols?: string; // DEBUG
+    symbols: SymbolData[];
 }
 
 export interface CharacterToken {
@@ -40,17 +41,8 @@ export function parseString(s: string): RenderableToken[] {
 
         if (found && !isEnglishMode) {
             const ipaSymbol = foundSymbolData.ipaSymbol;
-            const symbolIsVowel = isVowel(ipaSymbol);
 
-            const token = {
-                type: "phoneticSymbol",
-                vowelBitmask: symbolIsVowel ? foundSymbolData.mask : 0,
-                consonantBitmask: symbolIsVowel ? 0 : foundSymbolData.mask,
-                vowelOrConsonant: symbolIsVowel ? "vowel" : "consonant",
-                vowelBeforeConsonant: false,
-
-                symbols: ipaSymbol,
-            } as RuneToken;
+            const token = bitmaskToRuneToken(foundSymbolData.mask);
             tokens.push(token);
 
             i += ipaSymbol.length;
@@ -61,7 +53,7 @@ export function parseString(s: string): RenderableToken[] {
         } else {
             // No phonetic symbol starts from this character onwards.
             // Treat this character like a special character.
-            const token = { type: "specialChar", char: c } as CharacterToken;
+            const token: CharacterToken = { type: "specialChar", char: c };
             tokens.push(token);
 
             i += 1;
@@ -92,15 +84,14 @@ function canMergeTokens(
 }
 
 function mergeTokens(first: RuneToken, second: RuneToken): RuneToken {
-    return {
-        type: "phoneticSymbol",
-        vowelBitmask: first.vowelBitmask | second.vowelBitmask,
-        consonantBitmask: first.consonantBitmask | second.consonantBitmask,
-        vowelOrConsonant: "mixed",
-        vowelBeforeConsonant: first.consonantBitmask === 0,
+    const vowelBitmask = first.vowelBitmask | second.vowelBitmask;
+    const consonantBitmask = first.consonantBitmask | second.consonantBitmask;
+    const vowelBeforeConsonant = first.consonantBitmask === 0;
 
-        symbols: [first.symbols, second.symbols].join(" "),
-    };
+    const bitmask =
+        vowelBitmask | consonantBitmask | (vowelBeforeConsonant ? 1 : 0);
+
+    return bitmaskToRuneToken(bitmask);
 }
 
 export function getLineTokenCounts(tokens: RenderableToken[]): number[] {

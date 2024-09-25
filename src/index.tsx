@@ -37,10 +37,7 @@ async function setup() {
     );
 
     // Testimonials Section
-    render(
-        <Testimonials />,
-        document.querySelector(".testimonials-container")
-    );
+    render(<Testimonials />, document.querySelector(".testimonials-container"));
 
     addGoldenPathListener();
 }

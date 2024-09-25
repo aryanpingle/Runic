@@ -198,6 +198,18 @@ export interface RuneLayers {
 
 type RuneSegmentsContainer = SVGGElement;
 
+// TODO: This should be elsewhere
+export function getIPAFromBitmask(bitmask: number): string {
+    const { vowel, consonant, vowelBeforeConsonant } =
+        getInfoFromRuneMask(bitmask);
+    let arr = [consonant, vowel];
+    if (vowelBeforeConsonant) {
+        arr.reverse();
+    }
+    const translation = arr.join(" ").trim();
+    return translation;
+}
+
 export function getRuneLayersForOneRune(
     bitmask: number,
     index: number,
@@ -221,6 +233,9 @@ export function getRuneLayersForOneRune(
     );
 
     // Interactive Layer
+    const interactiveLayerSegments = getRuneSegments(0);
+    delete interactiveLayerSegments[13]; // Small, central vertical segment
+    delete interactiveLayerSegments[0]; // Middle segment
     const interactiveLayer = (
         <g
             className="rune"
@@ -228,18 +243,11 @@ export function getRuneLayersForOneRune(
             data-rune-index={index}
             transform={runeTranslation}
         >
-            {...getRuneSegments(0)}
+            {...interactiveLayerSegments}
         </g>
     );
 
     // Text Layer
-    const { vowel, consonant, vowelBeforeConsonant } =
-        getInfoFromRuneMask(bitmask);
-    let arr = [consonant, vowel];
-    if (vowelBeforeConsonant) {
-        arr.reverse();
-    }
-    const translation = arr.join(" ").trim();
     const textLayer = (
         <g className="rune" data-rune-index={index} transform={runeTranslation}>
             <text
@@ -250,7 +258,7 @@ export function getRuneLayersForOneRune(
                 alignment-baseline={"middle"}
                 text-anchor={"middle"}
             >
-                {translation}
+                {getIPAFromBitmask(bitmask)}
             </text>
         </g>
     );

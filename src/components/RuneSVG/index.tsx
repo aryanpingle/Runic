@@ -17,6 +17,7 @@ import {
     splitTokensIntoLines,
 } from "./tokenizer";
 import { bitmaskToRuneToken, getRuneBitmask } from "./utils";
+import { sanitizeBitmask } from "src/rune";
 
 export interface Props extends Partial<StateInProps> {
     interactive: boolean;
@@ -190,7 +191,8 @@ export class RuneSVG extends Component<Props, State> {
         );
 
         // Calculate the new bitmask after toggling
-        const newBitmask = bitmask ^ (1 << (14 - segmentIndex));
+        const toggledBitmask = bitmask ^ (1 << (14 - segmentIndex));
+        const newBitmask = sanitizeBitmask(toggledBitmask, bitmask);
 
         this.updateRuneTokenMask(tokenIndex, newBitmask);
     };

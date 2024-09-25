@@ -1,3 +1,4 @@
+import { getBit, unsetBits, setBits, isBitSet, setBit, unsetBit } from "./bits";
 import {
     VOWEL_MASK,
     MIDDLE_LINE_MASK,
@@ -109,4 +110,78 @@ export function getInfoFromRuneMask(runeMask: number) {
         consonant,
         vowelBeforeConsonant,
     };
+}
+
+function sanitizeBitmaskLeftLine(
+    newBitmask: number,
+    oldBitmask: number,
+): number {
+    const upperLeftSegment = 14 - 5;
+    const lowerLeftSegment = 14 - 4;
+
+    // 0 = both left line segments are un/set
+    // 1 = only one segment is set
+    const leftLinePartial =
+        getBit(newBitmask, upperLeftSegment) ^
+        getBit(newBitmask, lowerLeftSegment);
+
+    if (!leftLinePartial) return newBitmask;
+
+    // Only one of the two segments is active
+
+    // Decide whether to set both or unset both
+    const unsetBoth = unsetBits(newBitmask, upperLeftSegment, lowerLeftSegment);
+    const setBoth = setBits(newBitmask, upperLeftSegment, lowerLeftSegment);
+
+    // Check if the upper segment has changed
+    const newUpperLeftBit = getBit(newBitmask, upperLeftSegment);
+    const oldUpperLeftBit = getBit(oldBitmask, upperLeftSegment);
+    if (newUpperLeftBit !== oldUpperLeftBit) {
+        return newUpperLeftBit === 1 ? setBoth : unsetBoth;
+    }
+
+    // Check if the lower segment has changed
+    const newLowerLeftBit = getBit(newBitmask, lowerLeftSegment);
+    const oldLowerLeftBit = getBit(oldBitmask, lowerLeftSegment);
+    if (newLowerLeftBit !== oldLowerLeftBit) {
+        return newLowerLeftBit === 1 ? setBoth : unsetBoth;
+    }
+
+    throw new Error("Unreachable");
+}
+
+/**
+ * The middle vertical line consists of two long segments, and one
+ * small central segment. If either of the long segments is active,
+ * then the central segment should be activated too. Otherwise, it
+ * should be deactivated.
+ */
+export function sanitizeMiddleVerticalLine(bitmask: number): number {
+    const upperVerticalSegment = 14 - 7;
+    const lowerVerticalSegment = 14 - 10;
+    const centralVerticalSegment = 14 - 13;
+    if (
+        isBitSet(bitmask, upperVerticalSegment) ||
+        isBitSet(bitmask, lowerVerticalSegment)
+    ) {
+        return setBit(bitmask, centralVerticalSegment);
+    } else {
+        return unsetBit(bitmask, centralVerticalSegment);
+    }
+}
+
+export function sanitizeBitmask(bitmask: number, oldBitmask: number) {
+    bitmask = sanitizeMiddleVerticalLine(bitmask);
+
+    bitmask = sanitizeBitmaskLeftLine(bitmask, oldBitmask);
+
+    // If only the horizontal line is active, deactivate it.
+    // If not, activate it.
+    if ((bitmask & MIDDLE_LINE_MASK) === bitmask) {
+        bitmask = 0;
+    } else {
+        bitmask |= MIDDLE_LINE_MASK;
+    }
+
+    return bitmask;
 }

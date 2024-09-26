@@ -1,5 +1,5 @@
 // prettier-ignore
-const goldenPathDirections = ["South", "South", "North", "West", "East", "East", "West", "North", "East", "South", "South", "North", "West", "East", "West", "South", "North", "East"];
+const goldenPathDirections = ["North", "East", "South", "East", "East", "East", "East", "North", "North", "West", "South", "West", "North", "West", "West", "West", "West"];
 
 // For debugging
 // const goldenPathDirections = ["North", "South", "West", "East"];

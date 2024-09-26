@@ -10,11 +10,14 @@ interface Props {}
 interface State {}
 
 const holyCrossPhonetic = `
-nɔɹ wɛ is         is
-saʊ   is   saʊ saʊ   nɔɹ
-saʊ   wɛ nɔɹ is nɔɹ   saʊ
-O         wɛ is wɛ
+wɛ wɛ wɛ wɛ saʊ wɛ
+is saʊ nɔɹ nɔɹ wɛ nɔɹ
+nɔɹ is is is is nɔɹ
 `.trim();
+
+//    nɔɹ
+// wɛ     is
+//    saʊ
 
 const testimonialsInfo: SocialMediaCardProps[] = [
     {
@@ -31,7 +34,7 @@ const testimonialsInfo: SocialMediaCardProps[] = [
         pfp: <img src="./images/librarian.jpg" alt="The Librarian" />,
         displayName: "Holy Cross 🐐",
         handle: "the.librarian",
-        phoneticText: `bɔɹɪŋ. ɛniweɪ.\n\n${holyCrossPhonetic}\n@#RUNIC@`,
+        phoneticText: `@#RUNIC@ is bɔɹɪŋ. tɹævəɫ ðɪs meɪz.\n${holyCrossPhonetic}`,
         comments: "1.7K",
         likes: "6.1K",
         reposts: "5.9K",

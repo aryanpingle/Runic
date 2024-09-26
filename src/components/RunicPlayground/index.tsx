@@ -83,7 +83,7 @@ export class RunicPlayground extends Component<Props, State> {
                         displayPhonemes={true}
                         runeThickness={0.5}
                         runeColor="cornflowerblue"
-                        runeGuideColor="#121212"
+                        runeGuideColor="#242424"
                     />
                 </div>
                 <div className="runic-playground__manuals">

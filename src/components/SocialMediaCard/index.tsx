@@ -40,7 +40,8 @@ export class SocialMediaCard extends Component<SocialMediaCardProps, State> {
                         phoneticText={props.phoneticText}
                         displayPhonemes={false}
                         interactive={false}
-                        runeColor="#e7e9ea"
+                        runeColor=""
+                        runeGuideColor=""
                     />
                 </div>
                 <div className="sm-card__interactions">

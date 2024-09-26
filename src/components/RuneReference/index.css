@@ -18,12 +18,13 @@
     grid-auto-flow: row;
     grid-template-rows: auto 1fr;
     justify-items: stretch;
+    gap: 0.5em;
 
     height: 100%;
     cursor: pointer;
 
-    background-color: black;
-    outline: 2px solid #242424;
+    background-color: var(--surface-1);
+    outline: 2px solid var(--surface-1-border);
     border-radius: 0.5em;
 
     text-align: center;
@@ -42,18 +43,36 @@
     justify-content: center;
     align-items: center;
 
-    background-color: #121212;
-    border-radius: inherit;
+    border-bottom: 2px solid var(--surface-1-border);
 }
 
 .rune-card .runic-svg {
     width: 3em;
 }
 
-.rune-card hr {
-    margin: 0;
-    width: 100%;
-    border: 1px solid #242424;
+/* Enable (easy) custom rune colors (to adapt to the theme) */
+
+.rune-card .rune-segment--stroke {
+    stroke: var(--rune-color, transparent);
+}
+
+.rune-card .rune-segment--fill {
+    fill: var(--rune-color, transparent);
+}
+
+/* Dark theme */
+.rune-card .runic-layer--guide {
+    /* noop */
+}
+.rune-card .runic-layer--real .rune-segment--active {
+    --rune-color: palegreen;
+}
+/* Light theme */
+.light-theme .rune-card .runic-layer--guide {
+    /* noop */
+}
+.light-theme .rune-card .runic-layer--real .rune-segment--active {
+    --rune-color: mediumseagreen;
 }
 
 .rune-info {
@@ -67,10 +86,9 @@
 
 .rune-info__symbol {
     font-size: 1.5em;
-    color: #cdcdcd;
 }
 
 .rune-info__english {
     font-size: 0.5em;
-    color: #888;
+    color: var(--on-surface-0-alt);
 }

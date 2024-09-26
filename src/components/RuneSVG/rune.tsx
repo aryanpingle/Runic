@@ -39,7 +39,7 @@ export function renderEnglishCharacter(
                 class="rune-segment rune-segment--active rune-segment--fill"
                 font-size={5}
                 font-family={"Noto Sans Mono, monospace"}
-                alignment-baseline={"before-edge"}
+                dominant-baseline={"text-before-edge"}
                 text-anchor={"start"}
             >
                 {char}
@@ -242,10 +242,10 @@ export function getRuneLayersForOneRune(
         <g className="rune" data-rune-index={index} transform={runeTranslation}>
             <text
                 font-size={1}
-                fill={"white"}
+                className="rune-segment--active rune-segment--fill"
                 x={1.5}
                 y={8}
-                alignment-baseline={"middle"}
+                dominant-baseline={"middle"}
                 text-anchor={"middle"}
             >
                 {token.symbols.map((s) => s.ipaSymbol).join(" ")}

@@ -18,8 +18,8 @@
 
     border-radius: 0.5em;
     border: none;
-    background-color: #242424;
-    outline: 2px solid #363636;
+    background-color: var(--surface-2);
+    outline: 2px solid var(--surface-2-border);
 }
 
 .text-input__textarea:focus {

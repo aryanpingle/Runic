@@ -17,7 +17,7 @@
     font-size: 0.75em;
     padding: 0.5em 1em;
     background-color: var(--sm-card--background);
-    border: 2px solid #242424;
+    border: 2px solid var(--surface-1-border);
     border-radius: 1em;
 
     display: grid;
@@ -86,4 +86,17 @@
     height: 1em;
     vertical-align: text-top;
     margin-right: 0.5em;
+}
+
+/* Enable (easy) custom rune colors (to adapt to the theme) */
+
+.sm-card .rune-segment--stroke {
+    stroke: var(--rune-color, transparent);
+}
+.sm-card .rune-segment--fill {
+    fill: var(--rune-color, transparent);
+}
+
+.sm-card .runic-layer--real .rune-segment--active {
+    --rune-color: currentColor;
 }

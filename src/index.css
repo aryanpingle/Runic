@@ -5,10 +5,36 @@
     box-sizing: border-box;
 }
 
+/* Dark theme */
+:root {
+    --surface-0: black;
+    --on-surface-0: #cccccc;
+    --on-surface-0-alt: #bfbfbf;
+    --surface-1: #121212;
+    --surface-1-border: #242424;
+    --surface-2: #242424; /* Textarea mostly */
+    --surface-2-border: #363636; /* Textarea mostly */
+
+    --link-color: orange;
+    --button-bkg: crimson;
+}
+/* Light theme */
+:root.light-theme {
+    --surface-0: white;
+    --on-surface-0: black;
+    --on-surface-0-alt: #242424;
+    --surface-1: #f2f2f2;
+    --surface-1-border: #cecece;
+    --surface-2: #dfdfdf; /* Textarea mostly */
+    --surface-2-border: #cccccc; /* Textarea mostly */
+
+    --button-bkg: hsl(348, 100%, 65%);
+}
+
 :root {
     font-family: var(--serif-font-family);
     font-weight: 400;
-    color: #ccc;
+    color: var(--on-surface-0);
 
     --serif-font-family: "Petrona", serif;
     --sans-serif-font-family: "Noto Sans Mono", monospace;
@@ -34,7 +60,7 @@ body {
     position: relative;
     margin: 0;
     padding: 1em;
-    background-color: black;
+    background-color: var(--surface-0);
 }
 
 header {
@@ -68,21 +94,20 @@ button {
     font: inherit;
     padding: 0.5em;
     border-radius: 0.5em;
-    background-color: crimson;
-    color: black;
-    border: none;
+    background-color: var(--button-bkg);
+    border: 2px solid var(--surface-2-border);
     font-weight: 900;
     cursor: pointer;
 }
 
 a {
-    filter: drop-shadow(0 0 0.2em currentColor);
-    color: orange;
+    font-weight: 700;
+    color: var(--link-color);
     text-underline-offset: 0.2em;
 }
 
 footer {
-    border-top: 2px solid #242424;
+    border-top: 2px solid var(--surface-1-border);
 }
 
 /* The fancy orb stuff */

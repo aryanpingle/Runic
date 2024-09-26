@@ -1,7 +1,7 @@
 .runic-editor {
     border-radius: 1em;
-    outline: 2px solid #242424;
-    background-color: #121212;
+    outline: 2px solid var(--surface-1-border);
+    background-color: var(--surface-1);
 
     font-size: 0.75em;
 
@@ -11,7 +11,7 @@
 .runic-editor__input-area {
     display: grid;
     align-items: stretch;
-    border-bottom: 2px solid #242424;
+    border-bottom: 2px solid var(--surface-1-border);
 }
 
 /* Mobile - Vertical layout */
@@ -86,7 +86,7 @@
 
 .runic-editor__preview > hr {
     margin: 0;
-    border: 1px solid #242424;
+    border: 1px solid var(--surface-1-border);
 }
 
 .runic-editor__svg-container {
@@ -96,8 +96,8 @@
     place-items: center;
 
     background-color: black;
-    --transparency-darker: #000000;
-    --transparency-lighter: #121212;
+    --transparency-darker: var(--surface-1);
+    --transparency-lighter: var(--surface-0);
     background-image: linear-gradient(
             45deg,
             var(--transparency-lighter) 25%,

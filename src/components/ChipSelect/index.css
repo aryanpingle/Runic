@@ -5,8 +5,7 @@
 
     padding: 0.25em;
     margin: 1em 0;
-    background-color: #121212;
-    outline: 2px solid #242424;
+    outline: 2px solid var(--surface-2-border);
     border-radius: 0.5em;
 
     display: grid;
@@ -41,11 +40,6 @@
     text-align: center;
 }
 
-.chip-select__input:focus + .chip-select__label {
-    /* outline: 2px solid gold; */
-}
-
 .chip-select__input:checked + .chip-select__label {
-    background-color: #ccc;
-    color: black;
+    background-color: var(--surface-2-border);
 }

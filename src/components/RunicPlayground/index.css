@@ -1,7 +1,7 @@
 .runic-playground {
     border-radius: 1em;
-    background-color: black;
-    border: 2px solid #242424;
+    background-color: var(--surface-1);
+    border: 2px solid var(--surface-1-border);
 
     display: grid;
     align-items: center;
@@ -36,7 +36,7 @@
 
 .runic-playground__svg-container {
     border: none;
-    border-bottom: 2px solid #242424;
+    border-bottom: 2px solid var(--surface-1-border);
 }
 
 /* Desktop - Horizontal */
@@ -44,8 +44,27 @@
 @media (min-width: 1024px) {
     .runic-playground__svg-container {
         border: none;
-        border-right: 2px solid #242424;
+        border-right: 2px solid var(--surface-1-border);
     }
+}
+
+/* Enable (easy) custom rune colors (to adapt to the theme) */
+
+.runic-playground .rune-segment--stroke {
+    stroke: var(--rune-color, transparent);
+}
+.runic-playground .rune-segment--fill {
+    fill: var(--rune-color, transparent);
+}
+
+.runic-playground .runic-layer--guide {
+    --rune-color: var(--surface-2);
+}
+.runic-playground .runic-layer--real .rune-segment--active {
+    --rune-color: cornflowerblue;
+}
+.runic-playground .runic-layer--text text {
+    --rune-color: currentColor;
 }
 
 .runic-playground__manuals {
@@ -73,7 +92,7 @@
     overflow: hidden;
 
     color: inherit;
-    background-color: #242424;
+    background-color: var(--surface-2);
 
     display: flex;
     justify-content: center;

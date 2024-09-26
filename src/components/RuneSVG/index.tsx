@@ -94,6 +94,7 @@ export class RuneSVG extends Component<Props, State> {
         this.applyStylesToGuideSegments();
         this.applyStylesToRealSegments();
         this.applyStylesToInteractiveSegments();
+        this.applyStylesToPhonemeText();
 
         // Apply styles to the SVG
         this.applyGeneralSVGStyles();
@@ -169,6 +170,15 @@ export class RuneSVG extends Component<Props, State> {
                     this.onInteractiveSegmentClick,
                 );
                 segment.setAttribute(onclickCertificate, "true");
+            });
+    }
+
+    private applyStylesToPhonemeText() {
+        // Text layer segments
+        this.textLayer
+            ?.querySelectorAll("text")
+            .forEach((segment) => {
+                segment.setAttribute("fill", this.state.runeColor);
             });
     }
 
@@ -326,20 +336,20 @@ export class RuneSVG extends Component<Props, State> {
             >
                 <g
                     ref={(e) => (this.guideLayer = e)}
-                    className="runic-layer--guide"
+                    className="runic-layer runic-layer--guide"
                 >
                     {...tokenLayers.guide}
                 </g>
                 <g
                     ref={(e) => (this.realLayer = e)}
-                    className="runic-layer--real"
+                    className="runic-layer runic-layer--real"
                 >
                     {...tokenLayers.real}
                 </g>
                 {props.interactive && (
                     <g
                         ref={(e) => (this.interactiveLayer = e)}
-                        className="runic-layer--interactive"
+                        className="runic-layer runic-layer--interactive"
                     >
                         {...tokenLayers.interactive}
                     </g>
@@ -347,7 +357,7 @@ export class RuneSVG extends Component<Props, State> {
                 {state.displayPhonemes && (
                     <g
                         ref={(e) => (this.textLayer = e)}
-                        className="runic-layer--text"
+                        className="runic-layer runic-layer--text"
                     >
                         {...tokenLayers.text}
                     </g>

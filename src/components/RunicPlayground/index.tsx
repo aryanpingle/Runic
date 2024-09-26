@@ -30,6 +30,7 @@ export class RunicPlayground extends Component<Props, State> {
     }
 
     resetRunicSVG() {
+        // Create a blank rune
         this.runeSVG.tokens = [bitmaskToRuneToken(0)];
         this.runeSVG.forceUpdate();
     }
@@ -39,14 +40,12 @@ export class RunicPlayground extends Component<Props, State> {
         if (token.bitmask === 0) return;
 
         const phonemeString = token.symbols.map((s) => s.ipaSymbol).join("");
-        const currentPhoneticText =
-            this.phoneticTextInput.textareaElement.value;
+        const currentPhoneticText = this.state.phoneticText;
         this.setState({ phoneticText: currentPhoneticText + phonemeString });
     };
 
     resetRune = () => {
-        const currentPhoneticText =
-            this.phoneticTextInput.textareaElement.value;
+        const currentPhoneticText = this.state.phoneticText;
         this.setState({ phoneticText: currentPhoneticText });
     };
 
@@ -67,6 +66,10 @@ export class RunicPlayground extends Component<Props, State> {
         res = res.replace(new RegExp(PHONEME_SEPARATOR + "(?=\\s|$)", "g"), "");
 
         return res.trim();
+    };
+
+    onPhoneticTextChange = (phoneticText: string) => {
+        this.setState({ phoneticText: phoneticText });
     };
 
     render(props: Props, state: State) {
@@ -109,6 +112,7 @@ export class RunicPlayground extends Component<Props, State> {
                         label="Result (Phonetic)"
                         placeholder="Phonetic text goes here"
                         value={state.phoneticText}
+                        bindInput={this.onPhoneticTextChange}
                     />
                     <TextInput
                         label="Result (Syllables)"

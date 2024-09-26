@@ -15,10 +15,10 @@ export interface SocialMediaCardProps {
     displayName: string;
     handle: string;
     phoneticText: string;
-    likes: number;
-    comments: number;
-    reposts: number;
-    views: number;
+    likes: string;
+    comments: string;
+    reposts: string;
+    views: string;
 }
 
 interface State {}
@@ -47,19 +47,19 @@ export class SocialMediaCard extends Component<SocialMediaCardProps, State> {
                 <div className="sm-card__interactions">
                     <span>
                         <SocialMediaCommentIcon />
-                        {props.comments.toLocaleString()}
+                        {props.comments}
                     </span>
                     <span>
                         <SocialMediaRepostIcon />
-                        {props.reposts.toLocaleString()}
+                        {props.reposts}
                     </span>
                     <span>
                         <SocialMediaHeartIcon />
-                        {props.likes.toLocaleString()}
+                        {props.likes}
                     </span>
                     <span>
                         <SocialMediaViewsIcon />
-                        {props.views.toLocaleString()}
+                        {props.views}
                     </span>
                 </div>
             </div>

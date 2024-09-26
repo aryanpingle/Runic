@@ -175,11 +175,9 @@ export class RuneSVG extends Component<Props, State> {
 
     private applyStylesToPhonemeText() {
         // Text layer segments
-        this.textLayer
-            ?.querySelectorAll("text")
-            .forEach((segment) => {
-                segment.setAttribute("fill", this.state.runeColor);
-            });
+        this.textLayer?.querySelectorAll("text").forEach((segment) => {
+            segment.setAttribute("fill", this.state.runeColor);
+        });
     }
 
     // --- Listener

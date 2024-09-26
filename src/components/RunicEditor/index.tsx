@@ -204,7 +204,7 @@ export class RunicEditor extends Component<Props, State> {
             downloadURI(uri, `${filename}.svg`);
         } else {
             // Draw the svg with styles to canvas, then download
-            const canvas = await drawSVGToCanvas(svgElement)
+            const canvas = await drawSVGToCanvas(svgElement);
             const uri = canvas.toDataURL(`image/${format}`);
             downloadURI(uri, `${filename}.${format}`);
         }

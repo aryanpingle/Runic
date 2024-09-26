@@ -188,7 +188,7 @@ export class RunicEditor extends Component<Props, State> {
 
     // Miscellaneous
 
-    download = (format: "svg" | "png" | "jpeg") => {
+    download = async (format: "svg" | "png" | "jpeg") => {
         const svgElement = this.runeSVGElement.svgElement;
 
         // Add background color (only if transparentBackground is disabled)
@@ -203,10 +203,10 @@ export class RunicEditor extends Component<Props, State> {
             const uri = svgToUri(svgElement);
             downloadURI(uri, `${filename}.svg`);
         } else {
-            drawSVGToCanvas(svgElement).then((canvas) => {
-                const uri = canvas.toDataURL(`image/${format}`);
-                downloadURI(uri, `${filename}.${format}`);
-            });
+            // Draw the svg with styles to canvas, then download
+            const canvas = await drawSVGToCanvas(svgElement)
+            const uri = canvas.toDataURL(`image/${format}`);
+            downloadURI(uri, `${filename}.${format}`);
         }
 
         // Remove background color

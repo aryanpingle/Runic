@@ -48,7 +48,7 @@ export class RuneSVG extends Component<Props, State> {
     // Initial state based on props
     state: State = {
         displayPhonemes: this.props.displayPhonemes ?? false,
-        backgroundColor: this.props.backgroundColor ?? "transparent",
+        backgroundColor: this.props.backgroundColor ?? "black",
         transparentBackground: this.props.transparentBackground ?? true,
         runeColor: this.props.runeColor ?? "crimson",
         runeGuideColor: this.props.runeGuideColor ?? "transparent",

@@ -1,14 +1,13 @@
+import "./index.css";
+
 import {
     SocialMediaCommentIcon,
     SocialMediaHeartIcon,
     SocialMediaRepostIcon,
     SocialMediaViewsIcon,
 } from "components/icons";
-import "./index.css";
-
 import { RuneSVG } from "components/RuneSVG";
 import { h, Component, VNode } from "preact";
-import { translateSentence } from "../../ipa";
 
 export interface SocialMediaCardProps {
     pfp: VNode<HTMLImageElement>;
@@ -41,7 +40,7 @@ export class SocialMediaCard extends Component<SocialMediaCardProps, State> {
                         phoneticText={props.phoneticText}
                         displayPhonemes={false}
                         interactive={false}
-                        runeColor="black"
+                        runeColor="#e7e9ea"
                     />
                 </div>
                 <div className="sm-card__interactions">

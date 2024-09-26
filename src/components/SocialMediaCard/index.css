@@ -1,12 +1,23 @@
+/* Dark theme */
 .sm-card {
+    --sm-card--background: black;
+    --sm-card--color-dark: #e7e9ea;
+    --sm-card--color-light: rgb(113, 118, 123);
+}
+
+/* Light theme */
+.light-theme .sm-card {
+    --sm-card--background: white;
     --sm-card--color-dark: black;
     --sm-card--color-light: rgb(83, 100, 113);
+}
 
+.sm-card {
     color: var(--sm-card--color-dark);
-
     font-size: 0.75em;
     padding: 0.5em 1em;
-    background-color: white;
+    background-color: var(--sm-card--background);
+    border: 2px solid #242424;
     border-radius: 1em;
 
     display: grid;
@@ -22,7 +33,6 @@
     grid-row: span 3;
     width: 2em;
     height: 2em;
-    background-color: red;
     border-radius: 100%;
 
     overflow: hidden;

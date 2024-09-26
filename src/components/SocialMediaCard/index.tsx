@@ -59,7 +59,7 @@ export class SocialMediaCard extends Component<SocialMediaCardProps, State> {
                     </span>
                     <span>
                         <SocialMediaViewsIcon />
-                        {props.likes.toLocaleString()}
+                        {props.views.toLocaleString()}
                     </span>
                 </div>
             </div>

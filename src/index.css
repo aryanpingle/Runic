@@ -95,7 +95,7 @@ footer {
     height: 100%;
     z-index: -1;
     overflow: hidden;
-    opacity: 0.15;
+    opacity: 0.2;
 }
 
 /* Mobile - Use linear gradients for the background */

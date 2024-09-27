@@ -21,7 +21,9 @@ nɔɹ is is is is nɔɹ
 
 const testimonialsInfo: SocialMediaCardProps[] = [
     {
-        pfp: <img src="./images/boss.jpg" alt="Boss Scavenger" />,
+        pfp: (
+            <img loading="lazy" src="./images/boss.jpg" alt="Boss Scavenger" />
+        ),
         displayName: "ScavQueen 🌸",
         handle: "boss.scavenger642",
         phoneticText: "ðɪs ɪz ɑsəm!\n@#RUNIC@ ɪz soʊ bjutəfəɫ",
@@ -31,7 +33,13 @@ const testimonialsInfo: SocialMediaCardProps[] = [
         views: "2.0K",
     },
     {
-        pfp: <img src="./images/librarian.jpg" alt="The Librarian" />,
+        pfp: (
+            <img
+                loading="lazy"
+                src="./images/librarian.jpg"
+                alt="The Librarian"
+            />
+        ),
         displayName: "Holy Cross 🐐",
         handle: "the.librarian",
         phoneticText: `@#RUNIC@ is bɔɹɪŋ. tɹævəɫ ðɪs meɪz.\n${holyCrossPhonetic}`,
@@ -41,7 +49,7 @@ const testimonialsInfo: SocialMediaCardProps[] = [
         views: "40.1K",
     },
     {
-        pfp: <img src="./images/heir.jpg" alt="The Heir" />,
+        pfp: <img loading="lazy" src="./images/heir.jpg" alt="The Heir" />,
         displayName: "Heirhead",
         handle: "the_only.heir",
         phoneticText: `@#RUNIC@ ɪz jusɫɛs.\nwhaɪ wʊd ɛniwən @love it@?!\ndu səmθɪŋ bɛtɝ wɪð jɔɹ taɪm.`,
@@ -51,7 +59,13 @@ const testimonialsInfo: SocialMediaCardProps[] = [
         views: "841",
     },
     {
-        pfp: <img src="./images/ruinseeker.jpg" alt="Ruinseeker" />,
+        pfp: (
+            <img
+                loading="lazy"
+                src="./images/ruinseeker.jpg"
+                alt="Ruinseeker"
+            />
+        ),
         displayName: "From (Fox) Software",
         handle: "real.ruinseeker",
         phoneticText: `θɹuaʊt hɛvən ænd ɝθ,\naɪ əɫoʊn æm ðə @honoured@ wən.\nθæŋk ju fɔɹ @#RUNIC@.`,

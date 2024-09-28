@@ -1,4 +1,18 @@
-// Bit manipulation utilities
+/**
+ * Bit manipulation utilities.
+ */
+
+/**
+ * Get the number of set bits (i.e. 1) in the given bitmask.
+ */
+export function countSetBits(bitstring: number) {
+    let count = 0;
+    while (bitstring != 0) {
+        count += bitstring % 2;
+        bitstring = bitstring >> 1;
+    }
+    return count;
+}
 
 export function getBit(bitmask: number, exponent: number): number {
     return (bitmask >> exponent) & 1;
@@ -19,6 +33,7 @@ export function setBits(bitmask: number, ...exponents: number[]): number {
 export function setBit(bitmask: number, exponent: number): number {
     return bitmask | (1 << exponent);
 }
+
 function toggleBit(bitmask: number, exponent: number): number {
     return bitmask ^ (1 << exponent);
 }

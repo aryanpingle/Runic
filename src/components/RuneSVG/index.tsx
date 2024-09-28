@@ -332,12 +332,15 @@ export class RuneSVG extends Component<Props, State> {
                 xmlns="http://www.w3.org/2000/svg"
                 xmlnsXlink="http://www.w3.org/1999/xlink"
             >
-                <g
-                    ref={(e) => (this.guideLayer = e)}
-                    className="runic-layer runic-layer--guide"
-                >
-                    {...tokenLayers.guide}
-                </g>
+                {/* Simple optimization, may be removed if troublesome */}
+                {state.runeGuideColor !== "transparent" && (
+                    <g
+                        ref={(e) => (this.guideLayer = e)}
+                        className="runic-layer runic-layer--guide"
+                    >
+                        {...tokenLayers.guide}
+                    </g>
+                )}
                 <g
                     ref={(e) => (this.realLayer = e)}
                     className="runic-layer runic-layer--real"

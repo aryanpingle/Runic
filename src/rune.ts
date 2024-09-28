@@ -1,4 +1,12 @@
-import { getBit, unsetBits, setBits, isBitSet, setBit, unsetBit } from "./bits";
+import {
+    getBit,
+    unsetBits,
+    setBits,
+    isBitSet,
+    setBit,
+    unsetBit,
+    countSetBits,
+} from "./bits";
 import {
     VOWEL_MASK,
     MIDDLE_LINE_MASK,
@@ -8,7 +16,6 @@ import {
     symbolToSymbolData,
     consonantDataTable,
 } from "./runeDataset";
-import { countSetBits } from "./utils";
 
 function containsBitmask(bitstring: number, bitmask: number) {
     return (bitstring & bitmask) === bitmask;

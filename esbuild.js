@@ -26,6 +26,24 @@ async function main() {
             allowOverwrite: true,
         }),
     );
+    // Build the service worker
+    contexts.push(
+        await esbuild.context({
+            entryPoints: ["src/service-worker.ts"],
+            bundle: true,
+            format: "esm",
+            target: "es2020",
+            minify: production,
+            sourcesContent: false,
+            outfile: "./dist/service-worker.js",
+            logLevel: "silent",
+            plugins: [
+                /* add to the end of plugins array */
+                esbuildProblemMatcherPlugin,
+            ],
+            allowOverwrite: true,
+        }),
+    );
 
     if (watch) {
         await Promise.allSettled(contexts.map((context) => context.watch()));

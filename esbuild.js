@@ -3,28 +3,32 @@ const esbuild = require("esbuild");
 const {
     esbuildProblemMatcherPlugin,
 } = require("./plugins/esbuildProblemMatchersPlugin");
-const { injectInitialScriptPlugin } = require("./plugins/injectInitialScript");
+const { injectionPlugin } = require("./plugins/injection-plugin");
 
 const production = process.argv.includes("--production");
 const watch = process.argv.includes("--watch");
+
+const commonBuildOptions = {
+    bundle: true,
+    format: "esm",
+    target: "es2020",
+    minify: production,
+    sourcesContent: false,
+    logLevel: "silent",
+    alias: {
+        react: "preact/compat",
+    },
+    allowOverwrite: true,
+};
 
 async function main() {
     const contexts = [];
     // Build the visualization webview code
     contexts.push(
         await esbuild.context({
-            entryPoints: ["src/index.tsx", "src/initial-script.ts"],
-            bundle: true,
-            format: "esm",
-            target: "es2020",
-            minify: production,
-            sourcesContent: false,
-            outdir: "./dist/bundle",
-            metafile: true,
-            logLevel: "silent",
-            alias: {
-                react: "preact/compat",
-            },
+            ...commonBuildOptions,
+            entryPoints: ["src/index.tsx"],
+            outfile: "./dist/bundle/index.js",
             plugins: [
                 esbuildPluginCopy({
                     // Resolve relative to the current working directory
@@ -37,7 +41,22 @@ async function main() {
                         },
                     ],
                 }),
-                injectInitialScriptPlugin,
+                /* add to the end of plugins array */
+                esbuildProblemMatcherPlugin,
+            ],
+        }),
+    );
+    // Build the initial resources (JS and CSS)
+    contexts.push(
+        await esbuild.context({
+            ...commonBuildOptions,
+            entryPoints: ["src/initial-resources/index.ts"],
+            outfile: "./dist/bundle/initial.js",
+            plugins: [
+                injectionPlugin({
+                    inFile: "src/index.ejs",
+                    outFile: "dist/index.html",
+                }),
                 /* add to the end of plugins array */
                 esbuildProblemMatcherPlugin,
             ],
@@ -46,19 +65,13 @@ async function main() {
     // Build the service worker
     contexts.push(
         await esbuild.context({
+            ...commonBuildOptions,
             entryPoints: ["src/service-worker.ts"],
-            bundle: true,
-            format: "esm",
-            target: "es2020",
-            minify: production,
-            sourcesContent: false,
             outdir: "./dist",
-            logLevel: "silent",
             plugins: [
                 /* add to the end of plugins array */
                 esbuildProblemMatcherPlugin,
             ],
-            allowOverwrite: true,
         }),
     );
 

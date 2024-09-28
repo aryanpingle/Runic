@@ -13,6 +13,7 @@
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^22.7.4",
+    "ejs": "^3.1.10",
     "esbuild": "^0.23.1",
     "esbuild-plugin-copy": "^2.1.1",
     "preact": "^10.23.2",

@@ -6,15 +6,14 @@
         <title>Runic - The Tunic Translation Tool</title>
 
         <!-- Initial Script -->
-        <!-- inject:initial-script -->
+        <%- injectFile("js", "dist/bundle/initial.js") %>
+        <!-- Initial CSS -->
+        <%- injectFile("css", "dist/bundle/initial.css") %>
 
         <!-- Preconnect to fonts.gstatic.com -->
         <link rel="preconnect" href="fonts.gstatic.com" />
 
-        <!-- CSS -->
-        <link rel="stylesheet" href="./bundle/index.css" />
-
-        <!-- JS -->
+        <!-- Lazy JS -->
         <script src="./bundle/index.js" async defer></script>
 
         <!-- Google tag (gtag.js) -->
@@ -84,6 +83,9 @@
         />
     </head>
     <body>
+        <!-- Lazy CSS -->
+        <link rel="stylesheet" href="./bundle/index.css" />
+
         <div class="fancy-orb-background">
             <div class="orb orb-red"></div>
             <div class="orb orb-green"></div>
@@ -116,8 +118,8 @@
                     <p>
                         Anything you type in English will be translated to
                         phonetic, and then converted to Runic.<br />
-                        Put phrases within '<i>@</i>' to display them in
-                        English, like '<i>@The Librarian@</i>'
+                        Put phrases within '<i>&#64;</i>' to display them in
+                        English, like '<i>&#64;The Librarian&#64;</i>'
                     </p>
                 </section>
                 <div class="runic-editor-container"></div>

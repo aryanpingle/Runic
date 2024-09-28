@@ -1,6 +1,3 @@
-import "./fonts.css";
-import "./index.css";
-
 import { render } from "preact";
 import { loadIPADict } from "./ipa";
 import { RunicEditor } from "components/RunicEditor";

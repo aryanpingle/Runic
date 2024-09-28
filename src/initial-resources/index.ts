@@ -1,3 +1,6 @@
+import "./fonts.css";
+import "./index.css";
+
 function setTheme() {
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
     if (mediaQuery.matches) {

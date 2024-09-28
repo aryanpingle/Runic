@@ -12,7 +12,7 @@ const log = (text: string, color = "rgb(128, 128, 128)") =>
         `color: black !important; background-color: ${color};`,
     );
 
-const ENABLE_CACHING = IS_DEVELOPMENT;
+const ENABLE_CACHING = !IS_DEVELOPMENT;
 
 const CACHE_NAME = "runic-cache-1";
 let CACHE: Cache = null;

@@ -133,8 +133,7 @@ export class RunicEditor extends Component<Props, State> {
     englishInput?: TextInput;
     phoneticInput?: TextInput;
 
-    componentDidMount(): void {
-    }
+    componentDidMount(): void {}
 
     // Listeners
 

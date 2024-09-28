@@ -6,7 +6,7 @@ export async function loadIPADict() {
     // Load the dictionary
     const response = await fetch(IPADictURL);
     IPADict = await response.json();
-    console.log("Loaded IPA Dictionary.")
+    console.log("Loaded IPA Dictionary.");
 }
 
 /**

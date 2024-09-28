@@ -28,8 +28,8 @@ function addThemeListener() {
     mediaQuery.addEventListener("change", setTheme);
 }
 
-async function setup() {
-    await loadIPADict();
+function setup() {
+    loadIPADict();
 
     addThemeListener();
 

@@ -125,6 +125,7 @@ function getSettings(obj: RunicEditor): VNode {
 }
 
 const initialEnglishText = "Tunic\nSecret Legend!";
+const initialPhoneticText = "tunɪk\nsikɹət ɫɛdʒənd!";
 
 export class RunicEditor extends Component<Props, State> {
     runeSVGElement?: RuneSVG;
@@ -133,7 +134,6 @@ export class RunicEditor extends Component<Props, State> {
     phoneticInput?: TextInput;
 
     componentDidMount(): void {
-        this.onEnglishChange(initialEnglishText);
     }
 
     // Listeners
@@ -232,6 +232,7 @@ export class RunicEditor extends Component<Props, State> {
                         placeholder="Type something here"
                         name="text-input--phonetic"
                         bindInput={this.onPhoneticChange}
+                        value={initialPhoneticText}
                         spellcheck={false}
                     />
                 </div>
@@ -244,7 +245,7 @@ export class RunicEditor extends Component<Props, State> {
                             ref={(e) => (this.runeSVGElement = e)}
                             interactive={false}
                             displayPhonemes={false}
-                            phoneticText="sikɹət ɫɛdʒənd"
+                            phoneticText={initialPhoneticText}
                         ></RuneSVG>
                     </div>
                     <hr />

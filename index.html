@@ -5,12 +5,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Runic - The Tunic Translation Tool</title>
 
-        <!-- Service Worker -->
-        <script type="module">
-            if ("serviceWorker" in navigator) {
-                navigator.serviceWorker.register("./service-worker.js");
-            }
-        </script>
+        <!-- Initial Script -->
+        <script type="module">function r(){window.matchMedia("(prefers-color-scheme: dark)").matches?document.documentElement.classList.remove("light-theme"):document.documentElement.classList.add("light-theme")}function t(){let e=window.matchMedia("(prefers-color-scheme: dark)");r(),e.addEventListener("change",r)}function i(){"serviceWorker"in navigator&&navigator.serviceWorker.register("./service-worker.js")}(function(){i(),t()})();</script>
 
         <!-- Preconnect to fonts.gstatic.com -->
         <link rel="preconnect" href="fonts.gstatic.com" />

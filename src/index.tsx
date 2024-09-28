@@ -1,37 +1,18 @@
+import "./fonts.css";
+import "./index.css";
+
 import { render } from "preact";
 import { loadIPADict } from "./ipa";
 import { RunicEditor } from "components/RunicEditor";
 
-import "./index.css";
 import { RuneReferenceTable } from "components/RuneReference";
 import { consonantDataTable, vowelDataTable } from "./runeDataset";
 import { RunicPlayground } from "components/RunicPlayground";
 import { Testimonials } from "components/Testimonials";
 import { addGoldenPathListener } from "./holyCross";
 
-function setTheme() {
-    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-    if (mediaQuery.matches) {
-        // Dark theme
-        document.documentElement.classList.remove("light-theme");
-    } else {
-        // Light theme
-        document.documentElement.classList.add("light-theme");
-    }
-}
-
-function addThemeListener() {
-    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-    // Apply the theme
-    setTheme();
-    // Listen for a theme change
-    mediaQuery.addEventListener("change", setTheme);
-}
-
 function setup() {
     loadIPADict();
-
-    addThemeListener();
 
     // Runic Translator
     render(

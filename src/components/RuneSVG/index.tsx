@@ -22,6 +22,8 @@ import { sanitizeBitmask } from "src/rune";
 export interface Props extends Partial<StateInProps> {
     interactive: boolean;
     phoneticText: string;
+
+    svgProps?: preact.JSX.SVGAttributes<any>;
 }
 
 interface StateInProps {
@@ -328,9 +330,12 @@ export class RuneSVG extends Component<Props, State> {
                 class="runic-svg"
                 preserveAspectRatio="xMidYMid meet"
                 viewBox={viewBox}
+                width={viewBoxWidth}
+                height={viewBoxHeight}
                 version="1.1"
                 xmlns="http://www.w3.org/2000/svg"
                 xmlnsXlink="http://www.w3.org/1999/xlink"
+                {...props.svgProps}
             >
                 {/* Simple optimization, may be removed if troublesome */}
                 {state.runeGuideColor !== "transparent" && (

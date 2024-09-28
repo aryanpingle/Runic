@@ -42,6 +42,9 @@ export class SocialMediaCard extends Component<SocialMediaCardProps, State> {
                         interactive={false}
                         runeColor=""
                         runeGuideColor=""
+                        svgProps={{
+                            preserveAspectRatio: "xMinYMin meet"
+                        }}
                     />
                 </div>
                 <div className="sm-card__interactions">

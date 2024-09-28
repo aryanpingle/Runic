@@ -1,4 +1,4 @@
-import { PlusIcon, ResetIcon } from "components/icons";
+import { CancelIcon, PlusIcon, ResetIcon, SpaceKeyIcon } from "components/icons";
 import "./index.css";
 
 import { RuneSVG } from "components/RuneSVG";
@@ -42,6 +42,11 @@ export class RunicPlayground extends Component<Props, State> {
         const phonemeString = token.symbols.map((s) => s.ipaSymbol).join("");
         const currentPhoneticText = this.state.phoneticText;
         this.setState({ phoneticText: currentPhoneticText + phonemeString });
+    };
+
+    addSpace = () => {
+        const currentPhoneticText = this.state.phoneticText;
+        this.setState({ phoneticText: currentPhoneticText + " " });
     };
 
     resetRune = () => {
@@ -99,12 +104,32 @@ export class RunicPlayground extends Component<Props, State> {
                         </button>
                         <button
                             className="runic-playground__control-button"
+                            onClick={this.addSpace}
+                        >
+                            <span className="runic-playground__control-icon">
+                                <SpaceKeyIcon />
+                            </span>
+                            Spacebar
+                        </button>
+                    </div>
+                    <div className="runic-playground__controls">
+                        <button
+                            className="runic-playground__control-button"
                             onClick={this.resetRune}
+                        >
+                            <span className="runic-playground__control-icon">
+                                <CancelIcon />
+                            </span>
+                            Cancel Rune
+                        </button>
+                        <button
+                            className="runic-playground__control-button"
+                            onClick={this.addPhoneme}
                         >
                             <span className="runic-playground__control-icon">
                                 <ResetIcon />
                             </span>
-                            Reset Rune
+                            Clear Result
                         </button>
                     </div>
                     <TextInput

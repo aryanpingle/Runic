@@ -209,10 +209,25 @@ export const ResetIcon = (props: preact.JSX.HTMLAttributes) => (
         width="800px"
         height="800px"
         viewBox="0 0 24 24"
-        fill="currentColor"
         xmlns="http://www.w3.org/2000/svg"
+        fill="currentColor"
+        {...props}
     >
         <path d="M12,2A10,10,0,1,0,22,12,10,10,0,0,0,12,2Zm0,18a8,8,0,0,1-8-8A7.92,7.92,0,0,1,5.69,7.1L16.9,18.31A7.92,7.92,0,0,1,12,20Zm6.31-3.1L7.1,5.69A7.92,7.92,0,0,1,12,4a8,8,0,0,1,8,8A7.92,7.92,0,0,1,18.31,16.9Z" />
+    </svg>
+);
+
+export const CancelIcon = (props: preact.JSX.HTMLAttributes) => (
+    // @ts-ignore - HTML attributes are valid for SVG
+    <svg
+        width="800px"
+        height="800px"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="currentColor"
+        {...props}
+    >
+        <path d="M13.41,12l6.3-6.29a1,1,0,1,0-1.42-1.42L12,10.59,5.71,4.29A1,1,0,0,0,4.29,5.71L10.59,12l-6.3,6.29a1,1,0,0,0,0,1.42,1,1,0,0,0,1.42,0L12,13.41l6.29,6.3a1,1,0,0,0,1.42,0,1,1,0,0,0,0-1.42Z" />
     </svg>
 );
 

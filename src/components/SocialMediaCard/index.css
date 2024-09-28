@@ -25,7 +25,6 @@
     grid-template-rows: auto 1fr auto;
     column-gap: 0.5em;
     max-height: 15em;
-    max-width: 60ch;
     width: 100%;
 }
 

@@ -1,3 +1,5 @@
+const { copy: esbuildPluginCopy } = require("esbuild-plugin-copy");
+
 const esbuild = require("esbuild");
 
 const production = process.argv.includes("--production");
@@ -20,6 +22,17 @@ async function main() {
             outfile: "./dist/bundle/index.js",
             logLevel: "silent",
             plugins: [
+                esbuildPluginCopy({
+                    // Resolve relative to the current working directory
+                    resolveFrom: "cwd",
+                    assets: [
+                        {
+                            from: ["./public/**/*"],
+                            to: ["./dist"],
+                            watch: watch,
+                        },
+                    ],
+                }),
                 /* add to the end of plugins array */
                 esbuildProblemMatcherPlugin,
             ],

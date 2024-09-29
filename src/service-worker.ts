@@ -50,6 +50,8 @@ function isResourceRequest(urlString: string) {
     if (urlString.includes("ipa_dict.json")) return true;
     // Google Fonts
     if (urlString.includes("fonts.googleapis.com")) return true;
+    // Any image
+    if (/\.(png|webp|jpg|jpeg)$/.test(urlString)) return true;
     return false;
 }
 

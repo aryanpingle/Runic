@@ -78,18 +78,20 @@
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-    gap: 0.5em;
+    gap: 1em;
     margin: 1em;
 }
 
 .runic-playground__controls > * {
-    flex: 1 0 auto;
+    flex: 1 0 0;
 }
 
 .runic-playground__control-button {
     font: inherit;
     font-weight: 500;
     overflow: hidden;
+    min-width: min-content;
+    text-wrap: nowrap;
 
     color: inherit;
     background-color: var(--surface-2);

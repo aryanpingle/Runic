@@ -94,6 +94,7 @@ section .section-banner {
 section > p {
     text-align: center;
     text-wrap: balance;
+    color: var(--on-surface-0-alt);
     margin: 1.33em 0;
 }
 
@@ -124,6 +125,12 @@ footer {
 
 b {
     font-weight: 700;
+}
+
+/* Introductory article */
+
+.introduction-article p {
+    color: var(--on-surface-0);
 }
 
 /* The fancy orb stuff */

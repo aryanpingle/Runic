@@ -43,7 +43,7 @@ export class SocialMediaCard extends Component<SocialMediaCardProps, State> {
                         runeColor=""
                         runeGuideColor=""
                         svgProps={{
-                            preserveAspectRatio: "xMinYMin meet"
+                            preserveAspectRatio: "xMinYMin meet",
                         }}
                     />
                 </div>

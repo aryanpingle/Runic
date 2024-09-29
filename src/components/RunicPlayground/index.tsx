@@ -1,4 +1,9 @@
-import { CancelIcon, PlusIcon, ResetIcon, SpaceKeyIcon } from "components/icons";
+import {
+    CancelIcon,
+    PlusIcon,
+    ResetIcon,
+    SpaceKeyIcon,
+} from "components/icons";
 import "./index.css";
 
 import { RuneSVG } from "components/RuneSVG";

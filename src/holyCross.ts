@@ -33,7 +33,6 @@ function onKeyDown(event: KeyboardEvent) {
         // Check if the correct key was pressed
         if (goldenPathDirections[goldenPathIndex] !== directionPressed) {
             // Wrong key was pressed
-            console.log("WRONG");
             goldenPathIndex = 0;
             return;
         } else {
@@ -51,7 +50,7 @@ function onKeyDown(event: KeyboardEvent) {
 
 function onGoldenPathTravelled() {
     // TODO: Do something cool
-    console.log("GOLDEN PATH TRAVELLED!");
+    window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
 }
 
 export function addGoldenPathListener() {

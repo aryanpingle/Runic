@@ -85,10 +85,12 @@
 }
 
 .rune-info__symbol {
+    font-family: var(--serif-font);
     font-size: 1.5em;
+    margin-bottom: 0.25em;
 }
 
 .rune-info__english {
+    opacity: 0.75;
     font-size: 0.5em;
-    color: var(--on-surface-0-alt);
 }

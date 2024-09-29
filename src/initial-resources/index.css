@@ -29,12 +29,13 @@
 }
 
 :root {
-    font-family: var(--serif-font-family);
+    font-family: var(--sans-serif-font);
     font-weight: 400;
     color: var(--on-surface-0);
 
-    --serif-font-family: "Petrona", serif;
-    --sans-serif-font-family: "Noto Sans Mono", monospace;
+    --serif-font: "Petrona", serif;
+    --sans-serif-font: "Nunito", sans-serif;
+    --monospace-font: "Noto Sans Mono", monospace;
     --article-width: 1280px;
     --section-width: 960px;
 }
@@ -75,16 +76,29 @@ footer {
     margin: auto;
 }
 
-section > h2 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: var(--serif-font);
     text-transform: capitalize;
 }
 
+section .section-banner {
+    max-width: 100%;
+    max-height: 5em;
+}
+
 section > p {
+    text-align: center;
+    text-wrap: balance;
     margin: 1.33em 0;
 }
 
 textarea {
-    font-family: var(--sans-serif-font-family);
+    font-family: var(--monospace-font);
 }
 
 button {

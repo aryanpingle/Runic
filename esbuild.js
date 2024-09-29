@@ -11,7 +11,7 @@ const watch = process.argv.includes("--watch");
 const commonBuildOptions = {
     bundle: true,
     format: "esm",
-    target: "es2020",
+    target: "es2015",
     minify: production,
     sourcesContent: false,
     logLevel: "silent",

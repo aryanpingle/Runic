@@ -2,7 +2,7 @@
     "short_name": "Runic",
     "name": "Runic",
 	"description": "The ultimate Tunic translator tool - translate, write and share text in the Tunic language!",
-    "start_url": "/",
+    "start_url": "./",
     "background_color": "#000000",
     "display": "standalone",
     "theme_color": "#000000",

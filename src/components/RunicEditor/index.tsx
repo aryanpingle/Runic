@@ -4,12 +4,14 @@ import { h, Component, VNode } from "preact";
 import { RuneSVG } from "components/RuneSVG";
 import { translateSentence } from "src/ipa";
 import { RangeInput } from "components/RangeInput";
-import { downloadURI, drawSVGToCanvas, svgToUri } from "./utils";
+import { downloadURI, drawSVGToCanvas, svgToImageBlob, svgToUri } from "./utils";
 import {
     CenterAlignIcon,
+    CopyIcon,
     DownloadIcon,
     LeftAlignIcon,
     RightAlignIcon,
+    ShareIcon,
 } from "components/icons";
 import { ChipSelect } from "components/ChipSelect";
 import { ColorInput } from "components/ColorInput";
@@ -120,6 +122,20 @@ function getSettings(obj: RunicEditor): VNode {
                     <DownloadIcon /> JPEG
                 </button>
             </div>
+            <div className="runic-editor__download-group">
+                <button
+                    className="runic-editor__download-button"
+                    onClick={() => obj.copyAsPNG()}
+                >
+                    <CopyIcon /> Copy
+                </button>
+                <button
+                    className="runic-editor__download-button"
+                    onClick={() => obj.sharePNG()}
+                >
+                    <ShareIcon /> Share
+                </button>
+            </div>
         </div>
     );
 }
@@ -185,9 +201,38 @@ export class RunicEditor extends Component<Props, State> {
         );
     };
 
-    // Miscellaneous
+    copyAsPNG = async () => {
+        this.usePreparedSVG(async (svgElement: SVGElement) => {
+            const blob = await svgToImageBlob(svgElement);
 
-    download = async (format: "svg" | "png" | "jpeg") => {
+            await navigator.clipboard.write?.([
+                new ClipboardItem({
+                    "image/png": blob,
+                }),
+            ]);
+        });
+    };
+
+    sharePNG = async () => {
+        this.usePreparedSVG(async (svgElement: SVGElement) => {
+            const blob = await svgToImageBlob(svgElement);
+
+            const file = new File([blob], "rune.png", {
+                lastModified: Date.now(),
+                type: "image/png",
+            });
+
+            const shareData: ShareData = {
+                files: [file],
+            };
+
+            if (navigator.canShare?.(shareData)) {
+                navigator.share(shareData);
+            }
+        });
+    };
+
+    usePreparedSVG = (callback: (svgElement: SVGElement) => void) => {
         const svgElement = this.runeSVGElement.svgElement;
 
         // Add background color (only if transparentBackground is disabled)
@@ -196,20 +241,27 @@ export class RunicEditor extends Component<Props, State> {
             svgElement.style.setProperty("background-color", backgroundColor);
         }
 
-        const filename = "rune";
-
-        if (format === "svg") {
-            const uri = svgToUri(svgElement);
-            downloadURI(uri, `${filename}.svg`);
-        } else {
-            // Draw the svg with styles to canvas, then download
-            const canvas = await drawSVGToCanvas(svgElement);
-            const uri = canvas.toDataURL(`image/${format}`);
-            downloadURI(uri, `${filename}.${format}`);
-        }
+        callback(svgElement);
 
         // Remove background color
         svgElement.style.removeProperty("background-color");
+    };
+
+    // Miscellaneous
+
+    download = async (format: "svg" | "png" | "jpeg") => {
+        this.usePreparedSVG(async (svgElement: SVGElement) => {
+            const filename = "rune";
+            if (format === "svg") {
+                const uri = svgToUri(svgElement);
+                downloadURI(uri, `${filename}.svg`);
+            } else {
+                // Draw the svg with styles to canvas, then download
+                const canvas = await drawSVGToCanvas(svgElement);
+                const uri = canvas.toDataURL(`image/${format}`);
+                downloadURI(uri, `${filename}.${format}`);
+            }
+        });
     };
 
     render() {

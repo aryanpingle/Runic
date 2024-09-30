@@ -45,6 +45,18 @@ export async function drawSVGToCanvas(
     });
 }
 
+export async function svgToImageBlob(svgElement: SVGElement) {
+    const canvas = await drawSVGToCanvas(svgElement);
+    let resultBlob = null;
+    await new Promise((resolve) => {
+        canvas.toBlob((blob) => {
+            resultBlob = blob;
+            resolve(0);
+        });
+    });
+    return resultBlob;
+}
+
 export function downloadURI(uri: string, filename: string = "tempfilename") {
     let link = document.createElement("a");
     link.download = filename;

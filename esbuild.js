@@ -66,6 +66,7 @@ async function main() {
     contexts.push(
         await esbuild.context({
             ...commonBuildOptions,
+            format: "cjs",
             entryPoints: ["src/service-worker.ts"],
             outdir: "./dist",
             plugins: [

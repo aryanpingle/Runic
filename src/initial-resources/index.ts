@@ -1,14 +1,32 @@
 import "./fonts.css";
 import "./index.css";
 
+function getManifestLinkElement(): HTMLLinkElement {
+    const query = document.head.querySelector(`link[rel="manifest"]`) as HTMLLinkElement;
+    if(query) return query;
+
+    // Create the link element
+    const element = document.createElement("link");
+    element.rel = "manifest";
+    document.head.appendChild(element);
+    
+    return element;
+}
+
 function setTheme() {
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
     if (mediaQuery.matches) {
         // Dark theme
         document.documentElement.classList.remove("light-theme");
+        // Set manifest
+        const element = getManifestLinkElement();
+        element.setAttribute("href", "manifest-dark.json");
     } else {
         // Light theme
         document.documentElement.classList.add("light-theme");
+        // Set manifest
+        const element = getManifestLinkElement();
+        element.setAttribute("href", "manifest-light.json");
     }
 }
 

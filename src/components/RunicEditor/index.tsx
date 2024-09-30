@@ -4,7 +4,12 @@ import { h, Component, VNode } from "preact";
 import { RuneSVG } from "components/RuneSVG";
 import { translateSentence } from "src/ipa";
 import { RangeInput } from "components/RangeInput";
-import { downloadURI, drawSVGToCanvas, svgToImageBlob, svgToUri } from "./utils";
+import {
+    downloadURI,
+    drawSVGToCanvas,
+    svgToImageBlob,
+    svgToUri,
+} from "./utils";
 import {
     CenterAlignIcon,
     CopyIcon,

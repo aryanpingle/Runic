@@ -90,7 +90,8 @@
 }
 
 .runic-editor__svg-container {
-    height: 100%;
+    position: relative;
+    height: 15em;
     padding: 1em;
     display: grid;
     place-items: center;
@@ -121,8 +122,20 @@
     background-repeat: repeat;
 }
 
+/* Desktop */
+
+@media (min-width: 1024px) {
+    .runic-editor__svg-container {
+        height: 100%;
+    }
+}
+
 .runic-editor__svg-container > .runic-svg {
-    max-height: 15em;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
 }
 
 details {

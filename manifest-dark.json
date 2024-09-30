@@ -1,0 +1,39 @@
+{
+    "short_name": "Runic",
+    "name": "Runic",
+	"description": "The ultimate Tunic translator tool - translate, write and share text in the Tunic language!",
+    "start_url": "/",
+    "background_color": "#000000",
+    "display": "standalone",
+    "theme_color": "#000000",
+    "icons": [
+		{
+			"src": "./images/pwa-icon-512.png",
+			"type": "image/png",
+			"sizes": "512x512",
+			"purpose": "any"
+		},
+		{
+			"src": "./images/pwa-icon-512.png",
+			"type": "image/png",
+			"sizes": "512x512",
+			"purpose": "maskable"
+		}
+	],
+	"screenshots": [
+		{
+			"src": "/images/screenshots/dark-1.jpg",
+			"type": "image/jpeg",
+			"sizes": "541x1201",
+			"form_factor": "narrow",
+			"label": "App on mobile (1)"
+		},
+		{
+			"src": "/images/screenshots/dark-2.jpg",
+			"type": "image/jpeg",
+			"sizes": "541x1201",
+			"form_factor": "narrow",
+			"label": "App on mobile (2)"
+		}
+	]
+}

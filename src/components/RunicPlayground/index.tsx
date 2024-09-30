@@ -59,6 +59,10 @@ export class RunicPlayground extends Component<Props, State> {
         this.setState({ phoneticText: currentPhoneticText });
     };
 
+    clearResult = () => {
+        this.setState({ phoneticText: "" });
+    };
+
     getPronunciation = (): string => {
         const tokens = parseString(this.state.phoneticText);
         let res = "";
@@ -129,7 +133,7 @@ export class RunicPlayground extends Component<Props, State> {
                         </button>
                         <button
                             className="runic-playground__control-button"
-                            onClick={this.addPhoneme}
+                            onClick={this.clearResult}
                         >
                             <span className="runic-playground__control-icon">
                                 <ResetIcon />

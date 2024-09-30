@@ -72,7 +72,7 @@ function getSettings(obj: RunicEditor): VNode {
                 bindInput={obj.onThicknessChange}
             ></RangeInput>
             <RangeInput
-                label={"Shadow"}
+                label={"Glow Effect"}
                 min={0}
                 max={20}
                 step={0.5}

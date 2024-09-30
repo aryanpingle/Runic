@@ -66,9 +66,10 @@ async function main() {
     contexts.push(
         await esbuild.context({
             ...commonBuildOptions,
-            format: "cjs",
+            format: "iife",
             entryPoints: ["src/service-worker.ts"],
             outdir: "./dist",
+            platform: "browser",
             plugins: [
                 /* add to the end of plugins array */
                 esbuildProblemMatcherPlugin,

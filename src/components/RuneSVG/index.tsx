@@ -115,6 +115,7 @@ export class RuneSVG extends Component<Props, State> {
         this.svgElement.querySelectorAll(".rune-segment").forEach((segment) => {
             // Make every segment transparent by default
             segment.setAttribute("stroke", "transparent");
+            segment.setAttribute("fill", "transparent");
             // Set a common stroke-width
             segment.setAttribute("stroke-width", `${this.state.runeThickness}`);
             // Make every line have rounded ends

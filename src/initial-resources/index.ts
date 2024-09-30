@@ -17,7 +17,7 @@ function addThemeListener() {
     // Apply the theme
     setTheme();
     // Listen for a theme change
-    mediaQuery.addEventListener("change", setTheme);
+    mediaQuery.addEventListener?.("change", setTheme);
 }
 
 function registerServiceWorker() {

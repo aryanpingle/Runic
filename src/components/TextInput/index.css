@@ -10,6 +10,7 @@
 
 .text-input__textarea {
     font-size: inherit;
+    font-size: min(1em, 16px);
     color: inherit;
     background-color: transparent;
     padding: 0.5em;

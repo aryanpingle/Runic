@@ -8,13 +8,13 @@
     "theme_color": "#000000",
     "icons": [
 		{
-			"src": "./images/pwa-icon-512.png",
+			"src": "./Runic/images/pwa-icon-512.png",
 			"type": "image/png",
 			"sizes": "512x512",
 			"purpose": "any"
 		},
 		{
-			"src": "./images/pwa-icon-512.png",
+			"src": "./Runic/images/pwa-icon-512.png",
 			"type": "image/png",
 			"sizes": "512x512",
 			"purpose": "maskable"

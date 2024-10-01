@@ -61,6 +61,18 @@ body {
     background-color: var(--surface-0);
 }
 
+/* Setting the theme class will take too long, hardcode this directly */
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: black;
+    }
+}
+@media (prefers-color-scheme: light) {
+    body {
+        background-color: white;
+    }
+}
+
 header {
     text-align: center;
 }

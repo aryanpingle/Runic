@@ -1,5 +1,5 @@
-import "./fonts.css";
 import "./index.css";
+import "./fonts.css";
 
 function getManifestLinkElement(): HTMLLinkElement {
     const query = document.head.querySelector(`link[rel="manifest"]`) as HTMLLinkElement;
